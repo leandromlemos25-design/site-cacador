@@ -160,6 +160,17 @@
             font-size: 19px; color: rgba(255,255,255,0.65);
             max-width: 500px; margin: 0 auto 36px; line-height: 1.6;
         }
+        .main-banner-img {
+            width: 100%;
+            max-width: 850px;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            margin-bottom: 40px;
+            border: 2px solid rgba(255,255,255,0.1);
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
         .hero-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
         .btn-primary {
             display: inline-flex; align-items: center; gap: 10px;
@@ -524,9 +535,13 @@
             <div class="hero-deco" style="top:20%;right:8%;animation-delay:1s">💰</div>
             <div class="hero-deco" style="bottom:15%;left:15%;animation-delay:0.5s">🛒</div>
             <div class="hero-inner">
-                <div class="hero-badge fade-up">🔥 OFERTAS ATUALIZADAS DIARIAMENTE</div>
-                <h1 class="fade-up fade-up-1">As Melhores Ofertas<br><span>da Internet</span></h1>
-                <p class="fade-up fade-up-2">
+                
+                <!-- NOVO BANNER EM DESTAQUE -->
+                <img src="banner.png" alt="Banner O Caçador de Ofertas" class="main-banner-img fade-up" onerror="this.style.display='none'">
+
+                <div class="hero-badge fade-up fade-up-1">🔥 OFERTAS ATUALIZADAS DIARIAMENTE</div>
+                <h1 class="fade-up fade-up-2">As Melhores Ofertas<br><span>da Internet</span></h1>
+                <p class="fade-up fade-up-3">
                     Promoções imperdíveis de Amazon, Shopee, Magalu, Mercado Livre e mais. 
                     Tudo verificado e com link direto.
                 </p>
@@ -674,7 +689,7 @@
     const CONFIG = {
         // 📌 COLE AQUI O ID DA SUA PLANILHA DO GOOGLE SHEETS
         // (é o código que fica na URL entre /d/ e /edit)
-        SHEET_ID: "1Ug9wQKO9HfCRrTsjZz8gDe7dCVDxXH2ehMC3nGkb6Xw",
+        SHEET_ID: "COLE_O_ID_DA_SUA_PLANILHA_AQUI",
 
         // 📌 NOME DA ABA DA PLANILHA (onde ficam as ofertas do site)
         SHEET_TAB: "Site",
