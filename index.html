@@ -1,1 +1,989 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O Caçador de Oferta — Melhores Promoções da Internet</title>
+    <meta name="description" content="Promoções imperdíveis de Amazon, Shopee, Magalu, Mercado Livre e mais. Ofertas verificadas e atualizadas diariamente.">
+    <meta property="og:title" content="O Caçador de Oferta">
+    <meta property="og:description" content="As melhores promoções da internet, verificadas e atualizadas diariamente.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ocacadordeofertas.com">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎯</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* ══════════════════════════════════════════
+           RESET E BASE
+           ══════════════════════════════════════════ */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Outfit', 'Segoe UI', sans-serif;
+            background: #FAFBFC;
+            color: #1a1a2e;
+            -webkit-font-smoothing: antialiased;
+        }
+        a { text-decoration: none; }
+        button { font-family: inherit; cursor: pointer; border: none; }
+        input, textarea { font-family: inherit; }
+        input::placeholder, textarea::placeholder { color: #bbb; }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #FF6B35; border-radius: 4px; }
+
+        /* ══════════════════════════════════════════
+           ANIMAÇÕES
+           ══════════════════════════════════════════ */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .fade-up { animation: fadeUp 0.5s ease both; }
+        .fade-up-1 { animation-delay: 0.1s; }
+        .fade-up-2 { animation-delay: 0.2s; }
+        .fade-up-3 { animation-delay: 0.3s; }
+
+        /* ══════════════════════════════════════════
+           NAVBAR
+           ══════════════════════════════════════════ */
+        .navbar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            padding: 16px 0;
+            transition: all 0.3s;
+        }
+        .navbar.scrolled {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+            padding: 10px 0;
+        }
+        .navbar-inner {
+            max-width: 1200px; margin: 0 auto; padding: 0 24px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .logo { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        .logo-emoji { font-size: 28px; }
+        .logo-text { font-size: 18px; font-weight: 900; color: #fff; line-height: 1.1; letter-spacing: -0.5px; }
+        .logo-sub { font-size: 10px; font-weight: 700; color: #FF6B35; letter-spacing: 2px; text-transform: uppercase; }
+        .navbar.scrolled .logo-text { color: #1a1a2e; }
+
+        .nav-links { display: flex; align-items: center; gap: 6px; }
+        .nav-btn {
+            padding: 8px 18px; border-radius: 8px; background: transparent;
+            font-size: 14px; font-weight: 600; transition: all 0.2s;
+            color: rgba(255,255,255,0.85);
+        }
+        .nav-btn.active { background: rgba(255,255,255,0.15); color: #FF6B35; }
+        .navbar.scrolled .nav-btn { color: #555; }
+        .navbar.scrolled .nav-btn.active { background: #FF6B3515; color: #FF6B35; }
+
+        .nav-cta {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 9px 18px; border-radius: 10px;
+            background: linear-gradient(135deg, #FF6B35, #E43225);
+            color: #fff; font-size: 13px; font-weight: 700;
+            margin-left: 8px; box-shadow: 0 3px 12px rgba(228,50,37,0.3);
+            transition: transform 0.2s;
+        }
+        .nav-cta:hover { transform: scale(1.04); }
+
+        .mobile-toggle {
+            display: none; background: none; color: #fff;
+            font-size: 28px; line-height: 1;
+        }
+        .navbar.scrolled .mobile-toggle { color: #1a1a2e; }
+
+        .mobile-menu {
+            display: none; background: #fff; padding: 16px 24px;
+            border-top: 1px solid #eee;
+        }
+        .mobile-menu.open { display: block; animation: fadeIn 0.2s ease; }
+        .mobile-menu button {
+            display: block; width: 100%; padding: 12px 0; background: none;
+            text-align: left; font-size: 16px; font-weight: 600; color: #333;
+        }
+        .mobile-menu button.active { color: #FF6B35; }
+        .mobile-menu .mob-cta {
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 12px; border-radius: 10px; margin-top: 8px;
+            background: linear-gradient(135deg, #FF6B35, #E43225);
+            color: #fff; font-weight: 700; text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none !important; }
+            .mobile-toggle { display: block !important; }
+        }
+
+        /* ══════════════════════════════════════════
+           HERO
+           ══════════════════════════════════════════ */
+        .hero {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%);
+            padding: 140px 24px 80px; text-align: center; position: relative; overflow: hidden;
+        }
+        .hero-deco {
+            position: absolute; font-size: 55px; opacity: 0.07;
+            animation: float 5s ease-in-out infinite;
+        }
+        .hero-inner { max-width: 800px; margin: 0 auto; position: relative; z-index: 2; }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(255,107,53,0.15); border: 1px solid rgba(255,107,53,0.3);
+            padding: 6px 18px; border-radius: 30px; margin-bottom: 24px;
+            color: #FF6B35; font-size: 13px; font-weight: 700;
+        }
+        .hero h1 {
+            font-size: 52px; font-weight: 900; color: #fff;
+            line-height: 1.1; margin-bottom: 20px; letter-spacing: -1px;
+        }
+        .hero h1 span {
+            background: linear-gradient(135deg, #FF6B35, #FFB347);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .hero p {
+            font-size: 19px; color: rgba(255,255,255,0.65);
+            max-width: 500px; margin: 0 auto 36px; line-height: 1.6;
+        }
+        .hero-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+        .btn-primary {
+            display: inline-flex; align-items: center; gap: 10px;
+            padding: 15px 32px; border-radius: 12px;
+            background: linear-gradient(135deg, #FF6B35, #E43225);
+            color: #fff; font-size: 16px; font-weight: 800;
+            box-shadow: 0 6px 30px rgba(228,50,37,0.4);
+            transition: all 0.3s; animation: pulse 2s infinite 2s;
+        }
+        .btn-primary:hover { transform: scale(1.04); }
+        .btn-secondary {
+            padding: 15px 32px; border-radius: 12px;
+            background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.2);
+            color: #fff; font-size: 16px; font-weight: 700; transition: all 0.3s;
+        }
+        .btn-secondary:hover { background: rgba(255,255,255,0.15); }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 36px; }
+            .hero p { font-size: 16px; }
+        }
+
+        /* ══════════════════════════════════════════
+           STATS
+           ══════════════════════════════════════════ */
+        .stats {
+            max-width: 1200px; margin: -40px auto 0; padding: 0 24px;
+            position: relative; z-index: 3;
+        }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+        .stat-card {
+            background: #fff; border-radius: 16px; padding: 24px 20px;
+            text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            border: 1px solid #f0f0f0;
+        }
+        .stat-emoji { font-size: 28px; margin-bottom: 8px; }
+        .stat-num {
+            font-size: 28px; font-weight: 900; color: #FF6B35;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .stat-label { font-size: 13px; color: #888; font-weight: 600; margin-top: 4px; }
+        @media (max-width: 768px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* ══════════════════════════════════════════
+           SEÇÕES
+           ══════════════════════════════════════════ */
+        .section { max-width: 1200px; margin: 0 auto; padding: 60px 24px; }
+        .section-title {
+            font-size: 32px; font-weight: 900; color: #1a1a2e;
+            margin-bottom: 10px; text-align: center;
+        }
+        .section-sub { color: #888; font-size: 16px; text-align: center; margin-bottom: 40px; }
+
+        /* ══════════════════════════════════════════
+           FILTROS
+           ══════════════════════════════════════════ */
+        .search-box {
+            max-width: 500px; margin: 0 auto 28px; position: relative;
+        }
+        .search-box input {
+            width: 100%; padding: 14px 16px 14px 46px;
+            border: 2px solid #eee; border-radius: 14px;
+            font-size: 15px; outline: none; transition: border-color 0.2s; background: #fff;
+        }
+        .search-box input:focus { border-color: #FF6B35; }
+        .search-icon {
+            position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+            color: #bbb; font-size: 18px;
+        }
+
+        .lojas-filter {
+            display: flex; gap: 8px; justify-content: center;
+            flex-wrap: wrap; margin-bottom: 36px;
+        }
+        .loja-btn {
+            padding: 9px 20px; border-radius: 25px;
+            border: 2px solid #e8e8e8; background: #fff;
+            color: #777; font-size: 13px; font-weight: 700;
+            transition: all 0.25s; white-space: nowrap;
+        }
+        .loja-btn.active {
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+        .contagem { margin-bottom: 20px; font-size: 14px; color: #999; font-weight: 600; }
+
+        /* ══════════════════════════════════════════
+           CARDS DE OFERTA
+           ══════════════════════════════════════════ */
+        .ofertas-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+            gap: 20px;
+        }
+        .oferta-card {
+            background: #fff; border-radius: 16px; overflow: hidden;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.06); transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+            border: 1px solid #f0f0f0; position: relative;
+        }
+        .oferta-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+        }
+        .oferta-selo {
+            position: absolute; top: 12px; left: 0; z-index: 2;
+            color: #fff; padding: 4px 14px 4px 8px;
+            border-radius: 0 20px 20px 0;
+            font-size: 11px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase;
+        }
+        .oferta-desconto {
+            position: absolute; top: 12px; right: 12px; z-index: 2;
+            color: #fff; border-radius: 12px; padding: 6px 10px;
+            font-size: 14px; font-weight: 900; line-height: 1;
+            box-shadow: 0 2px 8px rgba(228,50,37,0.3);
+        }
+        .oferta-img {
+            height: 140px; display: flex; align-items: center; justify-content: center;
+            font-size: 56px; position: relative;
+        }
+        .oferta-loja-badge {
+            position: absolute; bottom: 8px; left: 12px;
+            padding: 3px 10px; border-radius: 20px;
+            font-size: 11px; font-weight: 700;
+        }
+        .oferta-body { padding: 16px 18px 18px; }
+        .oferta-cat {
+            font-size: 11px; color: #999; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;
+        }
+        .oferta-titulo {
+            font-size: 15px; font-weight: 700; color: #1a1a2e;
+            margin-bottom: 14px; line-height: 1.35;
+            display: -webkit-box; -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical; overflow: hidden;
+            min-height: 40px;
+        }
+        .oferta-preco-antigo {
+            font-size: 13px; color: #aaa; text-decoration: line-through; font-weight: 500;
+        }
+        .oferta-preco-novo {
+            font-size: 26px; font-weight: 900; color: #16a34a;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .oferta-economia { font-size: 12px; color: #FF6B35; font-weight: 600; margin-top: 2px; }
+        .oferta-btn {
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 11px 16px; border-radius: 10px; width: 100%;
+            color: #fff; font-size: 14px; font-weight: 700;
+            transition: all 0.2s; margin-top: 14px;
+        }
+        .oferta-btn:hover { transform: scale(1.02); }
+
+        .empty-state {
+            text-align: center; padding: 60px 20px;
+        }
+        .empty-state .emoji { font-size: 48px; margin-bottom: 16px; }
+
+        /* ══════════════════════════════════════════
+           LOADING
+           ══════════════════════════════════════════ */
+        .loading {
+            text-align: center; padding: 60px 20px;
+        }
+        .spinner {
+            width: 40px; height: 40px; border: 4px solid #eee;
+            border-top-color: #FF6B35; border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        /* ══════════════════════════════════════════
+           FORMULÁRIO PEDIDO
+           ══════════════════════════════════════════ */
+        .form-box {
+            background: #fff; border-radius: 20px; padding: 36px 32px;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.08);
+            max-width: 560px; margin: 0 auto; border: 1px solid #f0f0f0;
+        }
+        .form-title { font-size: 22px; font-weight: 800; text-align: center; margin-bottom: 6px; }
+        .form-sub { color: #888; font-size: 14px; text-align: center; margin-bottom: 24px; }
+        .form-group { margin-bottom: 16px; }
+        .form-label { font-size: 13px; font-weight: 700; color: #555; display: block; margin-bottom: 6px; }
+        .form-input {
+            width: 100%; padding: 13px 16px; border: 2px solid #eee; border-radius: 10px;
+            font-size: 15px; outline: none; transition: border-color 0.2s;
+        }
+        .form-input:focus { border-color: #FF6B35; }
+        .form-textarea { resize: vertical; min-height: 80px; }
+
+        .form-lojas { display: flex; flex-wrap: wrap; gap: 8px; }
+        .form-loja-btn {
+            padding: 7px 14px; border-radius: 20px;
+            border: 2px solid #eee; background: #fafafa;
+            color: #777; font-size: 13px; font-weight: 600; transition: all 0.2s;
+        }
+        .form-loja-btn.selected { background: #FF6B3512; }
+
+        .form-submit {
+            width: 100%; padding: 14px; border-radius: 12px;
+            background: linear-gradient(135deg, #FF6B35, #E43225);
+            color: #fff; font-size: 16px; font-weight: 800;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            transition: all 0.3s; box-shadow: 0 4px 20px rgba(228,50,37,0.3);
+        }
+        .form-submit:disabled { background: #ddd; color: #aaa; box-shadow: none; cursor: not-allowed; }
+
+        .form-success {
+            text-align: center; padding: 30px 0; animation: fadeUp 0.4s ease;
+        }
+        .form-success-icon {
+            width: 64px; height: 64px; border-radius: 50%;
+            background: linear-gradient(135deg, #16a34a, #22c55e);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 16px; color: #fff; font-size: 28px;
+        }
+
+        .como-funciona { max-width: 700px; margin: 50px auto 0; }
+        .como-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .como-card {
+            text-align: center; padding: 24px; background: #fff; border-radius: 16px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.04); border: 1px solid #f0f0f0;
+        }
+        .como-emoji { font-size: 36px; margin-bottom: 12px; }
+        .como-step {
+            font-size: 11px; font-weight: 800; color: #FF6B35;
+            letter-spacing: 1.5px; margin-bottom: 6px;
+        }
+        .como-title { font-size: 16px; font-weight: 800; margin-bottom: 6px; }
+        .como-desc { font-size: 13px; color: #888; line-height: 1.5; }
+
+        @media (max-width: 768px) {
+            .como-grid { grid-template-columns: 1fr; }
+        }
+
+        /* ══════════════════════════════════════════
+           REDES SOCIAIS
+           ══════════════════════════════════════════ */
+        .social-section {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            padding: 60px 24px;
+        }
+        .social-grid {
+            display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px;
+            max-width: 800px; margin: 0 auto;
+        }
+        .social-card {
+            display: flex; flex-direction: column; align-items: center; gap: 10px;
+            padding: 24px 16px; border-radius: 16px;
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+            color: #fff; transition: all 0.3s;
+        }
+        .social-card:hover { transform: translateY(-4px); }
+        .social-icon {
+            width: 48px; height: 48px; border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px;
+        }
+        .social-name { font-size: 13px; font-weight: 700; }
+
+        @media (max-width: 768px) {
+            .social-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* ══════════════════════════════════════════
+           CTA E FOOTER
+           ══════════════════════════════════════════ */
+        .cta-section { padding: 60px 24px; text-align: center; }
+        .cta-box {
+            max-width: 600px; margin: 0 auto;
+            background: linear-gradient(135deg, #FF6B35, #E43225);
+            border-radius: 24px; padding: 48px 36px;
+            box-shadow: 0 10px 50px rgba(228,50,37,0.25);
+        }
+        .cta-box h2 { font-size: 28px; font-weight: 900; color: #fff; margin-bottom: 12px; }
+        .cta-box p { color: rgba(255,255,255,0.8); font-size: 16px; margin-bottom: 28px; }
+        .cta-btn {
+            display: inline-flex; align-items: center; gap: 10px;
+            padding: 16px 36px; border-radius: 14px;
+            background: #fff; color: #E43225;
+            font-size: 17px; font-weight: 800;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15); transition: transform 0.2s;
+        }
+        .cta-btn:hover { transform: scale(1.05); }
+
+        .cta-inline {
+            text-align: center; margin-top: 50px;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border-radius: 20px; padding: 40px 24px;
+        }
+        .cta-inline h3 { color: #fff; font-size: 22px; font-weight: 800; margin-bottom: 10px; }
+        .cta-inline p { color: rgba(255,255,255,0.6); font-size: 15px; margin-bottom: 24px; }
+
+        footer {
+            background: #111; padding: 40px 24px 24px;
+            border-top: 3px solid #FF6B35;
+        }
+        .footer-inner {
+            max-width: 1200px; margin: 0 auto;
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 20px;
+        }
+        .footer-brand { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+        .footer-brand span:first-child { font-size: 22px; }
+        .footer-brand span:last-child { color: #fff; font-weight: 800; font-size: 16px; }
+        .footer-desc { color: #666; font-size: 13px; }
+        .footer-socials { display: flex; gap: 10px; }
+        .footer-social {
+            width: 40px; height: 40px; border-radius: 10px;
+            background: rgba(255,255,255,0.06);
+            display: flex; align-items: center; justify-content: center;
+            color: #888; font-size: 18px; transition: all 0.2s;
+        }
+        .footer-social:hover { color: #fff; }
+        .footer-copy {
+            text-align: center; margin-top: 28px; padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            color: #555; font-size: 12px;
+        }
+
+        /* ══════════════════════════════════════════
+           PÁGINA NÃO VISÍVEL (oculta por padrão)
+           ══════════════════════════════════════════ */
+        .page { display: none; }
+        .page.active { display: block; }
+    </style>
+</head>
+<body>
+
+    <!-- ═══════ NAVBAR ═══════ -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar-inner">
+            <div class="logo" onclick="navegar('home')">
+                <span class="logo-emoji">🎯</span>
+                <div>
+                    <div class="logo-text">O CAÇADOR</div>
+                    <div class="logo-sub">DE OFERTA</div>
+                </div>
+            </div>
+            <div class="nav-links">
+                <button class="nav-btn active" data-page="home" onclick="navegar('home')">Início</button>
+                <button class="nav-btn" data-page="ofertas" onclick="navegar('ofertas')">Ofertas</button>
+                <button class="nav-btn" data-page="pedir" onclick="navegar('pedir')">Pedir Oferta</button>
+                <a class="nav-cta" href="https://t.me/ocacadordeoferta" target="_blank">
+                    📲 Entrar no Grupo
+                </a>
+            </div>
+            <button class="mobile-toggle" onclick="toggleMenu()">☰</button>
+        </div>
+        <div class="mobile-menu" id="mobileMenu">
+            <button data-page="home" onclick="navegar('home')">Início</button>
+            <button data-page="ofertas" onclick="navegar('ofertas')">Ofertas</button>
+            <button data-page="pedir" onclick="navegar('pedir')">Pedir Oferta</button>
+            <a class="mob-cta" href="https://t.me/ocacadordeoferta" target="_blank">📲 Entrar no Grupo</a>
+        </div>
+    </nav>
+
+    <!-- ═══════ PÁGINA HOME ═══════ -->
+    <div class="page active" id="page-home">
+        <section class="hero">
+            <div class="hero-deco" style="top:10%;left:5%">🏷️</div>
+            <div class="hero-deco" style="top:20%;right:8%;animation-delay:1s">💰</div>
+            <div class="hero-deco" style="bottom:15%;left:15%;animation-delay:0.5s">🛒</div>
+            <div class="hero-inner">
+                <div class="hero-badge fade-up">🔥 OFERTAS ATUALIZADAS DIARIAMENTE</div>
+                <h1 class="fade-up fade-up-1">As Melhores Ofertas<br><span>da Internet</span></h1>
+                <p class="fade-up fade-up-2">
+                    Promoções imperdíveis de Amazon, Shopee, Magalu, Mercado Livre e mais. 
+                    Tudo verificado e com link direto.
+                </p>
+                <div class="hero-btns fade-up fade-up-3">
+                    <a class="btn-primary" href="https://t.me/ocacadordeoferta" target="_blank">
+                        📲 Entrar no Grupo Grátis
+                    </a>
+                    <button class="btn-secondary" onclick="navegar('ofertas')">Ver Ofertas →</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="stats">
+            <div class="stats-grid" id="statsGrid">
+                <div class="stat-card fade-up"><div class="stat-emoji">🏷️</div><div class="stat-num" id="stat-total">0</div><div class="stat-label">Ofertas Postadas</div></div>
+                <div class="stat-card fade-up fade-up-1"><div class="stat-emoji">💰</div><div class="stat-num" id="stat-desconto">0%</div><div class="stat-label">Desconto Médio</div></div>
+                <div class="stat-card fade-up fade-up-2"><div class="stat-emoji">🏪</div><div class="stat-num">6</div><div class="stat-label">Lojas Parceiras</div></div>
+                <div class="stat-card fade-up fade-up-3"><div class="stat-emoji">⚡</div><div class="stat-num">24/7</div><div class="stat-label">Ofertas Novas</div></div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">🔥 Ofertas em Destaque</h2>
+            <p class="section-sub">As promoções mais quentes selecionadas pela nossa equipe</p>
+            <div class="ofertas-grid" id="destaqueGrid"></div>
+            <div style="text-align:center;margin-top:40px">
+                <button onclick="navegar('ofertas')" style="padding:14px 36px;border-radius:12px;background:#1a1a2e;color:#fff;font-size:15px;font-weight:700;box-shadow:0 4px 15px rgba(26,26,46,0.2);transition:all 0.3s">
+                    Ver Todas as Ofertas →
+                </button>
+            </div>
+        </section>
+
+        <section class="social-section">
+            <div style="max-width:800px;margin:0 auto;text-align:center">
+                <h2 style="font-size:30px;font-weight:900;color:#fff;margin-bottom:10px">📱 Siga Nossas Redes</h2>
+                <p style="color:rgba(255,255,255,0.5);font-size:15px;margin-bottom:36px">Nunca perca uma oferta — siga em todas as plataformas</p>
+                <div class="social-grid" id="socialGrid"></div>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <div class="cta-box">
+                <h2>Não perca nenhuma oferta!</h2>
+                <p>Entre no grupo do Telegram e receba as melhores promoções em primeira mão.</p>
+                <a class="cta-btn" href="https://t.me/ocacadordeoferta" target="_blank">
+                    📲 Entrar Agora — É Grátis!
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <!-- ═══════ PÁGINA OFERTAS ═══════ -->
+    <div class="page" id="page-ofertas">
+        <section style="padding-top:100px">
+            <div class="section">
+                <h1 class="section-title fade-up">🏷️ Todas as Ofertas</h1>
+                <p class="section-sub fade-up fade-up-1">Filtre por loja ou busque o que procura</p>
+                <div class="search-box fade-up fade-up-1">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="buscaInput" placeholder="Buscar produto ou categoria..." oninput="filtrarOfertas()">
+                </div>
+                <div class="lojas-filter fade-up fade-up-2" id="lojasFilter"></div>
+                <div class="contagem" id="contagem"></div>
+                <div class="ofertas-grid" id="ofertasGrid"></div>
+                <div class="cta-inline">
+                    <h3>Quer receber ofertas em primeira mão?</h3>
+                    <p>No grupo do Telegram você recebe antes de todo mundo!</p>
+                    <a class="nav-cta" href="https://t.me/ocacadordeoferta" target="_blank" style="font-size:15px;padding:14px 30px">
+                        📲 Entrar no Grupo
+                    </a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ═══════ PÁGINA PEDIR OFERTA ═══════ -->
+    <div class="page" id="page-pedir">
+        <section style="padding-top:100px">
+            <div class="section">
+                <h1 class="section-title fade-up">🎯 Peça uma Promoção</h1>
+                <p class="section-sub fade-up fade-up-1" style="max-width:500px;margin-left:auto;margin-right:auto">
+                    Conta pra gente o que você quer comprar e a gente caça o melhor preço!
+                </p>
+                <div class="fade-up fade-up-2">
+                    <div class="form-box" id="formBox">
+                        <h3 class="form-title">🎯 Peça uma Promoção</h3>
+                        <p class="form-sub">Diga o que você procura e caçamos o melhor preço!</p>
+                        <div class="form-group">
+                            <label class="form-label">O que você está procurando? *</label>
+                            <input class="form-input" id="pedidoProduto" placeholder='Ex: "iPhone 15 Pro Max 256GB"'>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Quanto quer pagar? (opcional)</label>
+                            <input class="form-input" id="pedidoOrcamento" placeholder='Ex: "Até R$ 500"'>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Detalhes extras (opcional)</label>
+                            <textarea class="form-input form-textarea" id="pedidoDetalhes" placeholder='Ex: "Precisa ser a cor azul, pode ser usado"'></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Loja preferida? (opcional)</label>
+                            <div class="form-lojas" id="formLojas"></div>
+                        </div>
+                        <button class="form-submit" id="formSubmit" onclick="enviarPedido()" disabled>
+                            ✉️ Enviar Pedido
+                        </button>
+                    </div>
+                </div>
+                <div class="como-funciona fade-up fade-up-3">
+                    <h3 style="font-size:22px;font-weight:800;text-align:center;margin-bottom:28px">Como funciona?</h3>
+                    <div class="como-grid">
+                        <div class="como-card"><div class="como-emoji">📝</div><div class="como-step">PASSO 1</div><div class="como-title">Você pede</div><div class="como-desc">Diga qual produto quer e quanto quer pagar.</div></div>
+                        <div class="como-card"><div class="como-emoji">🔍</div><div class="como-step">PASSO 2</div><div class="como-title">A gente caça</div><div class="como-desc">Monitoramos Amazon, Shopee, Magalu e mais.</div></div>
+                        <div class="como-card"><div class="como-emoji">💰</div><div class="como-step">PASSO 3</div><div class="como-title">Você economiza</div><div class="como-desc">Avisamos no grupo quando achar o melhor preço!</div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ═══════ FOOTER ═══════ -->
+    <footer>
+        <div class="footer-inner">
+            <div>
+                <div class="footer-brand"><span>🎯</span><span>O CAÇADOR DE OFERTA</span></div>
+                <p class="footer-desc">As melhores promoções da internet, verificadas e atualizadas diariamente.</p>
+            </div>
+            <div class="footer-socials" id="footerSocials"></div>
+        </div>
+        <div class="footer-copy">© 2026 O Caçador de Oferta. Powered by Teteco Bot 🤖</div>
+    </footer>
+
+    <!-- ═══════════════════════════════════════════════════════
+         JAVASCRIPT — TODA A LÓGICA DO SITE
+         ═══════════════════════════════════════════════════════ -->
+    <script>
+    // ══════════════════════════════════════════
+    // CONFIGURAÇÃO — EDITE AQUI
+    // ══════════════════════════════════════════
+
+    const CONFIG = {
+        // 📌 COLE AQUI O ID DA SUA PLANILHA DO GOOGLE SHEETS
+        // (é o código que fica na URL entre /d/ e /edit)
+        SHEET_ID: "COLE_O_ID_DA_SUA_PLANILHA_AQUI",
+
+        // 📌 NOME DA ABA DA PLANILHA (onde ficam as ofertas do site)
+        SHEET_TAB: "Site",
+
+        // 📌 LINKS DAS REDES SOCIAIS
+        TELEGRAM: "https://t.me/ocacadordeoferta",
+        INSTAGRAM: "https://instagram.com/ocacadordeoferta",
+        TIKTOK: "https://tiktok.com/@ocacadordeoferta",
+        TWITTER: "https://x.com/ocacadordeoferta",
+        FACEBOOK: "https://facebook.com/ocacadordeoferta",
+    };
+
+    // ══════════════════════════════════════════
+    // DADOS
+    // ══════════════════════════════════════════
+
+    const LOJAS = {
+        todas:         { nome: "Todas",           emoji: "🔥", cor: "#FF6B35" },
+        amazon:        { nome: "Amazon",          emoji: "📦", cor: "#FF9900" },
+        shopee:        { nome: "Shopee",          emoji: "🧡", cor: "#EE4D2D" },
+        magalu:        { nome: "Magalu",          emoji: "💙", cor: "#0086FF" },
+        mercadolivre:  { nome: "Mercado Livre",   emoji: "🤝", cor: "#FFE600" },
+        aliexpress:    { nome: "AliExpress",      emoji: "🌏", cor: "#E43225" },
+        outras:        { nome: "Outras",          emoji: "🏷️", cor: "#8B5CF6" },
+    };
+
+    const REDES = [
+        { nome: "Telegram",  url: CONFIG.TELEGRAM,  emoji: "📲", cor: "#0088CC" },
+        { nome: "Instagram", url: CONFIG.INSTAGRAM,  emoji: "📸", cor: "#E4405F" },
+        { nome: "TikTok",    url: CONFIG.TIKTOK,     emoji: "🎵", cor: "#000000" },
+        { nome: "Twitter/X", url: CONFIG.TWITTER,     emoji: "🐦", cor: "#1DA1F2" },
+        { nome: "Facebook",  url: CONFIG.FACEBOOK,    emoji: "📘", cor: "#1877F2" },
+    ];
+
+    let todasOfertas = [];
+    let lojaAtual = "todas";
+
+    // ══════════════════════════════════════════
+    // CARREGAR OFERTAS DO GOOGLE SHEETS
+    // ══════════════════════════════════════════
+
+    async function carregarOfertas() {
+        if (CONFIG.SHEET_ID === "COLE_O_ID_DA_SUA_PLANILHA_AQUI") {
+            console.log("⚠️ Google Sheets não configurado. Usando ofertas de exemplo.");
+            todasOfertas = getOfertasExemplo();
+            renderizarTudo();
+            return;
+        }
+
+        try {
+            const url = `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(CONFIG.SHEET_TAB)}`;
+            const resp = await fetch(url);
+            const text = await resp.text();
+
+            const json = JSON.parse(text.substring(47, text.length - 2));
+            const rows = json.table.rows;
+            const cols = json.table.cols.map(c => c.label.toLowerCase().trim());
+
+            todasOfertas = rows.map((row, i) => {
+                const get = (colName) => {
+                    const idx = cols.indexOf(colName);
+                    return idx >= 0 && row.c[idx] ? (row.c[idx].v || "") : "";
+                };
+
+                const precoAntigo = parseFloat(String(get("preco_antigo")).replace(",", ".")) || 0;
+                const precoNovo = parseFloat(String(get("preco_novo")).replace(",", ".")) || 0;
+                const desconto = precoAntigo > 0 ? Math.round((1 - precoNovo / precoAntigo) * 100) : 0;
+
+                return {
+                    id: i + 1,
+                    loja: String(get("loja")).toLowerCase().trim() || "outras",
+                    titulo: get("titulo") || "Produto sem nome",
+                    precoAntigo,
+                    precoNovo,
+                    desconto,
+                    link: get("link") || "#",
+                    img: get("emoji") || "🛒",
+                    categoria: get("categoria") || "Geral",
+                    selo: get("selo") || "",
+                    ativo: String(get("ativo")).toLowerCase() !== "nao" && String(get("ativo")).toLowerCase() !== "não",
+                };
+            }).filter(o => o.ativo && o.precoNovo > 0);
+
+        } catch (err) {
+            console.error("❌ Erro ao carregar planilha:", err);
+            todasOfertas = getOfertasExemplo();
+        }
+
+        renderizarTudo();
+    }
+
+    function getOfertasExemplo() {
+        return [
+            { id:1, loja:"amazon", titulo:"Echo Dot 5ª Geração com Alexa — Smart Speaker", precoAntigo:399, precoNovo:199, desconto:50, link:"#", img:"🔊", categoria:"Tecnologia", selo:"MAIS VENDIDO" },
+            { id:2, loja:"shopee", titulo:"Fone Bluetooth TWS Cancelamento de Ruído", precoAntigo:189.90, precoNovo:59.90, desconto:68, link:"#", img:"🎧", categoria:"Acessórios", selo:"MENOR PREÇO" },
+            { id:3, loja:"magalu", titulo:"Fritadeira Air Fryer Digital 5.5L Inox", precoAntigo:599, precoNovo:279, desconto:53, link:"#", img:"🍟", categoria:"Casa", selo:"" },
+            { id:4, loja:"mercadolivre", titulo:"Kit 3 Camisetas Dry Fit UV50+ Masculina", precoAntigo:149.90, precoNovo:69.90, desconto:53, link:"#", img:"👕", categoria:"Moda", selo:"" },
+            { id:5, loja:"amazon", titulo:"Kindle 11ª Geração Iluminação Integrada", precoAntigo:549, precoNovo:349, desconto:36, link:"#", img:"📚", categoria:"Tecnologia", selo:"PREÇO HISTÓRICO" },
+            { id:6, loja:"aliexpress", titulo:"Smartwatch Monitor Cardíaco IP68 Tela AMOLED", precoAntigo:259, precoNovo:89.90, desconto:65, link:"#", img:"⌚", categoria:"Tecnologia", selo:"OFERTA RELÂMPAGO" },
+            { id:7, loja:"shopee", titulo:"Organizador de Maquiagem Acrílico Giratório 360°", precoAntigo:129, precoNovo:49.90, desconto:61, link:"#", img:"💄", categoria:"Beleza", selo:"" },
+            { id:8, loja:"magalu", titulo:"Aspirador Robô Mapeamento Laser Wi-Fi", precoAntigo:1899, precoNovo:899, desconto:53, link:"#", img:"🤖", categoria:"Casa", selo:"SUPER DESCONTO" },
+            { id:9, loja:"amazon", titulo:"Fire TV Stick 4K Controle de Voz Alexa", precoAntigo:449, precoNovo:249, desconto:44, link:"#", img:"📺", categoria:"Tecnologia", selo:"" },
+            { id:10, loja:"outras", titulo:"Tênis Nike Revolution 6 Masculino Running", precoAntigo:379.99, precoNovo:189.99, desconto:50, link:"#", img:"👟", categoria:"Esporte", selo:"" },
+            { id:11, loja:"shopee", titulo:"Câmera Segurança WiFi 360° Full HD Visão Noturna", precoAntigo:199.90, precoNovo:79.90, desconto:60, link:"#", img:"📷", categoria:"Tecnologia", selo:"" },
+            { id:12, loja:"mercadolivre", titulo:"Cadeira Gamer Reclinável 180° com Apoio de Pé", precoAntigo:1299, precoNovo:599, desconto:54, link:"#", img:"🪑", categoria:"Móveis", selo:"MAIS VENDIDO" },
+        ];
+    }
+
+    // ══════════════════════════════════════════
+    // RENDERIZAÇÃO
+    // ══════════════════════════════════════════
+
+    function renderizarTudo() {
+        renderDestaques();
+        renderOfertas();
+        renderSocial();
+        renderFormLojas();
+        renderFooterSocials();
+        atualizarStats();
+    }
+
+    function criarCardHTML(oferta, i) {
+        const loja = LOJAS[oferta.loja] || LOJAS.outras;
+        const economia = (oferta.precoAntigo - oferta.precoNovo).toFixed(2);
+        const bgGrad = oferta.desconto >= 50
+            ? "linear-gradient(135deg, #E43225, #FF6B35)"
+            : "linear-gradient(135deg, #FF6B35, #FFB347)";
+        const textColor = oferta.loja === "mercadolivre" ? "#333" : "#fff";
+
+        return `
+        <div class="oferta-card" style="animation-delay:${i * 0.06}s">
+            ${oferta.selo ? `<div class="oferta-selo" style="background:${oferta.desconto>=60?'#E43225':loja.cor};color:${textColor}">${oferta.selo}</div>` : ''}
+            <div class="oferta-desconto" style="background:${bgGrad}">-${oferta.desconto}%</div>
+            <div class="oferta-img" style="background:linear-gradient(135deg,${loja.cor}08,${loja.cor}15)">
+                ${oferta.img}
+                <div class="oferta-loja-badge" style="background:${loja.cor}18;color:${loja.cor}">${loja.nome}</div>
+            </div>
+            <div class="oferta-body">
+                <div class="oferta-cat">${oferta.categoria}</div>
+                <div class="oferta-titulo">${oferta.titulo}</div>
+                <div style="margin-bottom:14px">
+                    <div class="oferta-preco-antigo">R$ ${oferta.precoAntigo.toFixed(2)}</div>
+                    <div class="oferta-preco-novo">R$ ${oferta.precoNovo.toFixed(2)}</div>
+                    <div class="oferta-economia">Economia de R$ ${economia}</div>
+                </div>
+                <a href="${oferta.link}" target="_blank" rel="noopener noreferrer" class="oferta-btn" style="background:linear-gradient(135deg,${loja.cor},${loja.cor}DD);color:${textColor};box-shadow:0 3px 12px ${loja.cor}33">
+                    🛒 Ver Oferta →
+                </a>
+            </div>
+        </div>`;
+    }
+
+    function renderDestaques() {
+        const destaques = todasOfertas.filter(o => o.selo).slice(0, 6);
+        document.getElementById("destaqueGrid").innerHTML = destaques.map((o, i) => criarCardHTML(o, i)).join("");
+    }
+
+    function renderOfertas() {
+        const busca = (document.getElementById("buscaInput")?.value || "").toLowerCase();
+        const filtradas = todasOfertas.filter(o => {
+            const matchLoja = lojaAtual === "todas" || o.loja === lojaAtual;
+            const matchBusca = !busca || o.titulo.toLowerCase().includes(busca) || o.categoria.toLowerCase().includes(busca);
+            return matchLoja && matchBusca;
+        });
+
+        const grid = document.getElementById("ofertasGrid");
+        const contagem = document.getElementById("contagem");
+
+        contagem.textContent = `${filtradas.length} oferta${filtradas.length !== 1 ? 's' : ''} encontrada${filtradas.length !== 1 ? 's' : ''}`;
+
+        if (filtradas.length === 0) {
+            grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="emoji">🔍</div><h3 style="font-size:20px;color:#555;margin-bottom:8px">Nenhuma oferta encontrada</h3><p style="color:#999;font-size:15px">Tente outro filtro ou busque por um produto diferente.</p></div>`;
+        } else {
+            grid.innerHTML = filtradas.map((o, i) => criarCardHTML(o, i)).join("");
+        }
+    }
+
+    function renderSocial() {
+        document.getElementById("socialGrid").innerHTML = REDES.map(r =>
+            `<a class="social-card" href="${r.url}" target="_blank" rel="noopener noreferrer" onmouseenter="this.style.background='${r.cor}25';this.style.borderColor='${r.cor}50'" onmouseleave="this.style.background='rgba(255,255,255,0.05)';this.style.borderColor='rgba(255,255,255,0.08)'">
+                <div class="social-icon" style="background:${r.cor};box-shadow:0 4px 15px ${r.cor}44">${r.emoji}</div>
+                <span class="social-name">${r.nome}</span>
+            </a>`
+        ).join("");
+    }
+
+    function renderFormLojas() {
+        const lojaKeys = Object.keys(LOJAS).filter(k => k !== "todas");
+        document.getElementById("formLojas").innerHTML = lojaKeys.map(k => {
+            const l = LOJAS[k];
+            return `<button class="form-loja-btn" data-loja="${k}" onclick="toggleFormLoja(this,'${k}','${l.cor}')">${l.emoji} ${l.nome}</button>`;
+        }).join("");
+    }
+
+    function renderFooterSocials() {
+        document.getElementById("footerSocials").innerHTML = REDES.map(r =>
+            `<a class="footer-social" href="${r.url}" target="_blank" rel="noopener noreferrer" title="${r.nome}" style="font-size:18px" onmouseenter="this.style.background='${r.cor}';this.style.color='#fff'" onmouseleave="this.style.background='rgba(255,255,255,0.06)';this.style.color='#888'">${r.emoji}</a>`
+        ).join("");
+    }
+
+    function atualizarStats() {
+        document.getElementById("stat-total").textContent = todasOfertas.length;
+        if (todasOfertas.length > 0) {
+            const media = Math.round(todasOfertas.reduce((s, o) => s + o.desconto, 0) / todasOfertas.length);
+            document.getElementById("stat-desconto").textContent = media + "%";
+        }
+    }
+
+    // ══════════════════════════════════════════
+    // FILTROS DE LOJA E NAVEGAÇÃO
+    // ══════════════════════════════════════════
+
+    function inicializarFiltros() {
+        const container = document.getElementById("lojasFilter");
+        container.innerHTML = Object.entries(LOJAS).map(([id, l]) =>
+            `<button class="loja-btn ${id==='todas'?'active':''}" data-loja="${id}" onclick="filtrarPorLoja('${id}',this)" style="${id==='todas'?`border-color:${l.cor};background:${l.cor}12;color:${l.cor};box-shadow:0 2px 10px ${l.cor}20`:''}">${l.emoji} ${l.nome}</button>`
+        ).join("");
+    }
+
+    function filtrarPorLoja(loja, btn) {
+        lojaAtual = loja;
+        const l = LOJAS[loja];
+        document.querySelectorAll(".loja-btn").forEach(b => {
+            b.classList.remove("active");
+            b.style.borderColor = "#e8e8e8";
+            b.style.background = "#fff";
+            b.style.color = "#777";
+            b.style.boxShadow = "none";
+        });
+        btn.classList.add("active");
+        btn.style.borderColor = l.cor;
+        btn.style.background = l.cor + "12";
+        btn.style.color = l.cor;
+        btn.style.boxShadow = `0 2px 10px ${l.cor}20`;
+        renderOfertas();
+    }
+
+    function filtrarOfertas() { renderOfertas(); }
+
+    function navegar(pagina) {
+        document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+        document.getElementById("page-" + pagina).classList.add("active");
+
+        document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+        document.querySelectorAll(`.nav-btn[data-page="${pagina}"]`).forEach(b => b.classList.add("active"));
+
+        document.getElementById("mobileMenu").classList.remove("open");
+        window.scrollTo(0, 0);
+
+        if (pagina === "ofertas") {
+            inicializarFiltros();
+            renderOfertas();
+        }
+    }
+
+    function toggleMenu() { document.getElementById("mobileMenu").classList.toggle("open"); }
+
+    window.addEventListener("scroll", () => {
+        document.getElementById("navbar").classList.toggle("scrolled", window.scrollY > 60);
+    });
+
+    // ══════════════════════════════════════════
+    // FORMULÁRIO DE PEDIDO (A MAGIA)
+    // ══════════════════════════════════════════
+
+    let formLojaSelecionada = "";
+
+    function toggleFormLoja(btn, loja, cor) {
+        if (formLojaSelecionada === loja) {
+            formLojaSelecionada = "";
+            btn.style.borderColor = "#eee"; btn.style.background = "#fafafa"; btn.style.color = "#777";
+        } else {
+            document.querySelectorAll(".form-loja-btn").forEach(b => {
+                b.style.borderColor = "#eee"; b.style.background = "#fafafa"; b.style.color = "#777";
+            });
+            formLojaSelecionada = loja;
+            btn.style.borderColor = cor; btn.style.background = cor + "12"; btn.style.color = cor;
+        }
+    }
+
+    document.addEventListener("input", function(e) {
+        if (e.target.id === "pedidoProduto") {
+            document.getElementById("formSubmit").disabled = !e.target.value.trim();
+        }
+    });
+
+    function enviarPedido() {
+        const produto = document.getElementById("pedidoProduto").value.trim();
+        if (!produto) return;
+
+        const orcamento = document.getElementById("pedidoOrcamento").value;
+        const detalhes = document.getElementById("pedidoDetalhes").value;
+
+        // Ao invés de não ir para lado nenhum, isto abre a App do Telegram 
+        // ou o site do Telegram, abrindo uma conversa com o grupo/admin e colando o texto!
+        const msg = encodeURIComponent(
+            `🎯 NOVO PEDIDO DE OFERTA NO SITE\n\n` +
+            `📦 Produto: ${produto}\n` +
+            `${orcamento ? `💰 Orçamento: ${orcamento}\n` : ''}` +
+            `${formLojaSelecionada ? `🏪 Loja: ${LOJAS[formLojaSelecionada]?.nome || formLojaSelecionada}\n` : ''}` +
+            `${detalhes ? `📝 Detalhes: ${detalhes}\n` : ''}`
+        );
+
+        document.getElementById("formBox").innerHTML = `
+            <div class="form-success">
+                <div class="form-success-icon">✓</div>
+                <h3 style="font-size:22px;margin-bottom:8px;font-weight:800">Pedido Preparado!</h3>
+                <p style="color:#666;font-size:15px;margin-bottom:20px">Clique abaixo para enviar para a nossa equipa no Telegram.</p>
+                <a href="${CONFIG.TELEGRAM}?text=${msg}" target="_blank" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:10px;background:linear-gradient(135deg,#FF6B35,#E43225);color:#fff;font-weight:700;font-size:14px;text-decoration:none">
+                    📲 Enviar Pedido no Telegram
+                </a>
+            </div>`;
+    }
+
+    carregarOfertas();
+    </script>
+</body>
+</html>
 
