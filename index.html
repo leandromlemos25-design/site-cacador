@@ -1047,29 +1047,32 @@
                 const precoNovo = parseFloat(String(get("preco_novo", 4)).replace(",", ".")) || 0;
                 const desconto = precoAntigo > 0 ? Math.round((1 - precoNovo / precoAntigo) * 100) : 0;
 
-                // Timestamp: tenta coluna "data", senão usa índice para simular ordem
-                const rawData = get("data", 10);
+                // Coluna A = Data (índice 0)
+                const rawData = get("data", 0);
                 let timestamp = rawData ? new Date(rawData).getTime() : (Date.now() - i * 60000);
                 if (isNaN(timestamp)) timestamp = Date.now() - i * 60000;
 
+                // Coluna J = Ativo (índice 9)
                 const ativoVal = String(get("ativo", 9)).toLowerCase().trim();
                 const ativo = ativoVal !== "nao" && ativoVal !== "não" && ativoVal !== "false" && ativoVal !== "0";
 
-                // Loja: tenta por label primeiro, depois fallback para coluna 1
-                const lojaRaw = get("loja", 1) || get("store", 1) || row.c[1]?.v || "";
+                // Coluna B = Loja (índice 1)
+                const lojaRaw = get("loja", 1) || row.c[1]?.v || "";
 
-                // Imagem: aceita URL ou emoji — tenta vários nomes de coluna possíveis
-                const imgRaw = get("imagem", 6) || get("img", 6) || get("foto", 6) || get("image", 6) || get("emoji", 6) || get("url_imagem", 6) || "";
+                // Coluna K = imagem URL (índice 10), Coluna G = emoji (índice 6)
+                const imgUrl   = get("imagem", 10) || get("image", 10) || get("img", 10) || get("foto", 10) || "";
+                const imgEmoji = get("emoji", 6) || get("icone", 6) || "🛒";
+                const imgRaw   = imgUrl || imgEmoji;
 
                 return {
                     id: i + 1,
                     loja: normalizarLoja(String(lojaRaw)),
-                    titulo: get("titulo", 2) || get("title", 2) || "Produto",
+                    titulo: get("titulo", 2) || "Produto",
                     precoAntigo, precoNovo, desconto,
-                    link: get("link", 5) || get("url", 5) || "#",
+                    link: get("link", 5) || "#",
                     img: imgRaw || "🛒",
-                    categoria: get("categoria", 7) || get("category", 7) || "Geral",
-                    selo: get("selo", 8) || get("badge", 8) || "",
+                    categoria: get("categoria", 7) || "Geral",
+                    selo: get("selo", 8) || "",
                     ativo,
                     timestamp,
                 };
