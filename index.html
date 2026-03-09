@@ -1084,6 +1084,11 @@
                 };
             }).filter(o => o.ativo && o.precoNovo > 0);
 
+            // DEBUG — abre o console (F12) para ver os dados crus
+            console.table(novas.map(o => ({ titulo: o.titulo, img: o.img, loja: o.loja })));
+            console.log("🔍 RAW cols:", cols);
+            console.log("🔍 RAW row 7:", json.table.rows[6]?.c?.map((c,i) => `[${i}] ${c?.v}`));
+
             // Detectar ofertas novas (se já havia dados antes)
             if (silencioso && todasOfertas.length > 0) {
                 const novosIds = new Set(novas.map(o => o.id));
