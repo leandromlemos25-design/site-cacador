@@ -297,9 +297,14 @@
             box-shadow: 0 2px 8px rgba(228,50,37,0.3);
         }
         .oferta-img {
-            height: 140px; display: flex; align-items: center; justify-content: center;
-            font-size: 56px; position: relative;
+            height: 160px; display: flex; align-items: center; justify-content: center;
+            font-size: 56px; position: relative; overflow: hidden;
         }
+        .oferta-img img {
+            width: 100%; height: 100%; object-fit: contain;
+            padding: 12px; transition: transform 0.3s ease;
+        }
+        .oferta-card:hover .oferta-img img { transform: scale(1.05); }
         .oferta-loja-badge {
             position: absolute; bottom: 8px; left: 12px;
             padding: 3px 10px; border-radius: 20px;
@@ -845,8 +850,12 @@
         amazon:        { nome: "Amazon",          emoji: "📦", cor: "#FF9900" },
         shopee:        { nome: "Shopee",          emoji: "🧡", cor: "#EE4D2D" },
         magalu:        { nome: "Magalu",          emoji: "💙", cor: "#0086FF" },
-        mercadolivre:  { nome: "Mercado Livre",   emoji: "🤝", cor: "#FFE600" },
+        mercadolivre:  { nome: "Mercado Livre",   emoji: "🟡", cor: "#FFE600" },
         aliexpress:    { nome: "AliExpress",      emoji: "🌏", cor: "#E43225" },
+        americanas:    { nome: "Americanas",      emoji: "🔴", cor: "#E4002B" },
+        casasbahia:    { nome: "Casas Bahia",     emoji: "🛋️", cor: "#0057A8" },
+        submarino:     { nome: "Submarino",       emoji: "🚢", cor: "#0033A0" },
+        netshoes:      { nome: "Netshoes",        emoji: "👟", cor: "#007A4C" },
         outras:        { nome: "Outras",          emoji: "🏷️", cor: "#8B5CF6" },
     };
 
@@ -857,6 +866,33 @@
         { nome: "TikTok",    url: CONFIG.TIKTOK,    svg: '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.16-3.44-3.37-3.46-5.7-.02-1.43.34-2.84 1.05-4.04 1.63-2.64 4.88-3.9 7.82-2.92v4.06c-1.12-.4-2.42-.31-3.43.3-1.05.62-1.68 1.78-1.62 3.02.04 1.15.68 2.21 1.7 2.76 1.06.56 2.4.61 3.49.12 1.15-.52 1.88-1.68 1.91-2.96.06-4.57.01-9.15.03-13.73l-.02-.02z"/></svg>', cor: "#111111" },
         { nome: "Facebook",  url: CONFIG.FACEBOOK,  svg: '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm3 8h-1.35c-.538 0-.65.221-.65.778v1.222h2l-.209 2h-1.791v7h-3v-7h-2v-2h2v-2.308c0-1.769.931-2.692 3.029-2.692h1.971v3z"/></svg>', cor: "#1877F2" },
     ];
+
+    // ══════════════════════════════════════════
+    // NORMALIZAÇÃO DE LOJA
+    // Aceita qualquer variação de nome digitado na planilha
+    // ══════════════════════════════════════════
+
+    function normalizarLoja(raw) {
+        const v = raw.toLowerCase().trim()
+            .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // remove acentos
+            .replace(/[^a-z0-9]/g, "");                       // remove espaços e símbolos
+        const mapa = {
+            amazon:       ["amazon"],
+            shopee:       ["shopee"],
+            magalu:       ["magalu","magazineluiza","magazinelviza","magazine","luiza"],
+            mercadolivre: ["mercadolivre","mercadolibre","mercadol","meli","ml","mercado"],
+            aliexpress:   ["aliexpress","ali","aliex"],
+            americanas:   ["americanas","americanas"],
+            casasbahia:   ["casasbahia","casas","bahia"],
+            submarino:    ["submarino"],
+            shoptime:     ["shoptime"],
+            netshoes:     ["netshoes"],
+        };
+        for (const [chave, aliases] of Object.entries(mapa)) {
+            if (aliases.some(a => v.includes(a))) return chave;
+        }
+        return "outras";
+    }
 
     let todasOfertas = [];
     let lojaAtual = "todas";
@@ -1019,15 +1055,21 @@
                 const ativoVal = String(get("ativo", 9)).toLowerCase().trim();
                 const ativo = ativoVal !== "nao" && ativoVal !== "não" && ativoVal !== "false" && ativoVal !== "0";
 
+                // Loja: tenta por label primeiro, depois fallback para coluna 1
+                const lojaRaw = get("loja", 1) || get("store", 1) || row.c[1]?.v || "";
+
+                // Imagem: aceita URL ou emoji — tenta vários nomes de coluna possíveis
+                const imgRaw = get("imagem", 6) || get("img", 6) || get("foto", 6) || get("image", 6) || get("emoji", 6) || get("url_imagem", 6) || "";
+
                 return {
                     id: i + 1,
-                    loja: String(get("loja", 1)).toLowerCase().trim() || "outras",
-                    titulo: get("titulo", 2) || "Produto",
+                    loja: normalizarLoja(String(lojaRaw)),
+                    titulo: get("titulo", 2) || get("title", 2) || "Produto",
                     precoAntigo, precoNovo, desconto,
-                    link: get("link", 5) || "#",
-                    img: get("emoji", 6) || "🛒",
-                    categoria: get("categoria", 7) || "Geral",
-                    selo: get("selo", 8) || "",
+                    link: get("link", 5) || get("url", 5) || "#",
+                    img: imgRaw || "🛒",
+                    categoria: get("categoria", 7) || get("category", 7) || "Geral",
+                    selo: get("selo", 8) || get("badge", 8) || "",
                     ativo,
                     timestamp,
                 };
@@ -1150,7 +1192,10 @@
                 ${fav ? '❤️' : '🤍'}
             </button>
             <div class="oferta-img" style="background:linear-gradient(135deg,${loja.cor}08,${loja.cor}15)">
-                ${oferta.img}
+                ${oferta.img && (oferta.img.startsWith("http") || oferta.img.startsWith("//"))
+                    ? `<img src="${oferta.img}" alt="${oferta.titulo}" onerror="this.parentElement.innerHTML='<span style=\\'font-size:56px\\'>🛒</span><div class=\\'oferta-loja-badge\\' style=\\'background:${loja.cor}18;color:${loja.cor}\\'>${loja.nome}</div>'">`
+                    : `<span style="font-size:56px">${oferta.img || "🛒"}</span>`
+                }
                 <div class="oferta-loja-badge" style="background:${loja.cor}18;color:${loja.cor}">${loja.nome}</div>
             </div>
             <div class="oferta-body">
