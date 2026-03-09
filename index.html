@@ -75,7 +75,9 @@
             display: flex; align-items: center; justify-content: space-between;
         }
         .logo { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        .site-logo { max-height: 44px; border-radius: 6px; object-fit: contain; }
         .logo-emoji { font-size: 28px; }
+        .logo-text-container { display: flex; flex-direction: column; }
         .logo-text { font-size: 18px; font-weight: 900; color: #fff; line-height: 1.1; letter-spacing: -0.5px; }
         .logo-sub { font-size: 10px; font-weight: 700; color: #FF6B35; letter-spacing: 2px; text-transform: uppercase; }
         .navbar.scrolled .logo-text { color: #1a1a2e; }
@@ -413,12 +415,13 @@
         .social-icon {
             width: 48px; height: 48px; border-radius: 14px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 22px;
         }
-        .social-name { font-size: 13px; font-weight: 700; }
 
         @media (max-width: 768px) {
-            .social-grid { grid-template-columns: repeat(2, 1fr); }
+            .social-grid { grid-template-columns: repeat(3, 1fr); }
+            .social-grid .social-card:nth-child(4), .social-grid .social-card:nth-child(5) {
+                grid-column: span 1; /* Adjusts the grid so the last two fit centered */
+            }
         }
 
         /* ══════════════════════════════════════════
@@ -460,7 +463,6 @@
             flex-wrap: wrap; gap: 20px;
         }
         .footer-brand { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-        .footer-brand span:first-child { font-size: 22px; }
         .footer-brand span:last-child { color: #fff; font-weight: 800; font-size: 16px; }
         .footer-desc { color: #666; font-size: 13px; }
         .footer-socials { display: flex; gap: 10px; }
@@ -468,7 +470,7 @@
             width: 40px; height: 40px; border-radius: 10px;
             background: rgba(255,255,255,0.06);
             display: flex; align-items: center; justify-content: center;
-            color: #888; font-size: 18px; transition: all 0.2s;
+            color: #888; transition: all 0.2s;
         }
         .footer-social:hover { color: #fff; }
         .footer-copy {
@@ -490,8 +492,9 @@
     <nav class="navbar" id="navbar">
         <div class="navbar-inner">
             <div class="logo" onclick="navegar('home')">
-                <span class="logo-emoji">🎯</span>
-                <div>
+                <img src="logo.jpg" alt="Logo" class="site-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <span class="logo-emoji" style="display:none">🎯</span>
+                <div class="logo-text-container">
                     <div class="logo-text">O CAÇADOR</div>
                     <div class="logo-sub">DE OFERTA</div>
                 </div>
@@ -501,7 +504,7 @@
                 <button class="nav-btn" data-page="ofertas" onclick="navegar('ofertas')">Ofertas</button>
                 <button class="nav-btn" data-page="pedir" onclick="navegar('pedir')">Pedir Oferta</button>
                 <a class="nav-cta" href="https://t.me/ocacadordeoferta" target="_blank">
-                    📲 Entrar no Grupo
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.94z"/></svg> Entrar no Grupo
                 </a>
             </div>
             <button class="mobile-toggle" onclick="toggleMenu()">☰</button>
@@ -510,7 +513,7 @@
             <button data-page="home" onclick="navegar('home')">Início</button>
             <button data-page="ofertas" onclick="navegar('ofertas')">Ofertas</button>
             <button data-page="pedir" onclick="navegar('pedir')">Pedir Oferta</button>
-            <a class="mob-cta" href="https://t.me/ocacadordeoferta" target="_blank">📲 Entrar no Grupo</a>
+            <a class="mob-cta" href="https://t.me/ocacadordeoferta" target="_blank"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.94z"/></svg> Entrar no Grupo</a>
         </div>
     </nav>
 
@@ -529,7 +532,7 @@
                 </p>
                 <div class="hero-btns fade-up fade-up-3">
                     <a class="btn-primary" href="https://t.me/ocacadordeoferta" target="_blank">
-                        📲 Entrar no Grupo Grátis
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.94z"/></svg> Entrar no Grupo Grátis
                     </a>
                     <button class="btn-secondary" onclick="navegar('ofertas')">Ver Ofertas →</button>
                 </div>
@@ -569,7 +572,7 @@
                 <h2>Não perca nenhuma oferta!</h2>
                 <p>Entre no grupo do Telegram e receba as melhores promoções em primeira mão.</p>
                 <a class="cta-btn" href="https://t.me/ocacadordeoferta" target="_blank">
-                    📲 Entrar Agora — É Grátis!
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.94z"/></svg> Entrar Agora — É Grátis!
                 </a>
             </div>
         </section>
@@ -592,7 +595,7 @@
                     <h3>Quer receber ofertas em primeira mão?</h3>
                     <p>No grupo do Telegram você recebe antes de todo mundo!</p>
                     <a class="nav-cta" href="https://t.me/ocacadordeoferta" target="_blank" style="font-size:15px;padding:14px 30px">
-                        📲 Entrar no Grupo
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.94z"/></svg> Entrar no Grupo
                     </a>
                 </div>
             </div>
@@ -648,7 +651,11 @@
     <footer>
         <div class="footer-inner">
             <div>
-                <div class="footer-brand"><span>🎯</span><span>O CAÇADOR DE OFERTA</span></div>
+                <div class="footer-brand">
+                    <img src="logo.jpg" alt="Logo" style="max-height: 32px; border-radius: 4px;" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+                    <span style="display:none; font-size: 22px;">🎯</span>
+                    <span>O CAÇADOR DE OFERTA</span>
+                </div>
                 <p class="footer-desc">As melhores promoções da internet, verificadas e atualizadas diariamente.</p>
             </div>
             <div class="footer-socials" id="footerSocials"></div>
@@ -667,17 +674,17 @@
     const CONFIG = {
         // 📌 COLE AQUI O ID DA SUA PLANILHA DO GOOGLE SHEETS
         // (é o código que fica na URL entre /d/ e /edit)
-        SHEET_ID: "COLE_O_ID_DA_SUA_PLANILHA_AQUI",
+        SHEET_ID: "1Ug9wQKO9HfCRrTsjZz8gDe7dCVDxXH2ehMC3nGkb6Xw",
 
         // 📌 NOME DA ABA DA PLANILHA (onde ficam as ofertas do site)
         SHEET_TAB: "Site",
 
-        // 📌 LINKS DAS REDES SOCIAIS
+        // 📌 LINKS DAS REDES SOCIAIS OFICIAIS
         TELEGRAM: "https://t.me/ocacadordeoferta",
-        INSTAGRAM: "https://instagram.com/ocacadordeoferta",
-        TIKTOK: "https://tiktok.com/@ocacadordeoferta",
-        TWITTER: "https://x.com/ocacadordeoferta",
-        FACEBOOK: "https://facebook.com/ocacadordeoferta",
+        INSTAGRAM: "https://www.instagram.com/ocacadorde_ofertas?igsh=MTJheGowa3hyNGFtag==",
+        TIKTOK: "https://www.tiktok.com/@o.cacador.de.oferta?_r=1&_t=ZS-94XgN2UjJNh",
+        FACEBOOK: "https://www.facebook.com/share/18X4uDszrG/",
+        TWITTER: "https://x.com/ocacadordeoferta", // Atualize se necessário
     };
 
     // ══════════════════════════════════════════
@@ -694,12 +701,13 @@
         outras:        { nome: "Outras",          emoji: "🏷️", cor: "#8B5CF6" },
     };
 
+    // Vetores SVG Oficiais de cada marca para um aspeto 100% Profissional
     const REDES = [
-        { nome: "Telegram",  url: CONFIG.TELEGRAM,  emoji: "📲", cor: "#0088CC" },
-        { nome: "Instagram", url: CONFIG.INSTAGRAM,  emoji: "📸", cor: "#E4405F" },
-        { nome: "TikTok",    url: CONFIG.TIKTOK,     emoji: "🎵", cor: "#000000" },
-        { nome: "Twitter/X", url: CONFIG.TWITTER,     emoji: "🐦", cor: "#1DA1F2" },
-        { nome: "Facebook",  url: CONFIG.FACEBOOK,    emoji: "📘", cor: "#1877F2" },
+        { nome: "Telegram",  url: CONFIG.TELEGRAM,  svg: '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.94z"/></svg>', cor: "#0088CC" },
+        { nome: "Instagram", url: CONFIG.INSTAGRAM, svg: '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>', cor: "#E4405F" },
+        { nome: "TikTok",    url: CONFIG.TIKTOK,    svg: '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.16-3.44-3.37-3.46-5.7-.02-1.43.34-2.84 1.05-4.04 1.63-2.64 4.88-3.9 7.82-2.92v4.06c-1.12-.4-2.42-.31-3.43.3-1.05.62-1.68 1.78-1.62 3.02.04 1.15.68 2.21 1.7 2.76 1.06.56 2.4.61 3.49.12 1.15-.52 1.88-1.68 1.91-2.96.06-4.57.01-9.15.03-13.73l-.02-.02z"/></svg>', cor: "#111111" },
+        { nome: "Twitter/X", url: CONFIG.TWITTER,   svg: '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg>', cor: "#1DA1F2" },
+        { nome: "Facebook",  url: CONFIG.FACEBOOK,  svg: '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm3 8h-1.35c-.538 0-.65.221-.65.778v1.222h2l-.209 2h-1.791v7h-3v-7h-2v-2h2v-2.308c0-1.769.931-2.692 3.029-2.692h1.971v3z"/></svg>', cor: "#1877F2" },
     ];
 
     let todasOfertas = [];
@@ -710,9 +718,10 @@
     // ══════════════════════════════════════════
 
     async function carregarOfertas() {
-        if (CONFIG.SHEET_ID === "COLE_O_ID_DA_SUA_PLANILHA_AQUI") {
-            console.log("⚠️ Google Sheets não configurado. Usando ofertas de exemplo.");
-            todasOfertas = getOfertasExemplo();
+        // Se a planilha não estiver configurada, mostra o site vazio esperando ofertas
+        if (CONFIG.SHEET_ID === "COLE_O_ID_DA_SUA_PLANILHA_AQUI" || !CONFIG.SHEET_ID) {
+            console.log("⚠️ Planilha do Google não configurada. A aguardar ofertas...");
+            todasOfertas = [];
             renderizarTudo();
             return;
         }
@@ -753,27 +762,10 @@
 
         } catch (err) {
             console.error("❌ Erro ao carregar planilha:", err);
-            todasOfertas = getOfertasExemplo();
+            todasOfertas = []; // Em caso de erro, também mostra a vitrine vazia
         }
 
         renderizarTudo();
-    }
-
-    function getOfertasExemplo() {
-        return [
-            { id:1, loja:"amazon", titulo:"Echo Dot 5ª Geração com Alexa — Smart Speaker", precoAntigo:399, precoNovo:199, desconto:50, link:"#", img:"🔊", categoria:"Tecnologia", selo:"MAIS VENDIDO" },
-            { id:2, loja:"shopee", titulo:"Fone Bluetooth TWS Cancelamento de Ruído", precoAntigo:189.90, precoNovo:59.90, desconto:68, link:"#", img:"🎧", categoria:"Acessórios", selo:"MENOR PREÇO" },
-            { id:3, loja:"magalu", titulo:"Fritadeira Air Fryer Digital 5.5L Inox", precoAntigo:599, precoNovo:279, desconto:53, link:"#", img:"🍟", categoria:"Casa", selo:"" },
-            { id:4, loja:"mercadolivre", titulo:"Kit 3 Camisetas Dry Fit UV50+ Masculina", precoAntigo:149.90, precoNovo:69.90, desconto:53, link:"#", img:"👕", categoria:"Moda", selo:"" },
-            { id:5, loja:"amazon", titulo:"Kindle 11ª Geração Iluminação Integrada", precoAntigo:549, precoNovo:349, desconto:36, link:"#", img:"📚", categoria:"Tecnologia", selo:"PREÇO HISTÓRICO" },
-            { id:6, loja:"aliexpress", titulo:"Smartwatch Monitor Cardíaco IP68 Tela AMOLED", precoAntigo:259, precoNovo:89.90, desconto:65, link:"#", img:"⌚", categoria:"Tecnologia", selo:"OFERTA RELÂMPAGO" },
-            { id:7, loja:"shopee", titulo:"Organizador de Maquiagem Acrílico Giratório 360°", precoAntigo:129, precoNovo:49.90, desconto:61, link:"#", img:"💄", categoria:"Beleza", selo:"" },
-            { id:8, loja:"magalu", titulo:"Aspirador Robô Mapeamento Laser Wi-Fi", precoAntigo:1899, precoNovo:899, desconto:53, link:"#", img:"🤖", categoria:"Casa", selo:"SUPER DESCONTO" },
-            { id:9, loja:"amazon", titulo:"Fire TV Stick 4K Controle de Voz Alexa", precoAntigo:449, precoNovo:249, desconto:44, link:"#", img:"📺", categoria:"Tecnologia", selo:"" },
-            { id:10, loja:"outras", titulo:"Tênis Nike Revolution 6 Masculino Running", precoAntigo:379.99, precoNovo:189.99, desconto:50, link:"#", img:"👟", categoria:"Esporte", selo:"" },
-            { id:11, loja:"shopee", titulo:"Câmera Segurança WiFi 360° Full HD Visão Noturna", precoAntigo:199.90, precoNovo:79.90, desconto:60, link:"#", img:"📷", categoria:"Tecnologia", selo:"" },
-            { id:12, loja:"mercadolivre", titulo:"Cadeira Gamer Reclinável 180° com Apoio de Pé", precoAntigo:1299, precoNovo:599, desconto:54, link:"#", img:"🪑", categoria:"Móveis", selo:"MAIS VENDIDO" },
-        ];
     }
 
     // ══════════════════════════════════════════
@@ -821,8 +813,14 @@
     }
 
     function renderDestaques() {
+        const grid = document.getElementById("destaqueGrid");
         const destaques = todasOfertas.filter(o => o.selo).slice(0, 6);
-        document.getElementById("destaqueGrid").innerHTML = destaques.map((o, i) => criarCardHTML(o, i)).join("");
+        
+        if (destaques.length === 0) {
+            grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="emoji">⏱️</div><h3 style="font-size:20px;color:#555;margin-bottom:8px">O Teteco está a carregar o combustível...</h3><p style="color:#999;font-size:15px">As ofertas começarão a aparecer aqui assim que enviar a primeira promoção com o bot!</p></div>`;
+        } else {
+            grid.innerHTML = destaques.map((o, i) => criarCardHTML(o, i)).join("");
+        }
     }
 
     function renderOfertas() {
@@ -838,7 +836,9 @@
 
         contagem.textContent = `${filtradas.length} oferta${filtradas.length !== 1 ? 's' : ''} encontrada${filtradas.length !== 1 ? 's' : ''}`;
 
-        if (filtradas.length === 0) {
+        if (todasOfertas.length === 0) {
+            grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="emoji">⚙️</div><h3 style="font-size:20px;color:#555;margin-bottom:8px">Sem ofertas reais no momento</h3><p style="color:#999;font-size:15px">Configure o <b>ID da Planilha</b> no código do site e use o robô no Telegram para começar a popular o site.</p></div>`;
+        } else if (filtradas.length === 0) {
             grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="emoji">🔍</div><h3 style="font-size:20px;color:#555;margin-bottom:8px">Nenhuma oferta encontrada</h3><p style="color:#999;font-size:15px">Tente outro filtro ou busque por um produto diferente.</p></div>`;
         } else {
             grid.innerHTML = filtradas.map((o, i) => criarCardHTML(o, i)).join("");
@@ -848,7 +848,7 @@
     function renderSocial() {
         document.getElementById("socialGrid").innerHTML = REDES.map(r =>
             `<a class="social-card" href="${r.url}" target="_blank" rel="noopener noreferrer" onmouseenter="this.style.background='${r.cor}25';this.style.borderColor='${r.cor}50'" onmouseleave="this.style.background='rgba(255,255,255,0.05)';this.style.borderColor='rgba(255,255,255,0.08)'">
-                <div class="social-icon" style="background:${r.cor};box-shadow:0 4px 15px ${r.cor}44">${r.emoji}</div>
+                <div class="social-icon" style="color:${r.cor};">${r.svg}</div>
                 <span class="social-name">${r.nome}</span>
             </a>`
         ).join("");
@@ -864,7 +864,7 @@
 
     function renderFooterSocials() {
         document.getElementById("footerSocials").innerHTML = REDES.map(r =>
-            `<a class="footer-social" href="${r.url}" target="_blank" rel="noopener noreferrer" title="${r.nome}" style="font-size:18px" onmouseenter="this.style.background='${r.cor}';this.style.color='#fff'" onmouseleave="this.style.background='rgba(255,255,255,0.06)';this.style.color='#888'">${r.emoji}</a>`
+            `<a class="footer-social" href="${r.url}" target="_blank" rel="noopener noreferrer" title="${r.nome}" onmouseenter="this.style.background='${r.cor}';this.style.color='#fff'" onmouseleave="this.style.background='rgba(255,255,255,0.06)';this.style.color='#888'">${r.svg}</a>`
         ).join("");
     }
 
@@ -873,6 +873,8 @@
         if (todasOfertas.length > 0) {
             const media = Math.round(todasOfertas.reduce((s, o) => s + o.desconto, 0) / todasOfertas.length);
             document.getElementById("stat-desconto").textContent = media + "%";
+        } else {
+            document.getElementById("stat-desconto").textContent = "0%";
         }
     }
 
@@ -930,7 +932,7 @@
     });
 
     // ══════════════════════════════════════════
-    // FORMULÁRIO DE PEDIDO (A MAGIA)
+    // FORMULÁRIO DE PEDIDO
     // ══════════════════════════════════════════
 
     let formLojaSelecionada = "";
@@ -961,8 +963,6 @@
         const orcamento = document.getElementById("pedidoOrcamento").value;
         const detalhes = document.getElementById("pedidoDetalhes").value;
 
-        // Ao invés de não ir para lado nenhum, isto abre a App do Telegram 
-        // ou o site do Telegram, abrindo uma conversa com o grupo/admin e colando o texto!
         const msg = encodeURIComponent(
             `🎯 NOVO PEDIDO DE OFERTA NO SITE\n\n` +
             `📦 Produto: ${produto}\n` +
@@ -977,7 +977,7 @@
                 <h3 style="font-size:22px;margin-bottom:8px;font-weight:800">Pedido Preparado!</h3>
                 <p style="color:#666;font-size:15px;margin-bottom:20px">Clique abaixo para enviar para a nossa equipa no Telegram.</p>
                 <a href="${CONFIG.TELEGRAM}?text=${msg}" target="_blank" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:10px;background:linear-gradient(135deg,#FF6B35,#E43225);color:#fff;font-weight:700;font-size:14px;text-decoration:none">
-                    📲 Enviar Pedido no Telegram
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.94z"/></svg> Enviar Pedido no Telegram
                 </a>
             </div>`;
     }
@@ -986,4 +986,3 @@
     </script>
 </body>
 </html>
-
