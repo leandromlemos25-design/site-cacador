@@ -1060,8 +1060,14 @@
                 const lojaRaw = get("loja", 1) || row.c[1]?.v || "";
 
                 // Coluna K = imagem URL (índice 10), Coluna G = emoji (índice 6)
-                const imgUrl   = get("imagem", 10) || get("image", 10) || get("img", 10) || get("foto", 10) || "";
-                const imgEmoji = get("emoji", 6) || get("icone", 6) || "🛒";
+                // O bot pode colocar a URL em qualquer uma das duas colunas
+                const colEmoji  = String(get("emoji", 6) || "");
+                const colImagem = String(get("imagem", 10) || get("image", 10) || get("img", 10) || get("foto", 10) || "");
+                
+                // Se a coluna G tiver uma URL (começa com http), usa como imagem
+                const isUrl = (s) => s.startsWith("http") || s.startsWith("//");
+                const imgUrl   = isUrl(colImagem) ? colImagem : (isUrl(colEmoji) ? colEmoji : "");
+                const imgEmoji = !isUrl(colEmoji) && colEmoji ? colEmoji : "🛒";
                 const imgRaw   = imgUrl || imgEmoji;
 
                 return {
