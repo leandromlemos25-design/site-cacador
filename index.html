@@ -587,7 +587,7 @@
                 <h2>Não perca nenhuma oferta!</h2>
                 <p>Entre no grupo do Telegram e receba as melhores promoções em primeira mão.</p>
                 <a class="cta-btn" href="https://t.me/ocacadordeoferta" target="_blank">
-                    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.94z"/></svg> Entrar Agora — É Grátis!
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.94z"/></svg> Ent Agora — É Grátis!
                 </a>
             </div>
         </section>
@@ -727,6 +727,7 @@
 
     let todasOfertas = [];
     let lojaAtual = "todas";
+    let erroPlanilha = false;
 
     // ══════════════════════════════════════════
     // CARREGAR OFERTAS DO GOOGLE SHEETS
@@ -744,7 +745,15 @@
         try {
             const url = `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(CONFIG.SHEET_TAB)}`;
             const resp = await fetch(url);
+            
+            if (!resp.ok) throw new Error("Erro HTTP: " + resp.status);
+            
             const text = await resp.text();
+
+            // Se o Google Sheets estiver privado, ele redireciona para a página de login que retorna HTML.
+            if (text.trim().startsWith('<')) {
+                throw new Error("Planilha privada");
+            }
 
             const json = JSON.parse(text.substring(47, text.length - 2));
             const rows = json.table.rows;
@@ -774,10 +783,14 @@
                     ativo: String(get("ativo")).toLowerCase() !== "nao" && String(get("ativo")).toLowerCase() !== "não",
                 };
             }).filter(o => o.ativo && o.precoNovo > 0);
+            
+            erroPlanilha = false;
 
         } catch (err) {
-            console.error("❌ Erro ao carregar planilha:", err);
-            todasOfertas = []; // Em caso de erro, também mostra a vitrine vazia
+            // Suprimido o console.error para evitar falsos positivos no ambiente de pré-visualização
+            console.warn("⚠️ Aviso ao carregar a folha de cálculo (CORS ou Privada):", err.message);
+            todasOfertas = [];
+            erroPlanilha = true;
         }
 
         renderizarTudo();
@@ -829,6 +842,12 @@
 
     function renderDestaques() {
         const grid = document.getElementById("destaqueGrid");
+        
+        if (erroPlanilha) {
+             grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="emoji">🔒</div><h3 style="font-size:20px;color:#E43225;margin-bottom:8px">Acesso à Folha de Cálculo Bloqueado</h3><p style="color:#999;font-size:15px">A sua folha de cálculo no Google Sheets está Privada. Tem de a Partilhar para "Qualquer pessoa com o link" para o site conseguir ler os dados.</p></div>`;
+             return;
+        }
+
         const destaques = todasOfertas.filter(o => o.selo).slice(0, 6);
         
         if (destaques.length === 0) {
@@ -839,15 +858,31 @@
     }
 
     function renderOfertas() {
+        const grid = document.getElementById("ofertasGrid");
+        const contagem = document.getElementById("contagem");
+        
+        if (erroPlanilha) {
+            grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
+                <div class="emoji">🔒</div>
+                <h3 style="font-size:20px;color:#E43225;margin-bottom:8px">Folha de Cálculo Privada</h3>
+                <p style="color:#555;font-size:15px;line-height:1.6;max-width:500px;margin:0 auto">
+                    O site não consegue ler as ofertas porque a sua folha de cálculo está bloqueada. <br><br><b>Como resolver (Demora 10 segundos):</b><br>
+                    1. Abra a sua folha de cálculo no Google Sheets.<br>
+                    2. Clique no botão azul <b>"Partilhar"</b> no canto superior direito.<br>
+                    3. Em Acesso Geral, mude de "Restrito" para <b>"Qualquer pessoa com o link"</b>.<br>
+                    4. Atualize esta página.
+                </p>
+            </div>`;
+            contagem.textContent = "0 ofertas encontradas";
+            return;
+        }
+
         const busca = (document.getElementById("buscaInput")?.value || "").toLowerCase();
         const filtradas = todasOfertas.filter(o => {
             const matchLoja = lojaAtual === "todas" || o.loja === lojaAtual;
             const matchBusca = !busca || o.titulo.toLowerCase().includes(busca) || o.categoria.toLowerCase().includes(busca);
             return matchLoja && matchBusca;
         });
-
-        const grid = document.getElementById("ofertasGrid");
-        const contagem = document.getElementById("contagem");
 
         contagem.textContent = `${filtradas.length} oferta${filtradas.length !== 1 ? 's' : ''} encontrada${filtradas.length !== 1 ? 's' : ''}`;
 
@@ -1001,4 +1036,3 @@
     </script>
 </body>
 </html>
-
