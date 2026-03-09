@@ -142,6 +142,19 @@
             animation: float 5s ease-in-out infinite;
         }
         .hero-inner { max-width: 800px; margin: 0 auto; position: relative; z-index: 2; }
+        
+        .main-banner-img {
+            width: 100%;
+            max-width: 850px;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            margin-bottom: 40px;
+            border: 2px solid rgba(255,255,255,0.1);
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
         .hero-badge {
             display: inline-flex; align-items: center; gap: 8px;
             background: rgba(255,107,53,0.15); border: 1px solid rgba(255,107,53,0.3);
@@ -159,17 +172,6 @@
         .hero p {
             font-size: 19px; color: rgba(255,255,255,0.65);
             max-width: 500px; margin: 0 auto 36px; line-height: 1.6;
-        }
-        .main-banner-img {
-            width: 100%;
-            max-width: 850px;
-            border-radius: 20px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            margin-bottom: 40px;
-            border: 2px solid rgba(255,255,255,0.1);
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
         }
         .hero-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
         .btn-primary {
@@ -269,6 +271,7 @@
             background: #fff; border-radius: 16px; overflow: hidden;
             box-shadow: 0 2px 20px rgba(0,0,0,0.06); transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
             border: 1px solid #f0f0f0; position: relative;
+            display: flex; flex-direction: column;
         }
         .oferta-card:hover {
             transform: translateY(-6px);
@@ -295,7 +298,7 @@
             padding: 3px 10px; border-radius: 20px;
             font-size: 11px; font-weight: 700;
         }
-        .oferta-body { padding: 16px 18px 18px; }
+        .oferta-body { padding: 16px 18px 18px; flex: 1; display: flex; flex-direction: column; }
         .oferta-cat {
             font-size: 11px; color: #999; font-weight: 600;
             text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;
@@ -319,7 +322,7 @@
             display: flex; align-items: center; justify-content: center; gap: 8px;
             padding: 11px 16px; border-radius: 10px; width: 100%;
             color: #fff; font-size: 14px; font-weight: 700;
-            transition: all 0.2s; margin-top: 14px;
+            transition: all 0.2s; margin-top: auto;
         }
         .oferta-btn:hover { transform: scale(1.02); }
 
@@ -342,7 +345,7 @@
         }
 
         /* ══════════════════════════════════════════
-           FORMULÁRIO PEDIDO
+           FORMULÁRIO PEDIDO COMPLETO
            ══════════════════════════════════════════ */
         .form-box {
             background: #fff; border-radius: 20px; padding: 36px 32px;
@@ -431,7 +434,7 @@
         @media (max-width: 768px) {
             .social-grid { grid-template-columns: repeat(3, 1fr); }
             .social-grid .social-card:nth-child(4), .social-grid .social-card:nth-child(5) {
-                grid-column: span 1; /* Adjusts the grid so the last two fit centered */
+                grid-column: span 1; 
             }
         }
 
@@ -491,7 +494,7 @@
         }
 
         /* ══════════════════════════════════════════
-           PÁGINA NÃO VISÍVEL (oculta por padrão)
+           PÁGINA NÃO VISÍVEL
            ══════════════════════════════════════════ */
         .page { display: none; }
         .page.active { display: block; }
@@ -507,7 +510,7 @@
                 <span class="logo-emoji" style="display:none">🎯</span>
                 <div class="logo-text-container">
                     <div class="logo-text">O CAÇADOR</div>
-                    <div class="logo-sub">DE OFERTA</div>
+                    <div class="logo-sub">DE OFERTAS</div>
                 </div>
             </div>
             <div class="nav-links">
@@ -587,7 +590,7 @@
                 <h2>Não perca nenhuma oferta!</h2>
                 <p>Entre no grupo do Telegram e receba as melhores promoções em primeira mão.</p>
                 <a class="cta-btn" href="https://t.me/ocacadordeoferta" target="_blank">
-                    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.94z"/></svg> Ent Agora — É Grátis!
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.94z"/></svg> Entrar Agora — É Grátis!
                 </a>
             </div>
         </section>
@@ -687,19 +690,18 @@
     // ══════════════════════════════════════════
 
     const CONFIG = {
-        // 📌 COLE AQUI O ID DA SUA PLANILHA DO GOOGLE SHEETS
-        // (é o código que fica na URL entre /d/ e /edit)
+        // 📌 O SEU ID DO GOOGLE SHEETS
         SHEET_ID: "1Ug9wQKO9HfCRrTsjZz8gDe7dCVDxXH2ehMC3nGkb6Xw",
 
-        // 📌 NOME DA ABA DA PLANILHA (onde ficam as ofertas do site)
-        SHEET_TAB: "Site",
+        // 📌 NOME DA ABA DA PLANILHA (Atualizado com o seu print!)
+        SHEET_TAB: "Página1",
 
         // 📌 LINKS DAS REDES SOCIAIS OFICIAIS
         TELEGRAM: "https://t.me/ocacadordeoferta",
         INSTAGRAM: "https://www.instagram.com/ocacadorde_ofertas?igsh=MTJheGowa3hyNGFtag==",
         TIKTOK: "https://www.tiktok.com/@o.cacador.de.oferta?_r=1&_t=ZS-94XgN2UjJNh",
         FACEBOOK: "https://www.facebook.com/share/18X4uDszrG/",
-        TWITTER: "https://x.com/ocacadordeoferta", // Atualize se necessário
+        TWITTER: "https://x.com/ocacadordeoferta", 
     };
 
     // ══════════════════════════════════════════
@@ -716,12 +718,11 @@
         outras:        { nome: "Outras",          emoji: "🏷️", cor: "#8B5CF6" },
     };
 
-    // Vetores SVG Oficiais de cada marca para um aspeto 100% Profissional
+    // Vetores SVG Oficiais de cada marca
     const REDES = [
         { nome: "Telegram",  url: CONFIG.TELEGRAM,  svg: '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.94z"/></svg>', cor: "#0088CC" },
         { nome: "Instagram", url: CONFIG.INSTAGRAM, svg: '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>', cor: "#E4405F" },
         { nome: "TikTok",    url: CONFIG.TIKTOK,    svg: '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.16-3.44-3.37-3.46-5.7-.02-1.43.34-2.84 1.05-4.04 1.63-2.64 4.88-3.9 7.82-2.92v4.06c-1.12-.4-2.42-.31-3.43.3-1.05.62-1.68 1.78-1.62 3.02.04 1.15.68 2.21 1.7 2.76 1.06.56 2.4.61 3.49.12 1.15-.52 1.88-1.68 1.91-2.96.06-4.57.01-9.15.03-13.73l-.02-.02z"/></svg>', cor: "#111111" },
-        { nome: "Twitter/X", url: CONFIG.TWITTER,   svg: '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg>', cor: "#1DA1F2" },
         { nome: "Facebook",  url: CONFIG.FACEBOOK,  svg: '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm3 8h-1.35c-.538 0-.65.221-.65.778v1.222h2l-.209 2h-1.791v7h-3v-7h-2v-2h2v-2.308c0-1.769.931-2.692 3.029-2.692h1.971v3z"/></svg>', cor: "#1877F2" },
     ];
 
@@ -734,61 +735,67 @@
     // ══════════════════════════════════════════
 
     async function carregarOfertas() {
-        // Se a planilha não estiver configurada, mostra o site vazio esperando ofertas
-        if (CONFIG.SHEET_ID === "COLE_O_ID_DA_SUA_PLANILHA_AQUI" || !CONFIG.SHEET_ID) {
-            console.log("⚠️ Planilha do Google não configurada. A aguardar ofertas...");
+        if (!CONFIG.SHEET_ID || CONFIG.SHEET_ID.includes("COLE")) {
+            console.log("⚠️ Planilha do Google não configurada.");
             todasOfertas = [];
             renderizarTudo();
             return;
         }
 
         try {
-            const url = `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(CONFIG.SHEET_TAB)}`;
-            const resp = await fetch(url);
-            
-            if (!resp.ok) throw new Error("Erro HTTP: " + resp.status);
-            
-            const text = await resp.text();
-
-            // Se o Google Sheets estiver privado, ele redireciona para a página de login que retorna HTML.
-            if (text.trim().startsWith('<')) {
-                throw new Error("Planilha privada");
+            let queryUrl = `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/gviz/tq?tqx=out:json`;
+            if (CONFIG.SHEET_TAB) {
+                queryUrl += `&sheet=${encodeURIComponent(CONFIG.SHEET_TAB)}`;
             }
 
-            const json = JSON.parse(text.substring(47, text.length - 2));
+            const resp = await fetch(queryUrl);
+            const text = await resp.text();
+
+            if (text.includes("Sign in") || text.trim().startsWith("<")) {
+                throw new Error("PRIVADA");
+            }
+
+            const jsonString = text.substring(text.indexOf("(") + 1, text.lastIndexOf(")"));
+            const json = JSON.parse(jsonString);
+            
             const rows = json.table.rows;
-            const cols = json.table.cols.map(c => c.label.toLowerCase().trim());
+            const cols = json.table.cols.map(c => (c.label || "").toLowerCase().trim());
 
             todasOfertas = rows.map((row, i) => {
-                const get = (colName) => {
-                    const idx = cols.indexOf(colName);
+                const getByLabel = (label) => {
+                    const idx = cols.indexOf(label.toLowerCase());
                     return idx >= 0 && row.c[idx] ? (row.c[idx].v || "") : "";
                 };
 
-                const precoAntigo = parseFloat(String(get("preco_antigo")).replace(",", ".")) || 0;
-                const precoNovo = parseFloat(String(get("preco_novo")).replace(",", ".")) || 0;
+                const get = (label, colIdx) => {
+                    const val = getByLabel(label);
+                    if (val === "" && row.c[colIdx]) return row.c[colIdx].v || "";
+                    return val;
+                };
+
+                const precoAntigo = parseFloat(String(get("preco_antigo", 3)).replace(",", ".")) || 0;
+                const precoNovo = parseFloat(String(get("preco_novo", 4)).replace(",", ".")) || 0;
                 const desconto = precoAntigo > 0 ? Math.round((1 - precoNovo / precoAntigo) * 100) : 0;
 
                 return {
                     id: i + 1,
-                    loja: String(get("loja")).toLowerCase().trim() || "outras",
-                    titulo: get("titulo") || "Produto sem nome",
+                    loja: String(get("loja", 1)).toLowerCase().trim() || "outras",
+                    titulo: get("titulo", 2) || "Produto",
                     precoAntigo,
                     precoNovo,
                     desconto,
-                    link: get("link") || "#",
-                    img: get("emoji") || "🛒",
-                    categoria: get("categoria") || "Geral",
-                    selo: get("selo") || "",
-                    ativo: String(get("ativo")).toLowerCase() !== "nao" && String(get("ativo")).toLowerCase() !== "não",
+                    link: get("link", 5) || "#",
+                    img: get("emoji", 6) || "🛒",
+                    categoria: get("categoria", 7) || "Geral",
+                    selo: get("selo", 8) || "",
+                    ativo: String(get("ativo", 9)).toLowerCase() !== "nao" && String(get("ativo", 9)).toLowerCase() !== "não",
                 };
             }).filter(o => o.ativo && o.precoNovo > 0);
             
             erroPlanilha = false;
 
         } catch (err) {
-            // Suprimido o console.error para evitar falsos positivos no ambiente de pré-visualização
-            console.warn("⚠️ Aviso ao carregar a folha de cálculo (CORS ou Privada):", err.message);
+            console.warn("Aviso:", err.message);
             todasOfertas = [];
             erroPlanilha = true;
         }
@@ -812,9 +819,7 @@
     function criarCardHTML(oferta, i) {
         const loja = LOJAS[oferta.loja] || LOJAS.outras;
         const economia = (oferta.precoAntigo - oferta.precoNovo).toFixed(2);
-        const bgGrad = oferta.desconto >= 50
-            ? "linear-gradient(135deg, #E43225, #FF6B35)"
-            : "linear-gradient(135deg, #FF6B35, #FFB347)";
+        const bgGrad = oferta.desconto >= 50 ? "linear-gradient(135deg, #E43225, #FF6B35)" : "linear-gradient(135deg, #FF6B35, #FFB347)";
         const textColor = oferta.loja === "mercadolivre" ? "#333" : "#fff";
 
         return `
@@ -842,16 +847,13 @@
 
     function renderDestaques() {
         const grid = document.getElementById("destaqueGrid");
-        
         if (erroPlanilha) {
-             grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="emoji">🔒</div><h3 style="font-size:20px;color:#E43225;margin-bottom:8px">Acesso à Folha de Cálculo Bloqueado</h3><p style="color:#999;font-size:15px">A sua folha de cálculo no Google Sheets está Privada. Tem de a Partilhar para "Qualquer pessoa com o link" para o site conseguir ler os dados.</p></div>`;
+             grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="emoji">🔒</div><h3 style="font-size:20px;color:#E43225;margin-bottom:8px">Acesso Bloqueado</h3><p style="color:#999;font-size:15px">Verifique se a Folha de Cálculo está Partilhada para "Qualquer pessoa com o link".</p></div>`;
              return;
         }
-
         const destaques = todasOfertas.filter(o => o.selo).slice(0, 6);
-        
         if (destaques.length === 0) {
-            grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="emoji">⏱️</div><h3 style="font-size:20px;color:#555;margin-bottom:8px">O Teteco está a carregar o combustível...</h3><p style="color:#999;font-size:15px">As ofertas começarão a aparecer aqui assim que enviar a primeira promoção com o bot!</p></div>`;
+            grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="emoji">⏱️</div><h3 style="font-size:20px;color:#555;margin-bottom:8px">A aguardar ofertas...</h3><p style="color:#999;font-size:15px">As ofertas aparecerão aqui assim que enviar a primeira promoção com o bot!</p></div>`;
         } else {
             grid.innerHTML = destaques.map((o, i) => criarCardHTML(o, i)).join("");
         }
@@ -860,36 +862,23 @@
     function renderOfertas() {
         const grid = document.getElementById("ofertasGrid");
         const contagem = document.getElementById("contagem");
-        
         if (erroPlanilha) {
-            grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
-                <div class="emoji">🔒</div>
-                <h3 style="font-size:20px;color:#E43225;margin-bottom:8px">Folha de Cálculo Privada</h3>
-                <p style="color:#555;font-size:15px;line-height:1.6;max-width:500px;margin:0 auto">
-                    O site não consegue ler as ofertas porque a sua folha de cálculo está bloqueada. <br><br><b>Como resolver (Demora 10 segundos):</b><br>
-                    1. Abra a sua folha de cálculo no Google Sheets.<br>
-                    2. Clique no botão azul <b>"Partilhar"</b> no canto superior direito.<br>
-                    3. Em Acesso Geral, mude de "Restrito" para <b>"Qualquer pessoa com o link"</b>.<br>
-                    4. Atualize esta página.
-                </p>
-            </div>`;
-            contagem.textContent = "0 ofertas encontradas";
+            grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="emoji">🔒</div><h3 style="font-size:20px;color:#E43225;margin-bottom:8px">Folha de Cálculo Privada</h3><p style="color:#555;font-size:15px;line-height:1.6;max-width:500px;margin:0 auto">Resolva em 10 segundos:<br>1. No Sheets, clique em <b>"Partilhar"</b>.<br>2. Mude para <b>"Qualquer pessoa com o link"</b>.</p></div>`;
+            contagem.textContent = "0 ofertas";
             return;
         }
-
         const busca = (document.getElementById("buscaInput")?.value || "").toLowerCase();
         const filtradas = todasOfertas.filter(o => {
             const matchLoja = lojaAtual === "todas" || o.loja === lojaAtual;
             const matchBusca = !busca || o.titulo.toLowerCase().includes(busca) || o.categoria.toLowerCase().includes(busca);
             return matchLoja && matchBusca;
         });
-
         contagem.textContent = `${filtradas.length} oferta${filtradas.length !== 1 ? 's' : ''} encontrada${filtradas.length !== 1 ? 's' : ''}`;
-
+        
         if (todasOfertas.length === 0) {
-            grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="emoji">⚙️</div><h3 style="font-size:20px;color:#555;margin-bottom:8px">Sem ofertas reais no momento</h3><p style="color:#999;font-size:15px">Configure o <b>ID da Planilha</b> no código do site e use o robô no Telegram para começar a popular o site.</p></div>`;
+            grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="emoji">⚙️</div><h3 style="font-size:20px;color:#555;margin-bottom:8px">Sem ofertas reais no momento</h3><p style="color:#999;font-size:15px">A aguardar dados do robô Teteco.</p></div>`;
         } else if (filtradas.length === 0) {
-            grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="emoji">🔍</div><h3 style="font-size:20px;color:#555;margin-bottom:8px">Nenhuma oferta encontrada</h3><p style="color:#999;font-size:15px">Tente outro filtro ou busque por um produto diferente.</p></div>`;
+            grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="emoji">🔍</div><h3 style="font-size:20px;color:#555;margin-bottom:8px">Nenhuma oferta encontrada</h3></div>`;
         } else {
             grid.innerHTML = filtradas.map((o, i) => criarCardHTML(o, i)).join("");
         }
@@ -944,16 +933,10 @@
         const l = LOJAS[loja];
         document.querySelectorAll(".loja-btn").forEach(b => {
             b.classList.remove("active");
-            b.style.borderColor = "#e8e8e8";
-            b.style.background = "#fff";
-            b.style.color = "#777";
-            b.style.boxShadow = "none";
+            b.style.borderColor = "#e8e8e8"; b.style.background = "#fff"; b.style.color = "#777"; b.style.boxShadow = "none";
         });
         btn.classList.add("active");
-        btn.style.borderColor = l.cor;
-        btn.style.background = l.cor + "12";
-        btn.style.color = l.cor;
-        btn.style.boxShadow = `0 2px 10px ${l.cor}20`;
+        btn.style.borderColor = l.cor; btn.style.background = l.cor + "12"; btn.style.color = l.cor; btn.style.boxShadow = `0 2px 10px ${l.cor}20`;
         renderOfertas();
     }
 
