@@ -1061,12 +1061,26 @@
 
                 // Coluna K = imagem URL (índice 10), Coluna G = emoji (índice 6)
                 // O bot pode colocar a URL em qualquer uma das duas colunas
-                const colEmoji  = String(get("emoji", 6) || "");
-                const colImagem = String(get("imagem", 10) || get("image", 10) || get("img", 10) || get("foto", 10) || "");
+                const colEmoji  = String(get("emoji", 6) || row.c[6]?.v || "");
+                const colImagem = String(get("imagem", 10) || row.c[10]?.v || "");
                 
-                // Se a coluna G tiver uma URL (começa com http), usa como imagem
                 const isUrl = (s) => s.startsWith("http") || s.startsWith("//");
-                const imgUrl   = isUrl(colImagem) ? colImagem : (isUrl(colEmoji) ? colEmoji : "");
+                
+                // Converter URL de página imgbb para URL direta de imagem
+                const converterImgbb = (url) => {
+                    if (!url) return url;
+                    // Já é URL direta: https://i.ibb.co/xxx/img.jpg
+                    if (url.includes("i.ibb.co")) return url;
+                    // Página do imgbb: https://ibb.co/RTvGk3Tx → https://i.ibb.co/RTvGk3Tx/img.jpg
+                    if (url.includes("ibb.co/")) {
+                        const id = url.split("ibb.co/").pop()?.split("/")[0]?.split("?")[0];
+                        if (id) return `https://i.ibb.co/${id}/img.jpg`;
+                    }
+                    return url;
+                };
+                
+                const rawImgUrl = isUrl(colImagem) ? colImagem : (isUrl(colEmoji) ? colEmoji : "");
+                const imgUrl   = rawImgUrl ? converterImgbb(rawImgUrl) : "";
                 const imgEmoji = !isUrl(colEmoji) && colEmoji ? colEmoji : "🛒";
                 const imgRaw   = imgUrl || imgEmoji;
 
@@ -1168,6 +1182,8 @@
     // RENDERIZAÇÃO
     // ══════════════════════════════════════════
 
+    const isUrlImg = (s) => s && (s.startsWith("http") || s.startsWith("//"));
+
     function renderizarTudo() {
         renderDestaques();
         renderOfertas();
@@ -1206,8 +1222,14 @@
                 ${fav ? '❤️' : '🤍'}
             </button>
             <div class="oferta-img" style="background:linear-gradient(135deg,${loja.cor}08,${loja.cor}15)">
-                ${oferta.img && (oferta.img.startsWith("http") || oferta.img.startsWith("//"))
-                    ? `<img src="${oferta.img}" alt="${oferta.titulo}" onerror="this.parentElement.innerHTML='<span style=\\'font-size:56px\\'>🛒</span><div class=\\'oferta-loja-badge\\' style=\\'background:${loja.cor}18;color:${loja.cor}\\'>${loja.nome}</div>'">`
+                ${oferta.img && isUrlImg(oferta.img)
+                    ? `<img src="${oferta.img}" alt="${oferta.titulo}"
+                        onerror="
+                            var s=this.src;
+                            if(s.endsWith('.jpg')){this.src=s.replace('.jpg','.png');}
+                            else if(s.endsWith('.png')){this.src=s.replace('.png','.webp');}
+                            else if(s.endsWith('.webp')){this.onerror=null;this.parentElement.querySelector('.oferta-loja-badge') && (this.style.display='none'); this.insertAdjacentHTML('afterend','<span style=\\'font-size:56px\\'>🛒</span>');}
+                        ">`
                     : `<span style="font-size:56px">${oferta.img || "🛒"}</span>`
                 }
                 <div class="oferta-loja-badge" style="background:${loja.cor}18;color:${loja.cor}">${loja.nome}</div>
