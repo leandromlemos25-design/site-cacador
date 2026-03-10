@@ -55,13 +55,28 @@
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-8px); }
         }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        @keyframes shimmer {
+            0% { background-position: -468px 0; }
+            100% { background-position: 468px 0; }
         }
         .fade-up { animation: fadeUp 0.5s ease both; }
         .fade-up-1 { animation-delay: 0.1s; }
         .fade-up-2 { animation-delay: 0.2s; }
         .fade-up-3 { animation-delay: 0.3s; }
+
+        /* Esqueleto de Carregamento Premium */
+        .skeleton {
+            background: #f6f7f8;
+            background-image: linear-gradient(to right, #f6f7f8 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
+            background-repeat: no-repeat;
+            background-size: 800px 100%; 
+            animation-duration: 1.5s;
+            animation-fill-mode: forwards; 
+            animation-iteration-count: infinite;
+            animation-name: shimmer;
+            animation-timing-function: linear;
+            border-radius: 8px;
+        }
 
         /* ══════════════════════════════════════════
            NAVBAR
@@ -100,7 +115,7 @@
         .navbar.scrolled .nav-btn.active { background: #FF6B3515; color: #FF6B35; }
 
         .nav-cta {
-            display: inline-flex; align-items: center; gap: 6px;
+            display: inline-flex; align-items: center; gap: 8px;
             padding: 9px 18px; border-radius: 10px;
             background: linear-gradient(135deg, #FF6B35, #E43225);
             color: #fff; font-size: 13px; font-weight: 700;
@@ -108,6 +123,7 @@
             transition: transform 0.2s;
         }
         .nav-cta:hover { transform: scale(1.04); }
+        .nav-cta svg { fill: #fff; }
 
         .mobile-toggle {
             display: none; background: none; color: #fff;
@@ -236,7 +252,7 @@
         .section-sub { color: #888; font-size: 16px; text-align: center; margin-bottom: 40px; }
 
         /* ══════════════════════════════════════════
-           FILTROS
+           FILTROS E BUSCA
            ══════════════════════════════════════════ */
         .search-box {
             max-width: 500px; margin: 0 auto 28px; position: relative;
@@ -265,6 +281,21 @@
         .loja-btn.active {
             box-shadow: 0 2px 10px rgba(0,0,0,0.08);
         }
+        
+        .ordenacao-bar {
+            display: flex; align-items: center; gap: 8px;
+            margin-bottom: 20px; flex-wrap: wrap;
+        }
+        .ordenacao-label { font-size: 13px; font-weight: 700; color: #888; }
+        .ord-btn {
+            padding: 6px 14px; border-radius: 20px; border: 2px solid #eee;
+            background: #fff; color: #777; font-size: 12px; font-weight: 700;
+            transition: all 0.2s; cursor: pointer;
+        }
+        .ord-btn.active {
+            border-color: #FF6B35; background: #FF6B3512; color: #FF6B35;
+        }
+
         .contagem { margin-bottom: 20px; font-size: 14px; color: #999; font-weight: 600; }
 
         /* ══════════════════════════════════════════
@@ -296,9 +327,28 @@
             font-size: 14px; font-weight: 900; line-height: 1;
             box-shadow: 0 2px 8px rgba(228,50,37,0.3);
         }
+        .badge-novo {
+            position: absolute; top: 42px; right: 12px; z-index: 3;
+            background: linear-gradient(135deg, #16a34a, #22c55e);
+            color: #fff; font-size: 9px; font-weight: 900;
+            padding: 3px 7px; border-radius: 8px; letter-spacing: 1px;
+            text-transform: uppercase; box-shadow: 0 2px 8px rgba(34,197,94,0.4);
+            animation: pulse 2s infinite;
+        }
+        .btn-favorito {
+            position: absolute; top: 8px; right: 48px; z-index: 4;
+            background: rgba(255,255,255,0.9); border: none;
+            width: 32px; height: 32px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px; cursor: pointer; transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+        }
+        .btn-favorito:hover { transform: scale(1.15); }
+        .btn-favorito.ativo { background: #fff0f0; }
+
         .oferta-img {
             height: 160px; display: flex; align-items: center; justify-content: center;
-            font-size: 56px; position: relative; overflow: hidden;
+            position: relative; overflow: hidden;
         }
         .oferta-img img {
             width: 100%; height: 100%; object-fit: contain;
@@ -329,32 +379,79 @@
             font-size: 26px; font-weight: 900; color: #16a34a;
             font-family: 'JetBrains Mono', monospace;
         }
+        /* Estilo do Parcelamento Novo */
+        .oferta-parcelamento {
+            font-size: 12px; color: #666; margin-top: 1px; margin-bottom: 4px; line-height: 1.2;
+        }
+        .oferta-parcelamento strong { color: #1a1a2e; }
+
         .oferta-economia { font-size: 12px; color: #FF6B35; font-weight: 600; margin-top: 2px; }
+        
+        .botoes-acao {
+            display: grid; grid-template-columns: 1fr auto; gap: 8px; margin-top: auto; padding-top: 14px;
+        }
         .oferta-btn {
             display: flex; align-items: center; justify-content: center; gap: 8px;
             padding: 11px 16px; border-radius: 10px; width: 100%;
-            color: #fff; font-size: 14px; font-weight: 700;
-            transition: all 0.2s; margin-top: auto;
+            background: #1a1a2e; color: #fff; font-size: 14px; font-weight: 700;
+            transition: all 0.2s; 
         }
-        .oferta-btn:hover { transform: scale(1.02); }
+        .oferta-btn:hover { background: #FF6B35; }
+        
+        .btn-partilhar {
+            display: flex; align-items: center; justify-content: center;
+            width: 44px; border-radius: 10px;
+            background: #f0f0f0; color: #555;
+            border: 1px solid #e0e0e0; cursor: pointer; transition: all 0.2s;
+        }
+        .btn-partilhar:hover { background: #e0e0e0; color: #1a1a2e; }
 
-        .empty-state {
-            text-align: center; padding: 60px 20px;
+        .empty-state, .fav-empty {
+            text-align: center; padding: 60px 20px; grid-column: 1/-1;
         }
-        .empty-state .emoji { font-size: 48px; margin-bottom: 16px; }
+        .empty-state .emoji, .fav-empty .emoji { font-size: 48px; margin-bottom: 16px; }
 
         /* ══════════════════════════════════════════
-           LOADING
+           TOAST NOTIFICATION & REFRESH BAR
            ══════════════════════════════════════════ */
-        .loading {
-            text-align: center; padding: 60px 20px;
+        #toast-container {
+            position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+            display: flex; flex-direction: column; gap: 10px;
         }
-        .spinner {
-            width: 40px; height: 40px; border: 4px solid #eee;
-            border-top-color: #FF6B35; border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin: 0 auto 16px;
+        .toast {
+            display: flex; align-items: center; gap: 12px;
+            padding: 14px 18px; border-radius: 14px;
+            background: #1a1a2e; color: #fff;
+            font-size: 14px; font-weight: 600;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+            animation: toastIn 0.35s cubic-bezier(0.34,1.56,0.64,1) both;
+            min-width: 260px; max-width: 340px;
         }
+        .toast.saindo { animation: toastOut 0.3s ease both; }
+        .toast-icon { font-size: 20px; flex-shrink: 0; }
+        @keyframes toastIn { from { opacity: 0; transform: translateX(60px) scale(0.9); } to { opacity: 1; transform: translateX(0) scale(1); } }
+        @keyframes toastOut { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(60px); } }
+
+        .refresh-bar {
+            display: flex; align-items: center; gap: 8px;
+            font-size: 12px; color: #aaa; font-weight: 600;
+            margin-bottom: 12px;
+        }
+        .refresh-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: #22c55e; animation: pulse 2s infinite;
+        }
+        .refresh-bar.atualizando .refresh-dot { background: #FF6B35; }
+
+        /* Botão Scroll Top */
+        #btnScrollTop {
+            display: none; position: fixed; bottom: 30px; left: 30px; z-index: 99;
+            width: 45px; height: 45px; border-radius: 50%;
+            background: #1a1a2e; color: #fff; font-size: 20px;
+            border: none; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: 0.3s;
+        }
+        #btnScrollTop:hover { background: #FF6B35; transform: translateY(-3px); }
 
         /* ══════════════════════════════════════════
            FORMULÁRIO PEDIDO COMPLETO
@@ -409,16 +506,11 @@
             box-shadow: 0 2px 15px rgba(0,0,0,0.04); border: 1px solid #f0f0f0;
         }
         .como-emoji { font-size: 36px; margin-bottom: 12px; }
-        .como-step {
-            font-size: 11px; font-weight: 800; color: #FF6B35;
-            letter-spacing: 1.5px; margin-bottom: 6px;
-        }
+        .como-step { font-size: 11px; font-weight: 800; color: #FF6B35; letter-spacing: 1.5px; margin-bottom: 6px; }
         .como-title { font-size: 16px; font-weight: 800; margin-bottom: 6px; }
         .como-desc { font-size: 13px; color: #888; line-height: 1.5; }
 
-        @media (max-width: 768px) {
-            .como-grid { grid-template-columns: 1fr; }
-        }
+        @media (max-width: 768px) { .como-grid { grid-template-columns: 1fr; } }
 
         /* ══════════════════════════════════════════
            REDES SOCIAIS
@@ -445,9 +537,7 @@
 
         @media (max-width: 768px) {
             .social-grid { grid-template-columns: repeat(3, 1fr); }
-            .social-grid .social-card:nth-child(4), .social-grid .social-card:nth-child(5) {
-                grid-column: span 1; 
-            }
+            .social-grid .social-card:nth-child(4), .social-grid .social-card:nth-child(5) { grid-column: span 1; }
         }
 
         /* ══════════════════════════════════════════
@@ -479,10 +569,7 @@
         .cta-inline h3 { color: #fff; font-size: 22px; font-weight: 800; margin-bottom: 10px; }
         .cta-inline p { color: rgba(255,255,255,0.6); font-size: 15px; margin-bottom: 24px; }
 
-        footer {
-            background: #111; padding: 40px 24px 24px;
-            border-top: 3px solid #FF6B35;
-        }
+        footer { background: #111; padding: 40px 24px 24px; border-top: 3px solid #FF6B35; }
         .footer-inner {
             max-width: 1200px; margin: 0 auto;
             display: flex; justify-content: space-between; align-items: center;
@@ -499,109 +586,13 @@
             color: #888; transition: all 0.2s;
         }
         .footer-social:hover { color: #fff; }
-        .footer-copy {
-            text-align: center; margin-top: 28px; padding-top: 20px;
-            border-top: 1px solid rgba(255,255,255,0.06);
-            color: #555; font-size: 12px;
-        }
+        .footer-copy { text-align: center; margin-top: 28px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.06); color: #555; font-size: 12px; }
 
         /* ══════════════════════════════════════════
            PÁGINA NÃO VISÍVEL
            ══════════════════════════════════════════ */
         .page { display: none; }
         .page.active { display: block; }
-
-        /* ══════════════════════════════════════════
-           BADGE NOVO
-           ══════════════════════════════════════════ */
-        .badge-novo {
-            position: absolute; top: 42px; right: 12px; z-index: 3;
-            background: linear-gradient(135deg, #16a34a, #22c55e);
-            color: #fff; font-size: 9px; font-weight: 900;
-            padding: 3px 7px; border-radius: 8px; letter-spacing: 1px;
-            text-transform: uppercase; box-shadow: 0 2px 8px rgba(34,197,94,0.4);
-            animation: pulse 2s infinite;
-        }
-
-        /* ══════════════════════════════════════════
-           BOTÃO FAVORITO
-           ══════════════════════════════════════════ */
-        .btn-favorito {
-            position: absolute; top: 8px; right: 48px; z-index: 4;
-            background: rgba(255,255,255,0.9); border: none;
-            width: 32px; height: 32px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 16px; cursor: pointer; transition: all 0.2s;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-        }
-        .btn-favorito:hover { transform: scale(1.15); }
-        .btn-favorito.ativo { background: #fff0f0; }
-
-        /* ══════════════════════════════════════════
-           ORDENAÇÃO
-           ══════════════════════════════════════════ */
-        .ordenacao-bar {
-            display: flex; align-items: center; gap: 8px;
-            margin-bottom: 20px; flex-wrap: wrap;
-        }
-        .ordenacao-label { font-size: 13px; font-weight: 700; color: #888; }
-        .ord-btn {
-            padding: 6px 14px; border-radius: 20px; border: 2px solid #eee;
-            background: #fff; color: #777; font-size: 12px; font-weight: 700;
-            transition: all 0.2s; cursor: pointer;
-        }
-        .ord-btn.active {
-            border-color: #FF6B35; background: #FF6B3512; color: #FF6B35;
-        }
-
-        /* ══════════════════════════════════════════
-           TOAST NOTIFICATION
-           ══════════════════════════════════════════ */
-        #toast-container {
-            position: fixed; bottom: 24px; right: 24px; z-index: 9999;
-            display: flex; flex-direction: column; gap: 10px;
-        }
-        .toast {
-            display: flex; align-items: center; gap: 12px;
-            padding: 14px 18px; border-radius: 14px;
-            background: #1a1a2e; color: #fff;
-            font-size: 14px; font-weight: 600;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.25);
-            animation: toastIn 0.35s cubic-bezier(0.34,1.56,0.64,1) both;
-            min-width: 260px; max-width: 340px;
-        }
-        .toast.saindo { animation: toastOut 0.3s ease both; }
-        .toast-icon { font-size: 20px; flex-shrink: 0; }
-        @keyframes toastIn {
-            from { opacity: 0; transform: translateX(60px) scale(0.9); }
-            to { opacity: 1; transform: translateX(0) scale(1); }
-        }
-        @keyframes toastOut {
-            from { opacity: 1; transform: translateX(0); }
-            to { opacity: 0; transform: translateX(60px); }
-        }
-
-        /* ══════════════════════════════════════════
-           AUTO-REFRESH INDICATOR
-           ══════════════════════════════════════════ */
-        .refresh-bar {
-            display: flex; align-items: center; gap: 8px;
-            font-size: 12px; color: #aaa; font-weight: 600;
-            margin-bottom: 12px;
-        }
-        .refresh-dot {
-            width: 8px; height: 8px; border-radius: 50%;
-            background: #22c55e; animation: pulse 2s infinite;
-        }
-        .refresh-bar.atualizando .refresh-dot { background: #FF6B35; }
-
-        /* ══════════════════════════════════════════
-           ABA FAVORITOS
-           ══════════════════════════════════════════ */
-        .fav-empty {
-            text-align: center; padding: 60px 20px; grid-column: 1/-1;
-        }
-        .fav-empty .emoji { font-size: 48px; margin-bottom: 16px; }
     </style>
 </head>
 <body>
@@ -618,7 +609,7 @@
                 </div>
             </div>
             <div class="nav-links">
-                <button class="nav-btn" data-page="home" onclick="navegar('home')">Início</button>
+                <button class="nav-btn active" data-page="home" onclick="navegar('home')">Início</button>
                 <button class="nav-btn" data-page="ofertas" onclick="navegar('ofertas')">Ofertas</button>
                 <button class="nav-btn" data-page="favoritos" onclick="navegar('favoritos')">❤️ Favoritos</button>
                 <button class="nav-btn" data-page="pedir" onclick="navegar('pedir')">Pedir Oferta</button>
@@ -675,7 +666,9 @@
         <section class="section">
             <h2 class="section-title">🔥 Ofertas em Destaque</h2>
             <p class="section-sub">As promoções mais quentes selecionadas pela nossa equipe</p>
-            <div class="ofertas-grid" id="destaqueGrid"></div>
+            <div class="ofertas-grid" id="destaqueGrid">
+                <!-- Skeletons renderizados via JS durante o loading -->
+            </div>
             <div style="text-align:center;margin-top:40px">
                 <button onclick="navegar('ofertas')" style="padding:14px 36px;border-radius:12px;background:#1a1a2e;color:#fff;font-size:15px;font-weight:700;box-shadow:0 4px 15px rgba(26,26,46,0.2);transition:all 0.3s">
                     Ver Todas as Ofertas →
@@ -725,7 +718,9 @@
                     <button class="ord-btn" data-ord="maior" onclick="ordenar('maior',this)">💎 Maior Preço</button>
                 </div>
                 <div class="contagem" id="contagem"></div>
-                <div class="ofertas-grid" id="ofertasGrid"></div>
+                <div class="ofertas-grid" id="ofertasGrid">
+                    <!-- Skeletons renderizados via JS -->
+                </div>
                 <div class="cta-inline">
                     <h3>Quer receber ofertas em primeira mão?</h3>
                     <p>No grupo do Telegram você recebe antes de todo mundo!</p>
@@ -733,6 +728,17 @@
                         <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.94z"/></svg> Entrar no Grupo
                     </a>
                 </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ═══════ PÁGINA FAVORITOS ═══════ -->
+    <div class="page" id="page-favoritos">
+        <section style="padding-top:100px">
+            <div class="section">
+                <h1 class="section-title fade-up">❤️ Meus Favoritos</h1>
+                <p class="section-sub fade-up fade-up-1">Ofertas que você salvou para não perder</p>
+                <div class="ofertas-grid" id="favoritosGrid"></div>
             </div>
         </section>
     </div>
@@ -782,19 +788,9 @@
         </section>
     </div>
 
-    <!-- ═══════ PÁGINA FAVORITOS ═══════ -->
-    <div class="page" id="page-favoritos">
-        <section style="padding-top:100px">
-            <div class="section">
-                <h1 class="section-title fade-up">❤️ Meus Favoritos</h1>
-                <p class="section-sub fade-up fade-up-1">Ofertas que você salvou para não perder</p>
-                <div class="ofertas-grid" id="favoritosGrid"></div>
-            </div>
-        </section>
-    </div>
-
-    <!-- ═══════ TOAST CONTAINER ═══════ -->
+    <!-- ═══════ TOAST CONTAINER E SCROLL TOP ═══════ -->
     <div id="toast-container"></div>
+    <button id="btnScrollTop" onclick="window.scrollTo(0,0)" title="Voltar ao topo">↑</button>
 
     <!-- ═══════ FOOTER ═══════ -->
     <footer>
@@ -813,37 +809,23 @@
     </footer>
 
     <!-- ═══════════════════════════════════════════════════════
-         JAVASCRIPT — TODA A LÓGICA DO SITE (v2.0)
+         JAVASCRIPT — LÓGICA E MELHORIAS DE PERFORMANCE
          ═══════════════════════════════════════════════════════ -->
     <script>
     // ══════════════════════════════════════════
-    // CONFIGURAÇÃO — EDITE AQUI
+    // CONFIGURAÇÃO
     // ══════════════════════════════════════════
-
     const CONFIG = {
-        // 📌 O SEU ID DO GOOGLE SHEETS
         SHEET_ID: "1Ug9wQKO9HfCRrTsjZz8gDe7dCVDxXH2ehMC3nGkb6Xw",
-
-        // 📌 NOME DA ABA DA PLANILHA
         SHEET_TAB: "Página1",
-
-        // 📌 LINKS DAS REDES SOCIAIS OFICIAIS
         TELEGRAM: "https://t.me/ocacadordeoferta",
         INSTAGRAM: "https://www.instagram.com/ocacadorde_ofertas?igsh=MTJheGowa3hyNGFtag==",
         TIKTOK: "https://www.tiktok.com/@o.cacador.de.oferta?_r=1&_t=ZS-94XgN2UjJNh",
         FACEBOOK: "https://www.facebook.com/share/18X4uDszrG/",
         TWITTER: "https://x.com/ocacadordeoferta",
-
-        // 📌 AUTO-REFRESH (em milissegundos — 5 minutos)
         REFRESH_INTERVAL: 5 * 60 * 1000,
-
-        // 📌 JANELA "NOVO" (em horas — ofertas das últimas 24h)
         HORAS_NOVO: 24,
     };
-
-    // ══════════════════════════════════════════
-    // DADOS
-    // ══════════════════════════════════════════
 
     const LOJAS = {
         todas:         { nome: "Todas",           emoji: "🔥", cor: "#FF6B35" },
@@ -859,7 +841,6 @@
         outras:        { nome: "Outras",          emoji: "🏷️", cor: "#8B5CF6" },
     };
 
-    // Vetores SVG Oficiais de cada marca
     const REDES = [
         { nome: "Telegram",  url: CONFIG.TELEGRAM,  svg: '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.94z"/></svg>', cor: "#0088CC" },
         { nome: "Instagram", url: CONFIG.INSTAGRAM, svg: '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>', cor: "#E4405F" },
@@ -869,13 +850,11 @@
 
     // ══════════════════════════════════════════
     // NORMALIZAÇÃO DE LOJA
-    // Aceita qualquer variação de nome digitado na planilha
     // ══════════════════════════════════════════
-
     function normalizarLoja(raw) {
         const v = raw.toLowerCase().trim()
-            .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // remove acentos
-            .replace(/[^a-z0-9]/g, "");                       // remove espaços e símbolos
+            .normalize("NFD").replace(/[\u0300-\u036f]/g, "") 
+            .replace(/[^a-z0-9]/g, "");                       
         const mapa = {
             amazon:       ["amazon"],
             shopee:       ["shopee"],
@@ -902,122 +881,97 @@
     let refreshTimer = null;
     let ultimaAtualizacao = null;
 
-    // ══════════════════════════════════════════
-    // FAVORITOS (localStorage)
-    // ══════════════════════════════════════════
-
-    function getFavoritos() {
-        try { return JSON.parse(localStorage.getItem("cdf_favoritos") || "[]"); }
-        catch { return []; }
-    }
-    function salvarFavoritos(ids) {
-        try { localStorage.setItem("cdf_favoritos", JSON.stringify(ids)); } catch {}
-    }
+    // Favoritos
+    function getFavoritos() { try { return JSON.parse(localStorage.getItem("cdf_favs") || "[]"); } catch { return []; } }
+    function salvarFavoritos(ids) { try { localStorage.setItem("cdf_favs", JSON.stringify(ids)); } catch {} }
     function isFavorito(id) { return getFavoritos().includes(id); }
-    function toggleFavorito(id, titulo) {
+    function toggleFavorito(id) {
         const favs = getFavoritos();
         const idx = favs.indexOf(id);
-        if (idx === -1) {
-            favs.push(id);
-            mostrarToast("❤️", `Salvo nos favoritos!`);
-        } else {
-            favs.splice(idx, 1);
-            mostrarToast("💔", `Removido dos favoritos`);
-        }
+        if (idx === -1) { favs.push(id); mostrarToast("❤️", `Salvo nos favoritos!`); } 
+        else { favs.splice(idx, 1); mostrarToast("💔", `Removido dos favoritos`); }
         salvarFavoritos(favs);
-        // Atualizar ícone do botão sem re-render completo
+        
         const btn = document.querySelector(`.btn-favorito[data-id="${id}"]`);
-        if (btn) {
-            btn.textContent = isFavorito(id) ? "❤️" : "🤍";
-            btn.classList.toggle("ativo", isFavorito(id));
-        }
-        // Atualizar página de favoritos se estiver aberta
-        if (document.getElementById("page-favoritos").classList.contains("active")) {
-            renderFavoritos();
+        if (btn) { btn.textContent = isFavorito(id) ? "❤️" : "🤍"; btn.classList.toggle("ativo", isFavorito(id)); }
+        if (document.getElementById("page-favoritos").classList.contains("active")) renderFavoritos();
+    }
+
+    // Compartilhamento Nativo
+    function compartilharOferta(titulo, link) {
+        if (navigator.share) {
+            navigator.share({
+                title: 'O Caçador de Oferta',
+                text: `🔥 Olha essa promoção que eu achei: ${titulo}`,
+                url: link
+            }).catch(console.error);
+        } else {
+            navigator.clipboard.writeText(`${titulo}\n${link}`);
+            mostrarToast("🔗", "Link copiado para a área de transferência!");
         }
     }
 
-    // ══════════════════════════════════════════
-    // TOAST NOTIFICATIONS
-    // ══════════════════════════════════════════
-
-    function mostrarToast(icon, msg, duracao = 3000) {
+    function mostrarToast(icon, msg) {
         const container = document.getElementById("toast-container");
         const toast = document.createElement("div");
         toast.className = "toast";
         toast.innerHTML = `<span class="toast-icon">${icon}</span><span>${msg}</span>`;
         container.appendChild(toast);
-        setTimeout(() => {
-            toast.classList.add("saindo");
-            setTimeout(() => toast.remove(), 350);
-        }, duracao);
+        setTimeout(() => { toast.classList.add("saindo"); setTimeout(() => toast.remove(), 350); }, 3000);
     }
 
-    // ══════════════════════════════════════════
-    // CACHE (localStorage)
-    // ══════════════════════════════════════════
-
+    // Cache
     const CACHE_KEY = "cdf_cache";
-    const CACHE_TTL = 4 * 60 * 1000; // 4 minutos
-
-    function salvarCache(data) {
-        try {
-            localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data }));
-        } catch {}
-    }
+    function salvarCache(data) { try { localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data })); } catch {} }
     function lerCache() {
         try {
             const raw = localStorage.getItem(CACHE_KEY);
             if (!raw) return null;
             const { ts, data } = JSON.parse(raw);
-            if (Date.now() - ts > CACHE_TTL) return null;
+            if (Date.now() - ts > 4 * 60 * 1000) return null;
             return data;
         } catch { return null; }
     }
-
-    // ══════════════════════════════════════════
-    // BADGE "NOVO" — ofertas das últimas N horas
-    // ══════════════════════════════════════════
-
     function isNovo(oferta) {
         if (!oferta.timestamp) return false;
-        const diff = (Date.now() - oferta.timestamp) / (1000 * 60 * 60);
-        return diff <= CONFIG.HORAS_NOVO;
+        return ((Date.now() - oferta.timestamp) / (1000 * 60 * 60)) <= CONFIG.HORAS_NOVO;
     }
 
-    // ══════════════════════════════════════════
-    // CARREGAR OFERTAS DO GOOGLE SHEETS
-    // ══════════════════════════════════════════
+    // Renderiza Esqueletos enquanto carrega
+    function renderSkeletons() {
+        const gridHtml = Array(6).fill().map(() => `
+            <div class="oferta-card" style="border:none; box-shadow:none;">
+                <div class="skeleton" style="height:160px; width:100%; border-radius:16px 16px 0 0;"></div>
+                <div class="oferta-body" style="gap:10px;">
+                    <div class="skeleton" style="height:12px; width:40%;"></div>
+                    <div class="skeleton" style="height:40px; width:100%;"></div>
+                    <div class="skeleton" style="height:26px; width:60%; margin-top:5px;"></div>
+                    <div class="skeleton" style="height:40px; width:100%; border-radius:10px; margin-top:auto;"></div>
+                </div>
+            </div>`).join("");
+        
+        const dest = document.getElementById("destaqueGrid");
+        const ofertasG = document.getElementById("ofertasGrid");
+        if(dest && todasOfertas.length === 0) dest.innerHTML = gridHtml;
+        if(ofertasG && todasOfertas.length === 0) ofertasG.innerHTML = gridHtml;
+    }
 
+    // Carregar Dados
     async function carregarOfertas(silencioso = false) {
-        if (!CONFIG.SHEET_ID || CONFIG.SHEET_ID.includes("COLE")) {
-            todasOfertas = [];
-            renderizarTudo();
-            return;
-        }
+        if (!CONFIG.SHEET_ID || CONFIG.SHEET_ID.includes("COLE")) return;
+        if (!silencioso) renderSkeletons();
 
-        // Mostrar indicador de atualização
         const refreshBar = document.getElementById("refreshBar");
-        const refreshStatus = document.getElementById("refreshStatus");
         if (refreshBar) refreshBar.classList.add("atualizando");
-        if (refreshStatus) refreshStatus.textContent = "Atualizando...";
 
-        // Tentar usar cache primeiro (só na primeira carga)
         if (!silencioso) {
             const cached = lerCache();
-            if (cached && cached.length > 0) {
-                todasOfertas = cached;
-                erroPlanilha = false;
-                renderizarTudo();
-                if (refreshBar) refreshBar.classList.remove("atualizando");
-                atualizarRefreshStatus();
-            }
+            if (cached) { todasOfertas = cached; renderizarTudo(); }
         }
 
         try {
             const controller = new AbortController();
-            const timeout = setTimeout(() => controller.abort(), 10000); // 10s timeout
-
+            const timeout = setTimeout(() => controller.abort(), 10000);
             let queryUrl = `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/gviz/tq?tqx=out:json`;
             if (CONFIG.SHEET_TAB) queryUrl += `&sheet=${encodeURIComponent(CONFIG.SHEET_TAB)}`;
 
@@ -1027,51 +981,33 @@
 
             if (text.includes("Sign in") || text.trim().startsWith("<")) throw new Error("PRIVADA");
 
-            const jsonString = text.substring(text.indexOf("(") + 1, text.lastIndexOf(")"));
-            const json = JSON.parse(jsonString);
-            const rows = json.table.rows;
+            const json = JSON.parse(text.substring(text.indexOf("(") + 1, text.lastIndexOf(")")));
             const cols = json.table.cols.map(c => (c.label || "").toLowerCase().trim());
 
-            const novas = rows.map((row, i) => {
-                const getByLabel = (label) => {
-                    const idx = cols.indexOf(label.toLowerCase());
-                    return idx >= 0 && row.c[idx] ? (row.c[idx].v || "") : "";
-                };
-                const get = (label, colIdx) => {
-                    const val = getByLabel(label);
-                    if (val === "" && row.c[colIdx]) return row.c[colIdx].v || "";
-                    return val;
+            const novas = json.table.rows.map((row, i) => {
+                const get = (l, cIdx) => {
+                    const idx = cols.indexOf(l);
+                    const val = idx >= 0 && row.c[idx] ? (row.c[idx].v || "") : "";
+                    return val === "" && row.c[cIdx] ? row.c[cIdx].v || "" : val;
                 };
 
-                const precoAntigo = parseFloat(String(get("preco_antigo", 3)).replace(",", ".")) || 0;
-                const precoNovo = parseFloat(String(get("preco_novo", 4)).replace(",", ".")) || 0;
-                const desconto = precoAntigo > 0 ? Math.round((1 - precoNovo / precoAntigo) * 100) : 0;
+                const pA = parseFloat(String(get("preco_antigo", 3)).replace(",", ".")) || 0;
+                const pN = parseFloat(String(get("preco_novo", 4)).replace(",", ".")) || 0;
+                let ts = get("data", 10) ? new Date(get("data", 10)).getTime() : (Date.now() - i * 60000);
+                if (isNaN(ts)) ts = Date.now() - i * 60000;
 
-                // Coluna A = Data (índice 0)
-                const rawData = get("data", 0);
-                let timestamp = rawData ? new Date(rawData).getTime() : (Date.now() - i * 60000);
-                if (isNaN(timestamp)) timestamp = Date.now() - i * 60000;
-
-                // Coluna J = Ativo (índice 9)
-                const ativoVal = String(get("ativo", 9)).toLowerCase().trim();
-                const ativo = ativoVal !== "nao" && ativoVal !== "não" && ativoVal !== "false" && ativoVal !== "0";
-
-                // Coluna B = Loja (índice 1)
-                const lojaRaw = get("loja", 1) || row.c[1]?.v || "";
-
-                // Coluna K = imagem URL (índice 10), Coluna G = emoji (índice 6)
-                // O bot pode colocar a URL em qualquer uma das duas colunas
+                const ativoStr = String(get("ativo", 9)).toLowerCase().trim();
+                const ativo = ativoStr !== "nao" && ativoStr !== "não" && ativoStr !== "false" && ativoStr !== "0";
+                
+                let lojaExtraida = normalizarLoja(String(get("loja", 1) || row.c[1]?.v || ""));
+                
                 const colEmoji  = String(get("emoji", 6) || row.c[6]?.v || "");
                 const colImagem = String(get("imagem", 10) || row.c[10]?.v || "");
-                
                 const isUrl = (s) => s.startsWith("http") || s.startsWith("//");
                 
-                // Converter URL de página imgbb para URL direta de imagem
                 const converterImgbb = (url) => {
                     if (!url) return url;
-                    // Já é URL direta: https://i.ibb.co/xxx/img.jpg
                     if (url.includes("i.ibb.co")) return url;
-                    // Página do imgbb: https://ibb.co/RTvGk3Tx → https://i.ibb.co/RTvGk3Tx/img.jpg
                     if (url.includes("ibb.co/")) {
                         const id = url.split("ibb.co/").pop()?.split("/")[0]?.split("?")[0];
                         if (id) return `https://i.ibb.co/${id}/img.jpg`;
@@ -1080,54 +1016,36 @@
                 };
                 
                 const rawImgUrl = isUrl(colImagem) ? colImagem : (isUrl(colEmoji) ? colEmoji : "");
-                const imgUrl   = rawImgUrl ? converterImgbb(rawImgUrl) : "";
-                const imgEmoji = !isUrl(colEmoji) && colEmoji ? colEmoji : "🛒";
-                const imgRaw   = imgUrl || imgEmoji;
+                const imgUrl    = rawImgUrl ? converterImgbb(rawImgUrl) : "";
+                const imgEmoji  = !isUrl(colEmoji) && colEmoji ? colEmoji : "🛒";
+                const imgRaw    = imgUrl || imgEmoji;
 
                 return {
                     id: i + 1,
-                    loja: normalizarLoja(String(lojaRaw)),
+                    loja: lojaExtraida || "outras",
                     titulo: get("titulo", 2) || "Produto",
-                    precoAntigo, precoNovo, desconto,
+                    precoAntigo: pA, precoNovo: pN,
+                    desconto: pA > 0 ? Math.round((1 - pN / pA) * 100) : 0,
                     link: get("link", 5) || "#",
                     img: imgRaw || "🛒",
                     categoria: get("categoria", 7) || "Geral",
                     selo: get("selo", 8) || "",
-                    ativo,
-                    timestamp,
+                    ativo, timestamp: ts,
                 };
             }).filter(o => o.ativo && o.precoNovo > 0);
 
-            // DEBUG — abre o console (F12) para ver os dados crus
-            console.table(novas.map(o => ({ titulo: o.titulo, img: o.img, loja: o.loja })));
-            console.log("🔍 RAW cols:", cols);
-            console.log("🔍 RAW row 7:", json.table.rows[6]?.c?.map((c,i) => `[${i}] ${c?.v}`));
-
-            // Detectar ofertas novas (se já havia dados antes)
             if (silencioso && todasOfertas.length > 0) {
-                const novosIds = new Set(novas.map(o => o.id));
-                const anterioresIds = new Set(todasOfertas.map(o => o.id));
-                const qtdNovos = [...novosIds].filter(id => !anterioresIds.has(id)).length;
-                if (qtdNovos > 0) {
-                    mostrarToast("🔥", `${qtdNovos} nova${qtdNovos > 1 ? 's oferta foram adicionadas' : ' oferta foi adicionada'}!`);
-                }
+                const qtdNovos = novas.length - todasOfertas.length;
+                if (qtdNovos > 0) mostrarToast("🔥", `${qtdNovos} nova(s) oferta(s)!`);
             }
 
             todasOfertas = novas;
             erroPlanilha = false;
             ultimaAtualizacao = Date.now();
             salvarCache(todasOfertas);
-
         } catch (err) {
-            if (err.name === "AbortError") {
-                if (!silencioso) mostrarToast("⏱️", "Timeout ao carregar. Tentando cache...");
-                const cached = lerCache();
-                if (cached) { todasOfertas = cached; erroPlanilha = false; }
-                else { todasOfertas = []; erroPlanilha = true; }
-            } else {
-                console.warn("Aviso:", err.message);
-                if (!erroPlanilha) { todasOfertas = []; erroPlanilha = true; }
-            }
+            console.warn("Aviso:", err.message);
+            if (!erroPlanilha && todasOfertas.length === 0) erroPlanilha = true;
         }
 
         if (refreshBar) refreshBar.classList.remove("atualizando");
@@ -1140,25 +1058,15 @@
         if (!el) return;
         if (ultimaAtualizacao) {
             const mins = Math.round((Date.now() - ultimaAtualizacao) / 60000);
-            el.textContent = mins === 0 ? "Atualizado agora mesmo" : `Atualizado há ${mins} min — próxima em ${5 - mins} min`;
-        } else {
-            el.textContent = "Ao vivo — atualiza a cada 5 min";
+            el.textContent = mins === 0 ? "Atualizado agora" : `Atualizado há ${mins} min`;
         }
     }
 
-    // Auto-refresh
     function iniciarAutoRefresh() {
         if (refreshTimer) clearInterval(refreshTimer);
-        refreshTimer = setInterval(() => {
-            carregarOfertas(true);
-        }, CONFIG.REFRESH_INTERVAL);
-        // Atualizar contador a cada minuto
+        refreshTimer = setInterval(() => carregarOfertas(true), CONFIG.REFRESH_INTERVAL);
         setInterval(atualizarRefreshStatus, 60000);
     }
-
-    // ══════════════════════════════════════════
-    // ORDENAÇÃO
-    // ══════════════════════════════════════════
 
     function ordenar(tipo, btn) {
         ordemAtual = tipo;
@@ -1178,12 +1086,6 @@
         }
     }
 
-    // ══════════════════════════════════════════
-    // RENDERIZAÇÃO
-    // ══════════════════════════════════════════
-
-    const isUrlImg = (s) => s && (s.startsWith("http") || s.startsWith("//"));
-
     function renderizarTudo() {
         renderDestaques();
         renderOfertas();
@@ -1191,103 +1093,92 @@
         renderFormLojas();
         renderFooterSocials();
         atualizarStats();
-        if (document.getElementById("page-favoritos").classList.contains("active")) {
-            renderFavoritos();
-        }
+        if (document.getElementById("page-favoritos").classList.contains("active")) renderFavoritos();
     }
 
-    function criarCardHTML(oferta, i, contexto = "normal") {
-        const loja = LOJAS[oferta.loja] || LOJAS.outras;
-        const economia = (oferta.precoAntigo - oferta.precoNovo).toFixed(2);
-        const bgGrad = oferta.desconto >= 50 ? "linear-gradient(135deg, #E43225, #FF6B35)" : "linear-gradient(135deg, #FF6B35, #FFB347)";
-        const textColor = oferta.loja === "mercadolivre" ? "#333" : "#fff";
-        const fav = isFavorito(oferta.id);
-        const novo = isNovo(oferta);
-        const precoAntigoHtml = oferta.precoAntigo > 0 
-            ? `<div class="oferta-preco-antigo">R$ ${oferta.precoAntigo.toFixed(2)}</div>` 
-            : '';
-        const descontoHtml = oferta.desconto > 0
-            ? `<div class="oferta-desconto" style="background:${bgGrad}">-${oferta.desconto}%</div>`
-            : '';
-        const economiaHtml = oferta.desconto > 0
-            ? `<div class="oferta-economia">Economia de R$ ${economia}</div>`
-            : '';
+    // Função auxiliar para formatar dinheiro no padrão PT-BR
+    const formatarMoeda = (valor) => valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+    function criarCardHTML(o, i) {
+        const loja = LOJAS[o.loja] || LOJAS.outras;
+        const bgGrad = o.desconto >= 50 ? "linear-gradient(135deg, #E43225, #FF6B35)" : "linear-gradient(135deg, #FF6B35, #FFB347)";
+        const textColor = o.loja === "mercadolivre" ? "#333" : "#fff";
+        const fav = isFavorito(o.id);
+        
+        // Lazy Loading aplicado na Imagem Real
+        const isImgUrl = o.img && (o.img.startsWith("http") || o.img.startsWith("//"));
+        const imgContent = isImgUrl 
+            ? `<img src="${o.img}" alt="${o.titulo}" loading="lazy" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend','<span style=\\'font-size:56px\\'>🛒</span>');">` 
+            : `<span style="font-size:56px; z-index:1;">${o.img || "🛒"}</span>`;
+
+        // --- CÁLCULO INTELIGENTE DE PARCELAMENTO ---
+        let vezes = 1;
+        if (o.precoNovo >= 150) vezes = 10;
+        else if (o.precoNovo >= 100) vezes = 8;
+        else if (o.precoNovo >= 50) vezes = 5;
+        else if (o.precoNovo >= 30) vezes = 3;
+        else if (o.precoNovo >= 15) vezes = 2;
+        
+        const parcela = o.precoNovo / vezes;
+        const parcelamentoHtml = vezes > 1 
+            ? `<div class="oferta-parcelamento">ou <strong>${vezes}x</strong> de <strong>${formatarMoeda(parcela)}</strong></div>`
+            : `<div class="oferta-parcelamento" style="color:#16a34a; font-weight:600;">À vista no Pix</div>`;
 
         return `
-        <div class="oferta-card" style="animation-delay:${i * 0.06}s">
-            ${oferta.selo ? `<div class="oferta-selo" style="background:${oferta.desconto>=60?'#E43225':loja.cor};color:${textColor}">${oferta.selo}</div>` : ''}
-            ${descontoHtml}
-            ${novo ? `<div class="badge-novo">NOVO</div>` : ''}
-            <button class="btn-favorito ${fav ? 'ativo' : ''}" data-id="${oferta.id}" onclick="toggleFavorito(${oferta.id}, '${oferta.titulo.replace(/'/g,"\\'")}')">
+        <div class="oferta-card fade-up" style="animation-delay:${i * 0.05}s">
+            ${o.selo ? `<div class="oferta-selo" style="background:${o.desconto>=60?'#E43225':loja.cor};color:${textColor}">${o.selo}</div>` : ''}
+            ${o.desconto > 0 ? `<div class="oferta-desconto" style="background:${bgGrad}">-${o.desconto}%</div>` : ''}
+            ${isNovo(o) ? `<div class="badge-novo">NOVO</div>` : ''}
+            
+            <button class="btn-favorito ${fav ? 'ativo' : ''}" data-id="${o.id}" onclick="toggleFavorito(${o.id})">
                 ${fav ? '❤️' : '🤍'}
             </button>
+            
             <div class="oferta-img" style="background:linear-gradient(135deg,${loja.cor}08,${loja.cor}15)">
-                ${oferta.img && isUrlImg(oferta.img)
-                    ? `<img src="${oferta.img}" alt="${oferta.titulo}"
-                        onerror="
-                            var s=this.src;
-                            if(s.endsWith('.jpg')){this.src=s.replace('.jpg','.png');}
-                            else if(s.endsWith('.png')){this.src=s.replace('.png','.webp');}
-                            else if(s.endsWith('.webp')){this.onerror=null;this.parentElement.querySelector('.oferta-loja-badge') && (this.style.display='none'); this.insertAdjacentHTML('afterend','<span style=\\'font-size:56px\\'>🛒</span>');}
-                        ">`
-                    : `<span style="font-size:56px">${oferta.img || "🛒"}</span>`
-                }
-                <div class="oferta-loja-badge" style="background:${loja.cor}18;color:${loja.cor}">${loja.nome}</div>
+                ${imgContent}
+                <div class="oferta-loja-badge" style="background:${loja.cor}18;color:${loja.cor};z-index:2;">${loja.nome}</div>
             </div>
             <div class="oferta-body">
-                <div class="oferta-cat">${oferta.categoria}</div>
-                <div class="oferta-titulo">${oferta.titulo}</div>
-                <div style="margin-bottom:14px">
-                    ${precoAntigoHtml}
-                    <div class="oferta-preco-novo">R$ ${oferta.precoNovo.toFixed(2)}</div>
-                    ${economiaHtml}
+                <div class="oferta-cat">${o.categoria}</div>
+                <div class="oferta-titulo">${o.titulo}</div>
+                <div>
+                    ${o.precoAntigo > 0 ? `<div class="oferta-preco-antigo">${formatarMoeda(o.precoAntigo)}</div>` : ''}
+                    <div class="oferta-preco-novo">${formatarMoeda(o.precoNovo)}</div>
+                    ${parcelamentoHtml}
+                    ${o.desconto > 0 ? `<div class="oferta-economia">Economia de ${formatarMoeda(o.precoAntigo - o.precoNovo)}</div>` : ''}
                 </div>
-                <a href="${oferta.link}" target="_blank" rel="noopener noreferrer" class="oferta-btn" style="background:linear-gradient(135deg,${loja.cor},${loja.cor}DD);color:${textColor};box-shadow:0 3px 12px ${loja.cor}33">
-                    🛒 Ver Oferta →
-                </a>
+                
+                <div class="botoes-acao">
+                    <a href="${o.link}" target="_blank" rel="noopener noreferrer" class="oferta-btn" style="background:linear-gradient(135deg,${loja.cor},${loja.cor}DD);color:${textColor};box-shadow:0 3px 12px ${loja.cor}33">
+                        🛒 Ver Oferta
+                    </a>
+                    <button class="btn-partilhar" onclick="compartilharOferta('${o.titulo.replace(/'/g,"\\'")}', '${o.link}')" title="Partilhar com amigos">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                    </button>
+                </div>
             </div>
         </div>`;
     }
 
     function renderDestaques() {
         const grid = document.getElementById("destaqueGrid");
-        if (!grid) return;
-        if (erroPlanilha) {
-             grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="emoji">🔒</div><h3 style="font-size:20px;color:#E43225;margin-bottom:8px">Acesso Bloqueado</h3><p style="color:#999;font-size:15px">Verifique se a Folha de Cálculo está Partilhada para "Qualquer pessoa com o link".</p></div>`;
-             return;
-        }
-        const destaques = aplicarOrdem(todasOfertas.filter(o => o.selo)).slice(0, 6);
-        if (destaques.length === 0) {
-            grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="emoji">⏱️</div><h3 style="font-size:20px;color:#555;margin-bottom:8px">A aguardar ofertas...</h3><p style="color:#999;font-size:15px">As ofertas aparecerão aqui assim que enviar a primeira promoção com o bot!</p></div>`;
-        } else {
-            grid.innerHTML = destaques.map((o, i) => criarCardHTML(o, i)).join("");
-        }
+        if (!grid || todasOfertas.length === 0) return;
+        if (erroPlanilha) { grid.innerHTML = `<div class="empty-state">🔒 Acesso Bloqueado. Planilha privada.</div>`; return; }
+        const dest = aplicarOrdem(todasOfertas.filter(o => o.selo)).slice(0, 6);
+        grid.innerHTML = dest.length ? dest.map((o, i) => criarCardHTML(o, i)).join("") : `<div class="empty-state">Aguardando ofertas em destaque...</div>`;
     }
 
     function renderOfertas() {
         const grid = document.getElementById("ofertasGrid");
-        if (!grid) return;
+        if (!grid || todasOfertas.length === 0) return;
         const contagem = document.getElementById("contagem");
-        if (erroPlanilha) {
-            grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="emoji">🔒</div><h3 style="font-size:20px;color:#E43225;margin-bottom:8px">Folha de Cálculo Privada</h3><p style="color:#555;font-size:15px;line-height:1.6;max-width:500px;margin:0 auto">Resolva em 10 segundos:<br>1. No Sheets, clique em <b>"Partilhar"</b>.<br>2. Mude para <b>"Qualquer pessoa com o link"</b>.</p></div>`;
-            if (contagem) contagem.textContent = "0 ofertas";
-            return;
-        }
-        const busca = (document.getElementById("buscaInput")?.value || "").toLowerCase();
-        const filtradas = aplicarOrdem(todasOfertas.filter(o => {
-            const matchLoja = lojaAtual === "todas" || o.loja === lojaAtual;
-            const matchBusca = !busca || o.titulo.toLowerCase().includes(busca) || o.categoria.toLowerCase().includes(busca);
-            return matchLoja && matchBusca;
-        }));
-        if (contagem) contagem.textContent = `${filtradas.length} oferta${filtradas.length !== 1 ? 's' : ''} encontrada${filtradas.length !== 1 ? 's' : ''}`;
+        if (erroPlanilha) { grid.innerHTML = `<div class="empty-state">🔒 Acesso Bloqueado. Planilha privada.</div>`; return; }
         
-        if (todasOfertas.length === 0) {
-            grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="emoji">⚙️</div><h3 style="font-size:20px;color:#555;margin-bottom:8px">Sem ofertas reais no momento</h3><p style="color:#999;font-size:15px">A aguardar dados do robô Teteco.</p></div>`;
-        } else if (filtradas.length === 0) {
-            grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="emoji">🔍</div><h3 style="font-size:20px;color:#555;margin-bottom:8px">Nenhuma oferta encontrada</h3></div>`;
-        } else {
-            grid.innerHTML = filtradas.map((o, i) => criarCardHTML(o, i)).join("");
-        }
+        const busca = (document.getElementById("buscaInput")?.value || "").toLowerCase();
+        const filt = aplicarOrdem(todasOfertas.filter(o => (lojaAtual === "todas" || o.loja === lojaAtual) && (!busca || o.titulo.toLowerCase().includes(busca) || o.categoria.toLowerCase().includes(busca))));
+        
+        if (contagem) contagem.textContent = `${filt.length} oferta(s)`;
+        grid.innerHTML = filt.length ? filt.map((o, i) => criarCardHTML(o, i)).join("") : `<div class="empty-state">🔍 Nada encontrado.</div>`;
     }
 
     function renderFavoritos() {
@@ -1295,173 +1186,89 @@
         if (!grid) return;
         const favIds = getFavoritos();
         const favOfertas = aplicarOrdem(todasOfertas.filter(o => favIds.includes(o.id)));
-        if (favOfertas.length === 0) {
-            grid.innerHTML = `<div class="fav-empty" style="grid-column:1/-1"><div class="emoji">🤍</div><h3 style="font-size:20px;color:#555;margin-bottom:8px">Nenhum favorito ainda</h3><p style="color:#999;font-size:15px">Clique no 🤍 nos cards de ofertas para salvar aqui.</p></div>`;
-        } else {
-            grid.innerHTML = favOfertas.map((o, i) => criarCardHTML(o, i)).join("");
-        }
+        grid.innerHTML = favOfertas.length ? favOfertas.map((o, i) => criarCardHTML(o, i)).join("") : `<div class="fav-empty"><div class="emoji">🤍</div><h3>Nenhum favorito</h3><p>Clique no coração das ofertas para guardar.</p></div>`;
     }
 
     function renderSocial() {
-        document.getElementById("socialGrid").innerHTML = REDES.map(r =>
-            `<a class="social-card" href="${r.url}" target="_blank" rel="noopener noreferrer" onmouseenter="this.style.background='${r.cor}25';this.style.borderColor='${r.cor}50'" onmouseleave="this.style.background='rgba(255,255,255,0.05)';this.style.borderColor='rgba(255,255,255,0.08)'">
-                <div class="social-icon" style="color:${r.cor};">${r.svg}</div>
-                <span class="social-name">${r.nome}</span>
-            </a>`
-        ).join("");
+        document.getElementById("socialGrid").innerHTML = REDES.map(r => `<a class="social-card" href="${r.url}" target="_blank"><div class="social-icon" style="color:${r.cor};">${r.svg}</div><span>${r.nome}</span></a>`).join("");
     }
 
     function renderFormLojas() {
-        const lojaKeys = Object.keys(LOJAS).filter(k => k !== "todas");
-        document.getElementById("formLojas").innerHTML = lojaKeys.map(k => {
-            const l = LOJAS[k];
-            return `<button class="form-loja-btn" data-loja="${k}" onclick="toggleFormLoja(this,'${k}','${l.cor}')">${l.emoji} ${l.nome}</button>`;
-        }).join("");
+        document.getElementById("formLojas").innerHTML = Object.keys(LOJAS).filter(k => k !== "todas").map(k => `<button class="form-loja-btn" onclick="toggleFormLoja(this,'${k}','${LOJAS[k].cor}')">${LOJAS[k].emoji} ${LOJAS[k].nome}</button>`).join("");
     }
 
     function renderFooterSocials() {
-        document.getElementById("footerSocials").innerHTML = REDES.map(r =>
-            `<a class="footer-social" href="${r.url}" target="_blank" rel="noopener noreferrer" title="${r.nome}" onmouseenter="this.style.background='${r.cor}';this.style.color='#fff'" onmouseleave="this.style.background='rgba(255,255,255,0.06)';this.style.color='#888'">${r.svg}</a>`
-        ).join("");
+        document.getElementById("footerSocials").innerHTML = REDES.map(r => `<a class="footer-social" href="${r.url}" target="_blank">${r.svg}</a>`).join("");
     }
 
     function atualizarStats() {
         document.getElementById("stat-total").textContent = todasOfertas.length;
-        if (todasOfertas.length > 0) {
-            const media = Math.round(todasOfertas.reduce((s, o) => s + o.desconto, 0) / todasOfertas.length);
-            document.getElementById("stat-desconto").textContent = media + "%";
-        } else {
-            document.getElementById("stat-desconto").textContent = "0%";
-        }
+        document.getElementById("stat-desconto").textContent = (todasOfertas.length ? Math.round(todasOfertas.reduce((s, o) => s + o.desconto, 0) / todasOfertas.length) : 0) + "%";
     }
 
-    // ══════════════════════════════════════════
-    // FILTROS DE LOJA E NAVEGAÇÃO
-    // ══════════════════════════════════════════
-
     function inicializarFiltros() {
-        const container = document.getElementById("lojasFilter");
-        container.innerHTML = Object.entries(LOJAS).map(([id, l]) =>
-            `<button class="loja-btn ${id==='todas'?'active':''}" data-loja="${id}" onclick="filtrarPorLoja('${id}',this)" style="${id==='todas'?`border-color:${l.cor};background:${l.cor}12;color:${l.cor};box-shadow:0 2px 10px ${l.cor}20`:''}">${l.emoji} ${l.nome}</button>`
-        ).join("");
+        document.getElementById("lojasFilter").innerHTML = Object.entries(LOJAS).map(([id, l]) => `<button class="loja-btn ${id==='todas'?'active':''}" onclick="filtrarPorLoja('${id}',this)" style="${id==='todas'?`border-color:${l.cor};background:${l.cor}12;color:${l.cor}`:''}">${l.emoji} ${l.nome}</button>`).join("");
     }
 
     function filtrarPorLoja(loja, btn) {
         lojaAtual = loja;
-        const l = LOJAS[loja];
-        document.querySelectorAll(".loja-btn").forEach(b => {
-            b.classList.remove("active");
-            b.style.borderColor = "#e8e8e8"; b.style.background = "#fff"; b.style.color = "#777"; b.style.boxShadow = "none";
-        });
+        document.querySelectorAll(".loja-btn").forEach(b => { b.classList.remove("active"); b.style.borderColor = "#e8e8e8"; b.style.background = "#fff"; b.style.color = "#777"; });
         btn.classList.add("active");
-        btn.style.borderColor = l.cor; btn.style.background = l.cor + "12"; btn.style.color = l.cor; btn.style.boxShadow = `0 2px 10px ${l.cor}20`;
+        btn.style.borderColor = LOJAS[loja].cor; btn.style.background = LOJAS[loja].cor + "12"; btn.style.color = LOJAS[loja].cor;
         renderOfertas();
     }
 
-    // Debounce na busca — só filtra 300ms após o usuário parar de digitar
-    function filtrarOfertas() {
-        clearTimeout(debounceTimer);
-        debounceTimer = setTimeout(() => renderOfertas(), 300);
-    }
+    function filtrarOfertas() { clearTimeout(debounceTimer); debounceTimer = setTimeout(() => renderOfertas(), 300); }
 
     function navegar(pagina) {
         document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-        const pageEl = document.getElementById("page-" + pagina);
-        if (!pageEl) return;
-        pageEl.classList.add("active");
-
+        document.getElementById("page-" + pagina)?.classList.add("active");
         document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
         document.querySelectorAll(`.nav-btn[data-page="${pagina}"]`).forEach(b => b.classList.add("active"));
-
         document.getElementById("mobileMenu").classList.remove("open");
         window.scrollTo(0, 0);
-
-        // Atualizar URL hash para permitir botão "voltar" do browser
         history.pushState({ pagina }, "", `#${pagina}`);
-
-        if (pagina === "ofertas") {
-            inicializarFiltros();
-            renderOfertas();
-        } else if (pagina === "favoritos") {
-            renderFavoritos();
-        }
+        if (pagina === "ofertas") { inicializarFiltros(); renderOfertas(); }
+        else if (pagina === "favoritos") renderFavoritos();
     }
 
-    // Lidar com botão "voltar/avançar" do browser
     window.addEventListener("popstate", (e) => {
-        const pagina = (e.state && e.state.pagina) || location.hash.replace("#", "") || "home";
-        document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-        const pageEl = document.getElementById("page-" + pagina);
-        if (pageEl) pageEl.classList.add("active");
-        document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
-        document.querySelectorAll(`.nav-btn[data-page="${pagina}"]`).forEach(b => b.classList.add("active"));
-        if (pagina === "ofertas") { inicializarFiltros(); renderOfertas(); }
-        else if (pagina === "favoritos") { renderFavoritos(); }
+        const pg = (e.state && e.state.pagina) || location.hash.replace("#", "") || "home";
+        navegar(pg);
     });
 
-    // Verificar hash na URL ao carregar
     (function() {
         const hash = location.hash.replace("#", "");
-        if (hash && ["home","ofertas","favoritos","pedir"].includes(hash)) {
-            setTimeout(() => navegar(hash), 100);
-        }
+        if (["home","ofertas","favoritos","pedir"].includes(hash)) setTimeout(() => navegar(hash), 100);
     })();
 
     function toggleMenu() { document.getElementById("mobileMenu").classList.toggle("open"); }
 
+    // Lógica do botão Scroll Top
     window.addEventListener("scroll", () => {
         document.getElementById("navbar").classList.toggle("scrolled", window.scrollY > 60);
+        const btnScroll = document.getElementById("btnScrollTop");
+        if (window.scrollY > 500) { btnScroll.style.display = "block"; } else { btnScroll.style.display = "none"; }
     });
 
-    // ══════════════════════════════════════════
-    // FORMULÁRIO DE PEDIDO
-    // ══════════════════════════════════════════
-
     let formLojaSelecionada = "";
-
     function toggleFormLoja(btn, loja, cor) {
         if (formLojaSelecionada === loja) {
             formLojaSelecionada = "";
             btn.style.borderColor = "#eee"; btn.style.background = "#fafafa"; btn.style.color = "#777";
         } else {
-            document.querySelectorAll(".form-loja-btn").forEach(b => {
-                b.style.borderColor = "#eee"; b.style.background = "#fafafa"; b.style.color = "#777";
-            });
+            document.querySelectorAll(".form-loja-btn").forEach(b => { b.style.borderColor = "#eee"; b.style.background = "#fafafa"; b.style.color = "#777"; });
             formLojaSelecionada = loja;
             btn.style.borderColor = cor; btn.style.background = cor + "12"; btn.style.color = cor;
         }
     }
-
-    document.addEventListener("input", function(e) {
-        if (e.target.id === "pedidoProduto") {
-            document.getElementById("formSubmit").disabled = !e.target.value.trim();
-        }
-    });
+    document.addEventListener("input", e => { if (e.target.id === "pedidoProduto") document.getElementById("formSubmit").disabled = !e.target.value.trim(); });
 
     function enviarPedido() {
-        const produto = document.getElementById("pedidoProduto").value.trim();
-        if (!produto) return;
-
-        const orcamento = document.getElementById("pedidoOrcamento").value;
-        const detalhes = document.getElementById("pedidoDetalhes").value;
-
-        const msg = encodeURIComponent(
-            `🎯 NOVO PEDIDO DE OFERTA NO SITE\n\n` +
-            `📦 Produto: ${produto}\n` +
-            `${orcamento ? `💰 Orçamento: ${orcamento}\n` : ''}` +
-            `${formLojaSelecionada ? `🏪 Loja: ${LOJAS[formLojaSelecionada]?.nome || formLojaSelecionada}\n` : ''}` +
-            `${detalhes ? `📝 Detalhes: ${detalhes}\n` : ''}`
-        );
-
-        document.getElementById("formBox").innerHTML = `
-            <div class="form-success">
-                <div class="form-success-icon">✓</div>
-                <h3 style="font-size:22px;margin-bottom:8px;font-weight:800">Pedido Preparado!</h3>
-                <p style="color:#666;font-size:15px;margin-bottom:20px">Clique abaixo para enviar para a nossa equipa no Telegram.</p>
-                <a href="${CONFIG.TELEGRAM}?text=${msg}" target="_blank" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:10px;background:linear-gradient(135deg,#FF6B35,#E43225);color:#fff;font-weight:700;font-size:14px;text-decoration:none">
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.94z"/></svg> Enviar Pedido no Telegram
-                </a>
-            </div>`;
+        const p = document.getElementById("pedidoProduto").value.trim();
+        if (!p) return;
+        const msg = encodeURIComponent(`🎯 NOVO PEDIDO DE OFERTA NO SITE\n\n📦 Produto: ${p}\n${document.getElementById("pedidoOrcamento").value ? `💰 Orçamento: ${document.getElementById("pedidoOrcamento").value}\n` : ''}${formLojaSelecionada ? `🏪 Loja: ${LOJAS[formLojaSelecionada]?.nome}\n` : ''}${document.getElementById("pedidoDetalhes").value ? `📝 Detalhes: ${document.getElementById("pedidoDetalhes").value}\n` : ''}`);
+        document.getElementById("formBox").innerHTML = `<div class="form-success"><div class="form-success-icon">✓</div><h3 style="font-size:22px;margin-bottom:8px;font-weight:800">Pedido Preparado!</h3><p style="color:#666;font-size:15px;margin-bottom:20px">Clique abaixo para enviar para a nossa equipa no Telegram.</p><a href="${CONFIG.TELEGRAM}?text=${msg}" target="_blank" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:10px;background:linear-gradient(135deg,#FF6B35,#E43225);color:#fff;font-weight:700;font-size:14px;text-decoration:none"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.94z"/></svg> Enviar Pedido no Telegram</a></div>`;
     }
 
     carregarOfertas();
