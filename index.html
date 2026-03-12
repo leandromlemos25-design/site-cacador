@@ -1223,6 +1223,7 @@ footer{
 // ==========================================
 // CONFIGURAÇÕES GERAIS DA API & DADOS
 // ==========================================
+// ⚠️ DEIXE VAZIO PARA TESTAR AQUI! Só coloque a sua chave verdadeira quando for alojar na Vercel/Servidor.
 const apiKey = "AIzaSyB9sEKGLuyU7d_sFAY-kOtGteDNxGumk2M"; 
 
 const CONFIG = {
@@ -1275,7 +1276,9 @@ let chatHistorico = [];
 // MOTOR DE INTELIGÊNCIA ARTIFICIAL (GEMINI API)
 // ==========================================
 async function chamarGemini(promptTexto, systemInst = "") {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+    // Inteligência Adaptativa: Usa o modelo interno no simulador, e o modelo público na Vercel!
+    const modelName = apiKey ? "gemini-2.5-flash" : "gemini-2.5-flash-preview-09-2025";
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
     const payload = {
         contents: [{ role: "user", parts: [{ text: promptTexto }] }]
     };
@@ -1285,6 +1288,7 @@ async function chamarGemini(promptTexto, systemInst = "") {
     }
 
     let delay = 1000;
+    let ultimoErro = "";
     for (let i = 0; i < 5; i++) {
         try {
             const response = await fetch(url, {
@@ -1293,21 +1297,28 @@ async function chamarGemini(promptTexto, systemInst = "") {
                 body: JSON.stringify(payload)
             });
             
-            if (!response.ok) throw new Error(`API Error: ${response.status}`);
-            
             const result = await response.json();
+
+            if (!response.ok) {
+                ultimoErro = result.error?.message || response.statusText;
+                throw new Error(`API Error: ${response.status} - ${ultimoErro}`);
+            }
             
             // Blindagem contra bloqueios de segurança e falhas estruturais
             if (!result.candidates || !result.candidates[0] || !result.candidates[0].content) {
                 if (result.candidates?.[0]?.finishReason === 'SAFETY') {
                      return "Desculpe, a política de segurança da plataforma bloqueou a análise deste pedido. 🛡️";
                 }
+                ultimoErro = "Resposta vazia da API";
                 throw new Error("Resposta inválida da API");
             }
             
             return result.candidates[0].content.parts[0].text;
         } catch (error) {
-            if (i === 4) return "Desculpe, os meus circuitos de inteligência artificial estão indisponíveis no momento. Tente novamente mais tarde! 😔";
+            console.error(`Tentativa ${i+1} falhou:`, error);
+            if (i === 4) {
+                return `Desculpe, a IA está indisponível. (Erro: ${ultimoErro || error.message}) 😔`;
+            }
             await new Promise(r => setTimeout(r, delay));
             delay *= 2;
         }
