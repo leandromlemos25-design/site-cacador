@@ -1223,7 +1223,6 @@ footer{
 // ==========================================
 // CONFIGURAÇÕES GERAIS DA API & DADOS
 // ==========================================
-// ⚠️ ATENÇÃO: COLOQUE A SUA CHAVE DA API GEMINI AQUI ENTRE AS ASPAS!
 const apiKey = "AIzaSyB9sEKGLuyU7d_sFAY-kOtGteDNxGumk2M"; 
 
 const CONFIG = {
@@ -1276,20 +1275,15 @@ let chatHistorico = [];
 // MOTOR DE INTELIGÊNCIA ARTIFICIAL (GEMINI API)
 // ==========================================
 async function chamarGemini(promptTexto, systemInst = "") {
-    if (!apiKey) {
-        return "⚠️ A chave da API Gemini não está configurada no ambiente. Por favor, adicione a chave para ativar as funcionalidades inteligentes.";
-    }
-    
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
     const payload = {
-        contents: [{ parts: [{ text: promptTexto }] }]
+        contents: [{ role: "user", parts: [{ text: promptTexto }] }]
     };
     
     if (systemInst) {
         payload.systemInstruction = { parts: [{ text: systemInst }] };
     }
 
-    // Lógica de "Exponential Backoff" exigida para resiliência
     let delay = 1000;
     for (let i = 0; i < 5; i++) {
         try {
@@ -1302,7 +1296,16 @@ async function chamarGemini(promptTexto, systemInst = "") {
             if (!response.ok) throw new Error(`API Error: ${response.status}`);
             
             const result = await response.json();
-            return result.candidates?.[0]?.content?.parts?.[0]?.text || "Desculpe, tive um problema a processar a resposta.";
+            
+            // Blindagem contra bloqueios de segurança e falhas estruturais
+            if (!result.candidates || !result.candidates[0] || !result.candidates[0].content) {
+                if (result.candidates?.[0]?.finishReason === 'SAFETY') {
+                     return "Desculpe, a política de segurança da plataforma bloqueou a análise deste pedido. 🛡️";
+                }
+                throw new Error("Resposta inválida da API");
+            }
+            
+            return result.candidates[0].content.parts[0].text;
         } catch (error) {
             if (i === 4) return "Desculpe, os meus circuitos de inteligência artificial estão indisponíveis no momento. Tente novamente mais tarde! 😔";
             await new Promise(r => setTimeout(r, delay));
