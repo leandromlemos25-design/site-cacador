@@ -256,34 +256,127 @@ img, video{max-width:100%;display:block}
 .hero-stat-val{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--accent)}
 .hero-stat-label{font-size:12px;color:var(--text3);margin-top:2px;font-weight:500}
 
-/* ══ HERO VISUAL & VIDEO TETECO ══ */
+/* ══ HERO VISUAL: MOCKUP DE CELULAR (Clean & Premium) ══ */
 .hero-mascot-side{
   display:flex;align-items:center;justify-content:center;
   position:relative;
   width: 100%;
 }
-.teteco-video {
-  width: 100%;
-  max-width: 380px;
-  border-radius: 24px;
-  animation: teteco-float 4s ease-in-out infinite;
-  z-index: 10;
+.phone-mockup {
+  width: 280px;
+  height: 560px;
+  background: #0d0d0d;
+  border: 12px solid #1f1f1f;
+  border-radius: 44px;
   position: relative;
-  /* CORREÇÃO: Sombra mais elegante e remoção do fundo preto feio */
-  box-shadow: 0 20px 50px rgba(255, 77, 0, 0.15);
-  border: 1px solid rgba(255, 77, 0, 0.3);
-  background: transparent; 
-  object-fit: cover;
-  pointer-events: none; /* Previne o roubo de cliques */
+  z-index: 10;
+  box-shadow: 0 35px 70px rgba(0,0,0,0.6), inset 0 0 0 2px rgba(255,255,255,0.05);
+  animation: floatPhone 6s ease-in-out infinite;
+  overflow: hidden;
 }
-@keyframes teteco-float{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-16px)}
+@keyframes floatPhone {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-15px) rotate(2deg); }
 }
-.teteco-ground-glow{
+.phone-notch {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 110px;
+  height: 26px;
+  background: #1f1f1f;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+  z-index: 20;
+}
+.phone-screen {
+  padding: 50px 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  height: 100%;
+  background: radial-gradient(circle at top, rgba(255,77,0,0.15) 0%, transparent 60%);
+}
+.mock-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.mock-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  box-shadow: 0 4px 10px var(--accent-glow);
+}
+.mock-header-text strong {
+  display: block;
+  font-size: 13px;
+  color: #fff;
+  font-family: 'Syne', sans-serif;
+}
+.mock-header-text span {
+  font-size: 10px;
+  color: #888;
+}
+.mock-msg {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 14px;
+  border-radius: 16px;
+  border-top-left-radius: 4px;
+  opacity: 0;
+  animation: slideInMsg 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+.msg-1 { animation-delay: 0.5s; }
+.msg-2 { animation-delay: 2.5s; }
+.msg-3 { animation-delay: 4.5s; }
+
+@keyframes slideInMsg {
+  from { opacity: 0; transform: translateX(-20px) scale(0.9); }
+  to { opacity: 1; transform: translateX(0) scale(1); }
+}
+.mock-badge {
+  display: inline-block;
+  background: rgba(255,77,0,0.15);
+  color: var(--accent);
+  font-size: 9px;
+  font-weight: 800;
+  padding: 4px 8px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+.mock-msg strong {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 6px;
+  color: #fff;
+  line-height: 1.3;
+}
+.mock-msg p {
+  font-size: 11px;
+  color: #aaa;
+  line-height: 1.5;
+  margin-bottom: 0;
+}
+.mock-price {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--accent);
+  font-family: 'Syne', sans-serif;
+}
+
+.teteco-glow-bg{
   position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);
   width:340px;height:340px;
-  background:radial-gradient(circle, rgba(255,77,0,0.25) 0%, transparent 70%);
+  background:radial-gradient(circle, rgba(255,77,0,0.2) 0%, transparent 70%);
   border-radius:50%;
   filter:blur(12px);
   animation:glow-pulse 4s ease-in-out infinite;
@@ -463,6 +556,16 @@ img, video{max-width:100%;display:block}
   color:var(--text2);transition:all .2s;
 }
 .btn-partilhar:hover{background:var(--surface3)}
+
+/* ══ BOTÃO IA (NOVO) ══ */
+.ai-btn{
+  width:38px;flex-shrink:0;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg, #8B5CF6, #E81CFF);
+  border:none; color:#fff; font-size:16px;
+  transition:all .2s; box-shadow:0 0 15px rgba(232, 28, 255, 0.3);
+}
+.ai-btn:hover{transform:scale(1.08); box-shadow:0 4px 20px rgba(232, 28, 255, 0.5);}
 
 /* Load more */
 #loadMoreTrigger{grid-column:1/-1;display:flex;justify-content:center;padding:24px}
@@ -644,6 +747,28 @@ img, video{max-width:100%;display:block}
 #chatSendBtn:hover{transform:scale(1.05)}
 #chatSendBtn:disabled{opacity:.4;cursor:not-allowed;transform:none}
 
+/* ══ MODAL IA (NOVO) ══ */
+.ai-modal {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 3000;
+  display: none; align-items: center; justify-content: center; padding: 20px;
+  backdrop-filter: blur(5px);
+}
+.ai-modal.open { display: flex; animation: fadeIn .3s ease; }
+.ai-modal-content {
+  background: var(--surface); padding: 24px; border-radius: 20px;
+  max-width: 500px; width: 100%; border: 1px solid rgba(232, 28, 255, 0.4);
+  box-shadow: 0 0 40px rgba(232, 28, 255, 0.15); position: relative;
+}
+@keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+.ai-modal-header {
+  display:flex; align-items:center; gap:10px; margin-bottom:16px;
+  border-bottom: 1px solid var(--border); padding-bottom: 12px;
+}
+.ai-modal-body {
+  font-size:14px; line-height:1.6; color:var(--text2);
+  max-height:60vh; overflow-y:auto; padding-right:8px;
+}
+
 /* ══ NEWSLETTER ══ */
 .newsletter-section {
   background: var(--surface2);
@@ -761,7 +886,7 @@ footer{
 @media(max-width:1024px){
   #hero{grid-template-columns:1fr;padding:60px 40px;min-height:auto;gap:40px}
   .hero-visual{order:-1}
-  .teteco-video{max-width:320px}
+  .phone-mockup{max-width:320px}
   .section{padding:60px 40px}
   footer{padding:32px 40px}
   .stats-row{grid-template-columns:repeat(2,1fr)}
@@ -855,12 +980,42 @@ footer{
       </div>
     </div>
 
-    <!-- LADO DIREITO: O Teteco (NOVO VÍDEO) -->
+    <!-- LADO DIREITO: Mockup de Celular Clean & Premium -->
     <div class="hero-mascot-side fade-up fade-up-1">
       <div class="teteco-glow-bg"></div>
-      <video class="teteco-video" autoplay loop muted playsinline aria-label="Teteco Assistente Animado de Fato">
-          <source src="document_5012933588480428205.mp4" type="video/mp4">
-      </video>
+      <div class="phone-mockup">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+           
+           <div class="mock-header">
+             <div class="mock-avatar">🎯</div>
+             <div class="mock-header-text">
+               <strong>O Caçador de Oferta</strong>
+               <span>Agora mesmo</span>
+             </div>
+           </div>
+
+           <!-- Simulação de Notificações de Ofertas -->
+           <div class="mock-msg msg-1">
+             <span class="mock-badge">🔥 OFERTA</span>
+             <strong>Smartphone S24 Ultra 256GB</strong>
+             <p>De: <s>R$ 7.999</s><br>Por: <span class="mock-price">R$ 5.499</span></p>
+           </div>
+
+           <div class="mock-msg msg-2">
+             <span class="mock-badge">⚡ BUG</span>
+             <strong>Smart TV 55" 4K UHD</strong>
+             <p>De: <s>R$ 3.299</s><br>Por: <span class="mock-price">R$ 1.899</span></p>
+           </div>
+
+           <div class="mock-msg msg-3">
+             <span class="mock-badge">📦 CUPOM</span>
+             <strong>Fralda Pampers Confort Sec</strong>
+             <p>Com cupom ativo da loja!<br><span class="mock-price">R$ 89,90</span></p>
+           </div>
+
+        </div>
+      </div>
     </div>
   </section>
 
@@ -1018,6 +1173,20 @@ footer{
   Procurar Oferta
 </button>
 
+<!-- ═══ MODAL IA (Vale a pena?) ═══ -->
+<div class="ai-modal" id="aiModal">
+  <div class="ai-modal-content">
+    <button class="chat-close" onclick="window.fecharAiModal()" style="position:absolute; top:16px; right:16px; color:var(--text); background:none; border:none; font-size:20px; cursor:pointer;" aria-label="Fechar Análise IA">✕</button>
+    <div class="ai-modal-header">
+      <div class="mock-avatar" style="font-size:20px; width:40px; height:40px;">✨</div>
+      <h3 style="font-family:'Syne',sans-serif; margin:0; font-size:18px;">Análise Inteligente</h3>
+    </div>
+    <div class="ai-modal-body" id="aiModalBody">
+      <!-- O conteúdo será injetado dinamicamente pela API do Gemini -->
+    </div>
+  </div>
+</div>
+
 <!-- ═══ CHATBOT IA ═══ -->
 <button class="chat-fab" id="chatFab" onclick="window.toggleChat()" aria-label="Abrir assistente virtual Teteco">
   <span id="chatFabIcon">🤖</span>
@@ -1028,21 +1197,21 @@ footer{
   <div class="chat-header">
     <div class="chat-avatar" aria-hidden="true">🤖</div>
     <div class="chat-header-info">
-      <h4>Teteco AI</h4>
-      <p>Online agora</p>
+      <h4>Teteco AI ✨</h4>
+      <p>O seu especialista em compras</p>
     </div>
     <button class="chat-close" onclick="window.toggleChat()" aria-label="Fechar janela de chat">✕</button>
   </div>
   <div class="chat-messages" id="chatMessages">
-    <div class="chat-msg bot">Olá! Eu sou o Teteco, o assistente inteligente do Caçador. Posso ajudar a encontrar alguma oferta ou tirar dúvidas? 🎯</div>
+    <div class="chat-msg bot">Olá! Eu sou o Teteco, o assistente inteligente alimentado pela Inteligência Artificial. Posso ajudá-lo a encontrar a oferta ideal ou avaliar se uma promoção é verdadeira. O que procura? 🎯</div>
   </div>
   <div class="chat-suggestions" id="chatSuggestions">
-    <button class="chat-suggestion" onclick="window.enviarMsg('Tem cupom do Mercado Livre?')">Cupom Mercado Livre</button>
-    <button class="chat-suggestion" onclick="window.enviarMsg('Busque iPhones em promoção')">iPhones em promoção</button>
-    <button class="chat-suggestion" onclick="window.enviarMsg('Como faço um pedido?')">Como faço um pedido?</button>
+    <button class="chat-suggestion" onclick="window.enviarMsg('Tem algum iPhone em promoção?')">iPhones em promoção</button>
+    <button class="chat-suggestion" onclick="window.enviarMsg('Preciso de um presente até R$ 200')">Presentes até R$ 200</button>
+    <button class="chat-suggestion" onclick="window.enviarMsg('Como faço um pedido especial?')">Como pedir uma oferta?</button>
   </div>
   <div class="chat-input-bar">
-    <input type="text" id="chatInput" placeholder="Escreva sua mensagem..." onkeypress="if(event.key==='Enter') window.enviarMsg()" aria-label="Mensagem para o assistente virtual">
+    <input type="text" id="chatInput" placeholder="Escreva a sua mensagem..." onkeypress="if(event.key==='Enter') window.enviarMsg()" aria-label="Mensagem para o assistente virtual">
     <button id="chatSendBtn" onclick="window.enviarMsg()" aria-label="Enviar mensagem">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
     </button>
@@ -1051,7 +1220,12 @@ footer{
 
 <!-- ═══ LÓGICA JAVASCRIPT ═══ -->
 <script>
-// CONFIGURAÇÕES GERAIS
+// ==========================================
+// CONFIGURAÇÕES GERAIS DA API & DADOS
+// ==========================================
+// Chave da API do Gemini será injetada em tempo de execução
+const apiKey = ""; 
+
 const CONFIG = {
     SHEET_ID: "1Ug9wQKO9HfCRrTsjZz8gDe7dCVDxXH2ehMC3nGkb6Xw",
     SHEET_TAB: "Página1",
@@ -1086,7 +1260,6 @@ const REDES = [
     { nome: "Facebook",  url: CONFIG.FACEBOOK,  svg: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm3 8h-1.35c-.538 0-.65.221-.65.778v1.222h2l-.209 2h-1.791v7h-3v-7h-2v-2h2v-2.308c0-1.769.931-2.692 3.029-2.692h1.971v3z"/></svg>', cor: "#1877F2" }
 ];
 
-// ESTADO GLOBAL E VARIAVEIS
 let todasOfertas = [];
 let lojaAtual = "todas";
 let ordemAtual = "recente";
@@ -1100,7 +1273,52 @@ let chatOpen = false;
 let chatHistorico = [];
 
 // ==========================================
-// FUNÇÕES GLOBAIS BLINDADAS (EXPOSTAS NO FIM)
+// MOTOR DE INTELIGÊNCIA ARTIFICIAL (GEMINI API)
+// ==========================================
+async function chamarGemini(promptTexto, systemInst = "") {
+    if (!apiKey) {
+        return "⚠️ A chave da API Gemini não está configurada no ambiente. Por favor, adicione a chave para ativar as funcionalidades inteligentes.";
+    }
+    
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+    const payload = {
+        contents: [{ parts: [{ text: promptTexto }] }]
+    };
+    
+    if (systemInst) {
+        payload.systemInstruction = { parts: [{ text: systemInst }] };
+    }
+
+    // Lógica de "Exponential Backoff" exigida para resiliência
+    let delay = 1000;
+    for (let i = 0; i < 5; i++) {
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            
+            if (!response.ok) throw new Error(`API Error: ${response.status}`);
+            
+            const result = await response.json();
+            return result.candidates?.[0]?.content?.parts?.[0]?.text || "Desculpe, tive um problema a processar a resposta.";
+        } catch (error) {
+            if (i === 4) return "Desculpe, os meus circuitos de inteligência artificial estão indisponíveis no momento. Tente novamente mais tarde! 😔";
+            await new Promise(r => setTimeout(r, delay));
+            delay *= 2;
+        }
+    }
+}
+
+function _formatarRespostaIA(txt) {
+    return txt.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
+              .replace(/\*(.*?)\*/g, '<i>$1</i>')
+              .replace(/\n/g, '<br>');
+}
+
+// ==========================================
+// FUNÇÕES GLOBAIS DA APLICAÇÃO
 // ==========================================
 
 function initTema() {
@@ -1386,6 +1604,9 @@ function criarCardHTML(o, delayIdx) {
                 ${o.desconto > 0 ? `<div class="oferta-economia">Poupa ${formatarMoeda(o.precoAntigo - o.precoNovo)}</div>` : ''}
             </div>
             <div class="botoes-acao">
+                <button class="ai-btn" onclick="window.analisarOferta(${o.id})" aria-label="Analisar oferta com Inteligência Artificial" title="A IA analisa se vale a pena!">
+                    ✨
+                </button>
                 <a href="${esc(o.link)}" target="_blank" rel="noopener" class="oferta-btn" style="background:${loja.cor}15;color:${loja.cor};border:1px solid ${loja.cor}40" onmouseover="this.style.background='${loja.cor}';this.style.color='#fff'" onmouseout="this.style.background='${loja.cor}15';this.style.color='${loja.cor}'">
                     Pegar Oferta 🛒
                 </a>
@@ -1425,7 +1646,7 @@ function renderOfertas(resetPage = true) {
     const ofertasPagina = filt.slice(0, paginaAtual * CONFIG.ITEMS_PER_PAGE);
     
     if (filt.length === 0) {
-        grid.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🔍</div><h3>Poxa, não achamos nada!</h3><p>Tente buscar com outras palavras ou peça essa oferta para nossa equipe.</p></div>`;
+        grid.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🔍</div><h3>Poxa, não achamos nada!</h3><p>Tente buscar com outras palavras ou peça essa oferta para a nossa equipa.</p></div>`;
         document.getElementById("loadMoreTrigger").style.display = "none";
     } else {
         grid.innerHTML = ofertasPagina.map((o, i) => criarCardHTML(o, i)).join("");
@@ -1558,6 +1779,44 @@ function enviarPedido() {
     document.getElementById("formBox").innerHTML = `<div class="form-success fade-up"><div class="form-success-icon">✓</div><h3 style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--text);margin-bottom:8px">Pedido Preparado!</h3><p style="color:var(--text2);margin-bottom:24px">O seu pedido foi gerado. Clique abaixo para enviar diretamente para a nossa equipa no Telegram.</p><a href="${CONFIG.TELEGRAM}?text=${msg}" target="_blank" class="btn-primary" style="text-decoration:none">Enviar Pedido no Telegram</a></div>`;
 }
 
+// ==========================================
+// FUNÇÕES DE INTELIGÊNCIA ARTIFICIAL (Botão e Chatbot)
+// ==========================================
+
+async function analisarOferta(idOferta) {
+    const oferta = todasOfertas.find(o => o.id === idOferta);
+    if (!oferta) return;
+    
+    const modal = document.getElementById('aiModal');
+    const modalBody = document.getElementById('aiModalBody');
+    
+    modal.classList.add('open');
+    modalBody.innerHTML = '<div class="loader-spinner" style="margin: 20px auto;"></div><p style="text-align:center; margin-top:10px;">O Teteco está a analisar o mercado e os padrões de preço... ✨</p>';
+
+    const promptText = `
+        Analise a seguinte oferta:
+        - Produto: ${oferta.titulo}
+        - Loja: ${oferta.loja}
+        - Preço Atual: R$ ${oferta.precoNovo}
+        - Preço Antigo: R$ ${oferta.precoAntigo}
+        - Desconto reportado: ${oferta.desconto}%
+    `;
+
+    const systemInstruction = `Você é um especialista em compras e inteligência de mercado português de Portugal.
+O seu objetivo é analisar a oferta e dizer se "Vale a pena?" de forma muito direta, simpática e profissional.
+Sempre justifique se o desconto parece real ou se é "metade do dobro" baseado no seu conhecimento geral sobre a categoria do produto.
+Use emojis para tornar o texto mais leve.
+Forneça a sua resposta em, no máximo, 2 ou 3 parágrafos curtos.
+Finalize sempre atribuindo uma "Nota do Teteco" de 1 a 10.`;
+
+    const resposta = await chamarGemini(promptText, systemInstruction);
+    modalBody.innerHTML = _formatarRespostaIA(resposta);
+}
+
+function fecharAiModal() {
+    document.getElementById('aiModal').classList.remove('open');
+}
+
 function toggleChat() {
     chatOpen = !chatOpen;
     document.getElementById("chatWindow").classList.toggle("open", chatOpen);
@@ -1592,45 +1851,39 @@ async function enviarMsg(sugestao = null) {
     
     input.value = "";
     document.getElementById("chatSuggestions").style.display = "none";
+    
+    // Adiciona a mensagem do utilizador à interface e ao histórico
     _addMsgChat(esc(texto), "user");
     chatHistorico.push({role: "user", content: texto});
 
-    if (chatHistorico._aguardando === "nome") {
-        chatHistorico._nomeUsuario = texto;
-        chatHistorico._aguardando = null;
-        _addMsgChat(`Prazer, <b>${esc(texto)}</b>! Pedido anotado. Nossa equipa vai procurar e postar no grupo do Telegram. Fique de olho lá! 🚀`, "bot");
-        return;
-    }
-
+    // Inicia a animação de "A escrever..."
     const idMsg = "typing-" + Date.now();
     _addMsgChat(`<div class="typing-dots"><span></span><span></span><span></span></div>`, "bot");
     const typingMsg = document.getElementById("chatMessages").lastChild;
 
-    setTimeout(() => {
-        try {
-            const termos = texto.toLowerCase().split(/\s+/);
-            const encontrados = todasOfertas.filter(o => termos.some(t => t.length >= 3 && o.titulo.toLowerCase().includes(t))).slice(0, 3);
-            
-            typingMsg.remove();
-            
-            if(encontrados.length > 0){
-                let html = `Achei <b>${encontrados.length} oferta(s)</b> pra si! Dá uma olhada:<br><br>`;
-                encontrados.forEach(o => {
-                    html += `🛍️ <b>${esc(o.titulo)}</b><br>💰 ${formatarMoeda(o.precoNovo)} ${o.desconto>0?`<span style="color:var(--green)">(-${o.desconto}%)</span>`:''}<br><a href="${esc(o.link)}" target="_blank">Pegar Oferta →</a><br><br>`;
-                });
-                html += `Quer procurar mais alguma coisa?`;
-                _addMsgChat(html, "bot");
-                chatHistorico.push({role: "assistant", content: html});
-            } else {
-                _addMsgChat(`Puxa, rodei o sistema todo e não achei nada para "<b>${esc(texto)}</b>" agora. 😔<br><br>Mas calma! Posso pedir pra nossa equipa humana caçar isso para si. Qual é o seu <b>nome</b>?`, "bot");
-                chatHistorico._aguardando = "nome";
-                chatHistorico.push({role: "assistant", content: "Não encontrei. Pedindo nome."});
-            }
-        } catch(err) {
-            typingMsg.remove();
-            _addMsgChat("Deu um tilt nos meus circuitos. Tente de novo?", "bot");
-        }
-    }, 1200);
+    // Constrói o contexto atualizado das ofertas (top 20 para otimizar os tokens da API)
+    const contextoOfertas = todasOfertas.slice(0, 20).map(o => `- ${o.titulo} (Loja: ${o.loja}) por R$ ${o.precoNovo}`).join('\n');
+    
+    const systemPrompt = `Você é o Teteco, um assistente de inteligência artificial português de Portugal do site "O Caçador de Oferta".
+O seu papel é ajudar os clientes a encontrar os melhores produtos e descontos.
+Sempre interaja usando o português de Portugal (ex: ecrã, telemóvel, rato, utilizar, etc.).
+Seja muito amigável, entusiasmado, direto e use emojis (✨, 🎯, 🛒, 📉).
+Aqui estão as principais ofertas ativas neste exato momento no nosso catálogo:
+${contextoOfertas}
+Se o utilizador perguntar por algum produto que esteja nesta lista ou semelhante, recomende-o vivamente e mencione sempre o preço e a loja!
+Se não houver nada relacionado na lista, diga gentilmente que vai pedir à equipa humana para caçar essa promoção e colocá-la no grupo do Telegram.
+Nunca invente preços ou produtos que não estão na lista acima.`;
+
+    // Transforma o histórico do chat em texto para enviar à API (para manter o contexto da conversa)
+    const historicoTexto = chatHistorico.map(h => `${h.role === 'user' ? 'Utilizador' : 'Teteco'}: ${h.content}`).join('\n');
+    const promptFinal = `${historicoTexto}\nTeteco:`;
+
+    // Chama a API do Gemini
+    const resposta = await chamarGemini(promptFinal, systemPrompt);
+    
+    typingMsg.remove();
+    _addMsgChat(_formatarRespostaIA(resposta), "bot");
+    chatHistorico.push({role: "assistant", content: resposta});
 }
 
 // ==========================================
@@ -1649,6 +1902,8 @@ window.toggleFormLoja = toggleFormLoja;
 window.enviarPedido = enviarPedido;
 window.toggleChat = toggleChat;
 window.enviarMsg = enviarMsg;
+window.analisarOferta = analisarOferta;
+window.fecharAiModal = fecharAiModal;
 
 // ==========================================
 // INICIALIZAÇÃO
