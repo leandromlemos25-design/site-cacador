@@ -8,13 +8,14 @@ export default async function handler(req, res) {
   try {
     const timestamp = Math.floor(Date.now() / 1000).toString();
     
-    // MUDANÇA: Usando exatamente os campos que a Shopee exige (itemName e priceDiscountRate)
+    // MUDANÇA: Trocamos itemName por productName.
+    // Note que price, priceDiscountRate, offerLink e imageUrl já foram aprovados por eles!
     const graphqlPayload = JSON.stringify({
       query: `
         {
           productOfferV2(page: 1, limit: 12) {
             nodes {
-              itemName
+              productName
               price
               priceDiscountRate
               offerLink
@@ -68,21 +69,20 @@ export default async function handler(req, res) {
     // Extrai os produtos que a Shopee enviou
     const nodes = data.data?.productOfferV2?.nodes || [];
     
-    // TRADUÇÃO: Pega o idioma da Shopee e transforma no idioma que o seu site (index.html) entende
+    // TRADUÇÃO: Prepara os dados pro seu site
     const produtosFormatados = nodes.map(n => {
         const precoAtual = parseFloat(n.price) || 0;
         const porcentagemDesconto = parseFloat(n.priceDiscountRate) || 0;
         
-        // Calcula o preço antigo com base no desconto para ficar bonito no site
         let precoAntigo = precoAtual;
         if (porcentagemDesconto > 0 && porcentagemDesconto < 100) {
             precoAntigo = precoAtual / (1 - (porcentagemDesconto / 100));
         }
 
         return {
-            offerName: n.itemName || "Oferta Shopee",
-            price: precoAntigo,            // O site vai ler isso como Preço Riscado
-            discountPrice: precoAtual,     // O site vai ler isso como Preço Novo
+            offerName: n.productName || "Oferta Shopee",
+            price: precoAntigo,            
+            discountPrice: precoAtual,     
             discountRate: porcentagemDesconto,
             offerLink: n.offerLink,
             imageUrl: n.imageUrl
