@@ -5,9 +5,9 @@ export default async function handler(req, res) {
   const appId = '18349310952';
   const appSecret = 'OVT5GSP5CARZR74TXZ2L3J4RRQACTAG2'; 
 
-  // MUDANÇA: Agora o backend aceita buscas (ex: ?q=iphone)
+  // MUDANÇA: Aumentamos o limite para 20. Assim o filtro do site (index.html) terá munição de sobra para jogar as capinhas fora e exibir os celulares.
   const searchQuery = req.query?.q || "";
-  const limit = searchQuery ? 3 : 12; // Se for busca do chat, traz 3. Se for pro catálogo, 12.
+  const limit = searchQuery ? 20 : 12; 
   const keywordFilter = searchQuery ? `, keyword: "${searchQuery}"` : "";
 
   try {
