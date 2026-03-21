@@ -31,9 +31,9 @@ export default async function handler(req, res) {
     const baseString = appId + timestamp + graphqlPayload + appSecret;
     const signature = crypto.createHash('sha256').update(baseString).digest('hex');
 
-    // Opções de requisição usando o módulo HTTPS nativo (ignora problemas de fetch)
+    // MUDANÇA AQUI: Apontando para o servidor GLOBAL oficial da Shopee
     const options = {
-      hostname: 'openapi.shopee.com.br',
+      hostname: 'partner.shopeemobile.com', 
       port: 443,
       path: '/api/v2/affiliate/graphql',
       method: 'POST',
@@ -63,11 +63,11 @@ export default async function handler(req, res) {
       reqShopee.end();
     });
 
-    // Se a Shopee recusar a assinatura ou os parâmetros
-    if (data.errors) {
+    // Se a Shopee recusar a assinatura ou os parâmetros (Aqui veremos o que a Shopee responde!)
+    if (data.errors || data.error) {
         return res.status(400).json({ 
             erro_identificado: 'A Shopee recusou a requisição.', 
-            detalhes_oficiais_da_shopee: data.errors
+            detalhes_oficiais_da_shopee: data.errors || data
         });
     }
     
