@@ -1918,13 +1918,10 @@ async function enviarMsg(sugestao = null) {
     chatHistorico.push({role: "user", content: texto});
 
     // Inicia a animação de "A escrever..."
-    _addMsgChat(`<div class="typing-dots"><span></span><span></span><span></span></div>`, "bot");
-    const typingMsg = document.getElementById("chatMessages").lastChild;
-
-    // Constrói o contexto atualizado das ofertas
+    // Constrói o contexto atualizado das ofertas (top 20 para otimizar tokens)
     const contextoOfertas = todasOfertas.slice(0, 20).map(o => `- ${o.titulo} (Loja: ${o.loja}) por R$ ${o.precoNovo}`).join('\n');
     
-    // MUDANÇA CRÍTICA: Ensinamos o bot a usar a "TAG DE BUSCA"
+    // MUDANÇA CRÍTICA: Inteligência de Busca Avançada (Compreensão de Meias Palavras)
     const systemPrompt = `Você é o Teteco, um assistente de compras do site "O Caçador de Oferta".
 Ajude os clientes a encontrar os melhores produtos e descontos.
 Use o português do Brasil. Seja amigável, entusiasmado, direto e use emojis (✨, 🎯, 🛒, 📉).
@@ -1932,14 +1929,17 @@ Ofertas ativas no catálogo agora:
 ${contextoOfertas}
 
 MUITO IMPORTANTE:
-Se o usuário pedir um produto específico que NÃO ESTÁ na lista acima, você DEVE dizer que vai procurar na Shopee para ele e, OBRIGATORIAMENTE, adicionar no final exato da sua resposta a tag mágica: [BUSCAR: Nome do Produto]
+Se o usuário pedir um produto específico que NÃO ESTÁ na lista acima, você DEVE dizer que vai procurar na Shopee para ele e, OBRIGATORIAMENTE, adicionar no final exato da sua resposta a tag mágica: [BUSCAR: Termo Otimizado]
 
-🚨 REGRA ANTI-ACESSÓRIOS (CRÍTICA) 🚨
-A busca da Shopee é cheia de capinhas e cabos baratos. Se o usuário pedir um CELULAR, iPHONE, TV ou CONSOLE, você OBRIGATORIAMENTE deve montar o termo de busca adicionando palavras como "Smartphone", "Aparelho" ou "Original" para forçar o sistema a buscar o produto real. NUNCA busque apenas pelo modelo.
-- ❌ ERRADO: [BUSCAR: iPhone 15] (Vai trazer capinhas de R$ 20)
-- ✅ CERTO: [BUSCAR: Smartphone Apple iPhone 15 Original]
-- ❌ ERRADO: [BUSCAR: PS5]
-- ✅ CERTO: [BUSCAR: Console PlayStation 5 Original]
+🚨 ENGENHARIA DE BUSCA (CRÍTICA) 🚨
+O usuário costuma usar "meias palavras", gírias ou ser vago (ex: "poco fone", "ps5", "um iphone"). Você atua como um tradutor inteligente para o algoritmo da loja:
+1. TRADUZA PARA O NOME COMERCIAL: "poco fone" vira "Xiaomi Poco". "pleisteixo" vira "PlayStation 5".
+2. FUJA DAS CAPINHAS (BURLANDO A LOJA): A Shopee retorna 90% de capinhas e cabos se você pesquisar só "iPhone 15" ou "Poco". Para forçar o algoritmo a trazer APARELHOS REAIS, SEMPRE adicione a capacidade de memória (ex: "128GB" ou "256GB") no termo de busca de smartphones.
+- ❌ [BUSCAR: iPhone 15] (Traz capinhas de 20 reais)
+- ✅ [BUSCAR: Apple iPhone 15 128GB] (Traz o aparelho real)
+- ❌ [BUSCAR: Smartphone POCO FONE Original] (A loja não acha nada)
+- ✅ [BUSCAR: Xiaomi Poco 256GB] (Traz o aparelho real)
+- ✅ [BUSCAR: Console PlayStation 5]
 
 NUNCA invente preços ou produtos que não estão na lista. Deixe o sistema buscar por você usando a tag.`;
 
@@ -1972,15 +1972,15 @@ NUNCA invente preços ou produtos que não estão na lista. Deixe o sistema busc
 
             if (ofertasEncontradas && Array.isArray(ofertasEncontradas)) {
                 
-                // 🛡️ FILTRO ANTI-ACESSÓRIOS (FRONTEND) 🛡️
-                // Se a busca for por um aparelho caro (celular, iphone, console), ignora itens com preço de capinha/cabo (abaixo de R$ 500)
+                // 🛡️ FILTRO ANTI-ACESSÓRIOS REFORÇADO (FRONTEND) 🛡️
                 const termoLower = termoBusca.toLowerCase();
-                const isAparelhoCaro = termoLower.includes('iphone') || termoLower.includes('smartphone') || termoLower.includes('celular') || termoLower.includes('playstation') || termoLower.includes('console');
+                const keywordsCaros = ['iphone', 'xiaomi', 'poco', 'samsung', 'motorola', 'playstation', 'ps4', 'ps5', 'xbox', 'nintendo', 'switch', 'console', 'celular', 'smartphone', 'tv', 'notebook', 'macbook', 'ipad', 'apple watch'];
+                const isAparelhoCaro = keywordsCaros.some(kw => termoLower.includes(kw));
                 
                 if (isAparelhoCaro) {
                     ofertasEncontradas = ofertasEncontradas.filter(o => {
                         const preco = o.discountPrice || o.price;
-                        return preco >= 500; // Elimina capinhas e cabos
+                        return preco >= 400; // Elimina capinhas, cabos e películas
                     });
                 }
 
