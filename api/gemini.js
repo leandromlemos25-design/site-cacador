@@ -1,55 +1,21 @@
-/**
- * Vercel Serverless Function — Proxy para Gemini API
- */
-
 export default async function handler(req, res) {
-    // CORS — adicionado o seu domínio Vercel de testes!
-    const allowedOrigins = [
-        "https://ocacadordeofertas.com",
-        "https://www.ocacadordeofertas.com",
-        "https://site-cacador.vercel.app", // <--- O SEU DOMÍNIO AQUI!
-        "http://localhost:3000",
-        "http://localhost:5500",
-        "http://127.0.0.1:5500",
-    ];
-
-    const origin = req.headers.origin || "";
-    // Permitir se for do mesmo domínio ou da lista de autorizados
-    if (!origin || allowedOrigins.includes(origin)) {
-        res.setHeader("Access-Control-Allow-Origin", origin || "*");
-    }
+    // Permite que o seu site acesse a API sem bloqueios de segurança (CORS)
+    res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-    // Preflight (requisições preliminares do navegador)
-    if (req.method === "OPTIONS") {
-        return res.status(200).end();
-    }
+    if (req.method === "OPTIONS") return res.status(200).end();
+    if (req.method !== "POST") return res.status(405).json({ error: "Use POST" });
 
-    if (req.method !== "POST") {
-        return res.status(405).json({ error: "Método não permitido. Use POST." });
-    }
-
+    // Puxa a sua chave secreta lá da Vercel
     const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) {
-        console.error("GEMINI_API_KEY não configurada na Vercel.");
-        return res.status(500).json({ error: "Configuração do servidor incompleta." });
-    }
+    if (!apiKey) return res.status(500).json({ error: "Chave API ausente na Vercel." });
 
     try {
         const { prompt, systemInstruction, history } = req.body;
 
-        if (!prompt || typeof prompt !== "string" || prompt.trim().length === 0) {
-            return res.status(400).json({ error: "Campo 'prompt' é obrigatório." });
-        }
-
-        // Limitar tamanho para não gastar tokens desnecessários
-        if (prompt.length > 10000) {
-            return res.status(400).json({ error: "Prompt muito longo." });
-        }
-
-        // Modelo Gemini otimizado
-        const model = "gemini-2.5-flash";
+        // MUDANÇA CRÍTICA: Usando o modelo universal e estável da Google
+        const model = "gemini-1.5-flash";
         const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
 
         let contents;
@@ -64,13 +30,11 @@ export default async function handler(req, res) {
         }
 
         const payload = { contents };
-
-        if (systemInstruction && typeof systemInstruction === "string") {
-            payload.systemInstruction = {
-                parts: [{ text: systemInstruction }],
-            };
+        if (systemInstruction) {
+            payload.systemInstruction = { parts: [{ text: systemInstruction }] };
         }
 
+        // Bate na porta da Google
         const response = await fetch(url, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -79,29 +43,25 @@ export default async function handler(req, res) {
 
         const data = await response.json();
 
+        // Se a Google recusar, agora vamos ver o motivo exato
         if (!response.ok) {
-            console.error("Gemini API error:", data.error?.message);
             return res.status(502).json({
-                error: "Erro na API de IA.",
-                detail: data.error?.message || "Resposta inválida",
+                error: "A Google recusou a requisição",
+                detail: data.error?.message || "Erro desconhecido da Google"
             });
         }
 
         if (!data.candidates || !data.candidates[0]?.content) {
-            const reason = data.candidates?.[0]?.finishReason || "UNKNOWN";
-            return res.status(200).json({
-                text: reason === "SAFETY"
-                    ? "A política de segurança bloqueou esta análise. 🛡️"
-                    : "Não consegui gerar uma resposta. Tente novamente.",
-                blocked: true,
-            });
+            return res.status(200).json({ text: "Bloqueado por segurança 🛡️", blocked: true });
         }
 
-        const text = data.candidates[0].content.parts[0].text;
-        return res.status(200).json({ text, blocked: false });
+        // Sucesso! Devolve a resposta ao seu site
+        return res.status(200).json({
+            text: data.candidates[0].content.parts[0].text,
+            blocked: false
+        });
 
     } catch (error) {
-        console.error("Proxy Gemini error:", error);
-        return res.status(500).json({ error: "Erro interno do servidor." });
+        return res.status(500).json({ error: "Falha no servidor", detail: error.message });
     }
 }
