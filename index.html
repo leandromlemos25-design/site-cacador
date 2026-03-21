@@ -1932,12 +1932,16 @@ Ofertas ativas no catálogo agora:
 ${contextoOfertas}
 
 MUITO IMPORTANTE:
-Se o usuário pedir um produto específico que NÃO ESTÁ na lista acima (ex: iPhone 16), você NÃO DEVE dizer apenas "não temos".
-Você DEVE dizer que vai procurar na Shopee para ele e, OBRIGATORIAMENTE, adicionar no final exato da sua resposta a tag mágica: [BUSCAR: Nome do Produto]
-Exemplo de resposta: "Não temos aqui no catálogo principal, mas vou procurar algumas ofertas de iPhone 16 na Shopee para você agora mesmo! 🔍 [BUSCAR: iPhone 16]"
+Se o usuário pedir um produto específico que NÃO ESTÁ na lista acima, você DEVE dizer que vai procurar na Shopee para ele e, OBRIGATORIAMENTE, adicionar no final exato da sua resposta a tag mágica: [BUSCAR: Nome do Produto]
 
-NUNCA invente preços ou produtos que não estão na lista. Deixe o sistema buscar por você usando a tag.
-Responda de forma concisa.`;
+🚨 REGRA ANTI-ACESSÓRIOS (CRÍTICA) 🚨
+A busca da Shopee é cheia de capinhas e cabos baratos. Se o usuário pedir um CELULAR, iPHONE, TV ou CONSOLE, você OBRIGATORIAMENTE deve montar o termo de busca adicionando palavras como "Smartphone", "Aparelho" ou "Original" para forçar o sistema a buscar o produto real. NUNCA busque apenas pelo modelo.
+- ❌ ERRADO: [BUSCAR: iPhone 15] (Vai trazer capinhas de R$ 20)
+- ✅ CERTO: [BUSCAR: Smartphone Apple iPhone 15 Original]
+- ❌ ERRADO: [BUSCAR: PS5]
+- ✅ CERTO: [BUSCAR: Console PlayStation 5 Original]
+
+NUNCA invente preços ou produtos que não estão na lista. Deixe o sistema buscar por você usando a tag.`;
 
     const historicoRecente = chatHistorico.slice(-10);
     const resposta = await chamarGemini(texto, systemPrompt, historicoRecente.slice(0, -1));
@@ -1961,32 +1965,50 @@ Responda de forma concisa.`;
         const typingBusca = document.getElementById("chatMessages").lastChild;
 
         try {
-            // Chama a sua API da Vercel com o termo de busca
+            // Chama a API da Shopee com o termo de busca (agora mais específico)
             const resShopee = await fetch('/api/shopee?q=' + encodeURIComponent(termoBusca));
-            const ofertasEncontradas = await resShopee.json();
+            let ofertasEncontradas = await resShopee.json();
             typingBusca.remove();
 
-            if (ofertasEncontradas && Array.isArray(ofertasEncontradas) && ofertasEncontradas.length > 0) {
-                // Monta mini-cards HTML das ofertas encontradas
-                let htmlOfertas = `<p style="margin-bottom:10px; font-size:13px;">Acabei de encontrar estas opções exclusivas para "<b>${esc(termoBusca)}</b>":</p><div style="display:flex; flex-direction:column; gap:8px;">`;
+            if (ofertasEncontradas && Array.isArray(ofertasEncontradas)) {
                 
-                ofertasEncontradas.slice(0, 3).forEach(o => {
-                    htmlOfertas += `
-                    <a href="${esc(o.offerLink)}" target="_blank" style="display:flex; gap:10px; background:var(--bg2); padding:10px; border-radius:12px; border:1px solid var(--border); text-decoration:none; color:var(--text); align-items:center; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
-                        <img src="${esc(o.imageUrl)}" style="width:50px; height:50px; object-fit:cover; border-radius:8px; border:1px solid var(--border2); flex-shrink:0;">
-                        <div style="flex:1; min-width:0;">
-                            <div style="font-size:11px; font-weight:600; line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; text-overflow:ellipsis;">${esc(o.offerName)}</div>
-                            <div style="color:var(--accent); font-weight:800; font-size:14px; margin-top:4px;">${formatarMoeda(o.discountPrice || o.price)}</div>
-                        </div>
-                    </a>`;
-                });
+                // 🛡️ FILTRO ANTI-ACESSÓRIOS (FRONTEND) 🛡️
+                // Se a busca for por um aparelho caro (celular, iphone, console), ignora itens com preço de capinha/cabo (abaixo de R$ 500)
+                const termoLower = termoBusca.toLowerCase();
+                const isAparelhoCaro = termoLower.includes('iphone') || termoLower.includes('smartphone') || termoLower.includes('celular') || termoLower.includes('playstation') || termoLower.includes('console');
                 
-                htmlOfertas += `</div>`;
-                _addMsgChat(htmlOfertas, "bot");
-                chatHistorico.push({role: "assistant", content: `Mostrei os resultados da Shopee para ${termoBusca}.`});
+                if (isAparelhoCaro) {
+                    ofertasEncontradas = ofertasEncontradas.filter(o => {
+                        const preco = o.discountPrice || o.price;
+                        return preco >= 500; // Elimina capinhas e cabos
+                    });
+                }
+
+                if (ofertasEncontradas.length > 0) {
+                    // Monta mini-cards HTML das ofertas encontradas
+                    let htmlOfertas = `<p style="margin-bottom:10px; font-size:13px;">Acabei de encontrar estas opções exclusivas para "<b>${esc(termoBusca)}</b>":</p><div style="display:flex; flex-direction:column; gap:8px;">`;
+                    
+                    ofertasEncontradas.slice(0, 3).forEach(o => {
+                        htmlOfertas += `
+                        <a href="${esc(o.offerLink)}" target="_blank" style="display:flex; gap:10px; background:var(--bg2); padding:10px; border-radius:12px; border:1px solid var(--border); text-decoration:none; color:var(--text); align-items:center; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+                            <img src="${esc(o.imageUrl)}" style="width:50px; height:50px; object-fit:cover; border-radius:8px; border:1px solid var(--border2); flex-shrink:0;">
+                            <div style="flex:1; min-width:0;">
+                                <div style="font-size:11px; font-weight:600; line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; text-overflow:ellipsis;">${esc(o.offerName)}</div>
+                                <div style="color:var(--accent); font-weight:800; font-size:14px; margin-top:4px;">${formatarMoeda(o.discountPrice || o.price)}</div>
+                            </div>
+                        </a>`;
+                    });
+                    
+                    htmlOfertas += `</div>`;
+                    _addMsgChat(htmlOfertas, "bot");
+                    chatHistorico.push({role: "assistant", content: `Mostrei os resultados da Shopee para ${termoBusca}.`});
+                } else {
+                    // Se não encontrou nada (ou se o filtro de R$ 500 bloqueou as capinhas)
+                    _addMsgChat(`Poxa, vasculhei a Shopee inteira mas não encontrei ofertas de aparelhos originais para "<b>${termoBusca}</b>" no momento. Quer que eu peça no grupo do Telegram? 😔`, "bot");
+                    chatHistorico.push({role: "assistant", content: `Não encontrei resultados na Shopee para ${termoBusca}.`});
+                }
             } else {
-                _addMsgChat(`Poxa, vasculhei a Shopee inteira mas não encontrei ofertas boas para "<b>${termoBusca}</b>" no momento. Quer que eu peça no grupo do Telegram? 😔`, "bot");
-                chatHistorico.push({role: "assistant", content: `Não encontrei resultados na Shopee para ${termoBusca}.`});
+                _addMsgChat(`Poxa, vasculhei a Shopee inteira mas não encontrei ofertas para "<b>${termoBusca}</b>" no momento.`, "bot");
             }
         } catch (error) {
             typingBusca.remove();
