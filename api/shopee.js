@@ -1,44 +1,66 @@
-// Arquivo: api/shopee.js (Backend da Vercel)
-const crypto = require('crypto');
-
 export default async function handler(req, res) {
-  // Configurações fornecidas por você (NUNCA mostre isso no Front-End)
   const appId = '18349310952';
-  
-  // DICA: O ideal é colocar essa Senha lá nas "Environment Variables" do painel da Vercel
-  // Mas para facilitar agora, estou colocando direto no código do backend.
   const appSecret = 'OVT5GSP5CARZR74TXZ2L3J4RRQACTAG2'; 
 
   try {
-    // 1. A Shopee exige um timestamp do momento exato do pedido
-    const timestamp = Math.floor(Date.now() / 1000);
+    const crypto = require('crypto');
+    const timestamp = Math.floor(Date.now() / 1000).toString();
     
-    // 2. Criação da Assinatura Criptográfica (HMAC-SHA256)
-    const payload = appId + timestamp;
-    const signature = crypto.createHmac('sha256', appSecret).update(payload).digest('hex');
-
-    // 3. Montagem da URL da Shopee (Exemplo buscando ofertas gerais de Afiliados)
-    // A API Open Platform da Shopee exige esses 3 parâmetros base em toda URL
-    const shopeeApiUrl = `https://openapi.shopee.com.br/api/v2/affiliate/offer/list?app_id=${appId}&timestamp=${timestamp}&sign=${signature}`;
-
-    // Faz a chamada verdadeira para a Shopee, que agora aceitará porque a assinatura está correta
-    const shopeeResponse = await fetch(shopeeApiUrl, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' }
+    // A API de Afiliados da Shopee exige o padrão GraphQL
+    const graphqlPayload = JSON.stringify({
+      query: `
+        {
+          productOfferV2(page: 1, limit: 12) {
+            nodes {
+              offerName
+              price
+              discountPrice
+              discountRate
+              offerLink
+              imageUrl
+            }
+          }
+        }
+      `
     });
 
-    if (!shopeeResponse.ok) {
-        throw new Error('Falha na comunicação com a Shopee.');
-    }
+    // Criptografia exigida para Afiliados (AppId + Timestamp + Payload + Secret)
+    const baseString = appId + timestamp + graphqlPayload + appSecret;
+    const signature = crypto.createHash('sha256').update(baseString).digest('hex');
+
+    // Endpoint oficial de Afiliados
+    const shopeeApiUrl = 'https://openapi.shopee.com.br/api/v2/affiliate/graphql';
+
+    const shopeeResponse = await fetch(shopeeApiUrl, {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `SHA256 Credential=${appId}, Timestamp=${timestamp}, Signature=${signature}`
+        },
+        body: graphqlPayload
+    });
 
     const data = await shopeeResponse.json();
+
+    // Se a Shopee recusar, agora vamos ver o motivo exato!
+    if (!shopeeResponse.ok || data.errors) {
+        console.error("Erro da Shopee:", data);
+        return res.status(400).json({ 
+            erro_identificado: 'A Shopee recusou o acesso.', 
+            detalhes_oficiais_da_shopee: data.errors || data 
+        });
+    }
     
-    // 4. Devolve os dados para o seu site (que os receberá na função carregarOfertasShopee() no frontend)
-    // O retorno depende muito da estrutura exata da Shopee, ajustamos para a sua necessidade
-    return res.status(200).json(data?.data?.list || []);
+    // Sucesso!
+    const produtos = data.data?.productOfferV2?.nodes || [];
+    return res.status(200).json(produtos);
 
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: 'Erro ao processar integração com a Shopee' });
+    // Se a Vercel falhar por algum motivo de código
+    console.error("Erro na Vercel:", error.message);
+    return res.status(500).json({ 
+        erro_identificado: 'Falha interna na Vercel', 
+        detalhes: error.message 
+    });
   }
 }
