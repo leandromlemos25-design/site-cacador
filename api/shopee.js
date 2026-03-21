@@ -1,4 +1,3 @@
-// Arquivo: api/shopee.js
 const crypto = require('crypto');
 const https = require('https');
 
@@ -9,7 +8,7 @@ export default async function handler(req, res) {
   try {
     const timestamp = Math.floor(Date.now() / 1000).toString();
     
-    // Payload exato como exigido pela Shopee Open Platform GraphQL
+    // Payload GraphQL da API de Afiliados
     const graphqlPayload = JSON.stringify({
       query: `
         {
@@ -27,15 +26,15 @@ export default async function handler(req, res) {
       `
     });
 
-    // Construção rigorosa da assinatura
+    // Assinatura (Regra da API de Afiliados da Shopee)
     const baseString = appId + timestamp + graphqlPayload + appSecret;
     const signature = crypto.createHash('sha256').update(baseString).digest('hex');
 
-    // MUDANÇA AQUI: Apontando para o servidor GLOBAL oficial da Shopee
+    // MUDANÇA AQUI: O domínio e caminho exclusivos para AFILIADOS no Brasil
     const options = {
-      hostname: 'partner.shopeemobile.com', 
+      hostname: 'open-api.affiliate.shopee.com.br',
       port: 443,
-      path: '/api/v2/affiliate/graphql',
+      path: '/graphql',
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -44,7 +43,7 @@ export default async function handler(req, res) {
       }
     };
 
-    // Retorna uma Promise para lidar com a requisição HTTPS
+    // Faz a requisição HTTPS
     const data = await new Promise((resolve, reject) => {
       const reqShopee = https.request(options, (resShopee) => {
         let responseBody = '';
@@ -53,7 +52,7 @@ export default async function handler(req, res) {
           try {
             resolve(JSON.parse(responseBody));
           } catch (e) {
-            reject(new Error("Resposta da Shopee não é um JSON válido"));
+            reject(new Error("A Shopee não retornou um JSON válido"));
           }
         });
       });
@@ -63,21 +62,20 @@ export default async function handler(req, res) {
       reqShopee.end();
     });
 
-    // Se a Shopee recusar a assinatura ou os parâmetros (Aqui veremos o que a Shopee responde!)
+    // Se a Shopee recusar a credencial (Veremos o motivo exato)
     if (data.errors || data.error) {
         return res.status(400).json({ 
-            erro_identificado: 'A Shopee recusou a requisição.', 
+            erro_identificado: 'A Shopee recusou o seu AppID ou Assinatura de Afiliado.', 
             detalhes_oficiais_da_shopee: data.errors || data
         });
     }
     
-    // Sucesso Absoluto!
+    // Sucesso! Extrai as ofertas
     const produtos = data.data?.productOfferV2?.nodes || [];
     return res.status(200).json(produtos);
 
   } catch (error) {
-    // Se a rede falhar
-    console.error("Erro Crítico na Vercel:", error.message);
+    console.error("Erro na Vercel:", error.message);
     return res.status(500).json({ 
         erro_identificado: 'Falha na comunicação de rede com a Shopee', 
         detalhes: error.message 
