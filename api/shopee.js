@@ -8,16 +8,15 @@ export default async function handler(req, res) {
   try {
     const timestamp = Math.floor(Date.now() / 1000).toString();
     
-    // Payload GraphQL da API de Afiliados
+    // MUDANÇA: Usando exatamente os campos que a Shopee exige (itemName e priceDiscountRate)
     const graphqlPayload = JSON.stringify({
       query: `
         {
           productOfferV2(page: 1, limit: 12) {
             nodes {
-              offerName
+              itemName
               price
-              discountPrice
-              discountRate
+              priceDiscountRate
               offerLink
               imageUrl
             }
@@ -26,11 +25,9 @@ export default async function handler(req, res) {
       `
     });
 
-    // Assinatura (Regra da API de Afiliados da Shopee)
     const baseString = appId + timestamp + graphqlPayload + appSecret;
     const signature = crypto.createHash('sha256').update(baseString).digest('hex');
 
-    // MUDANÇA AQUI: O domínio e caminho exclusivos para AFILIADOS no Brasil
     const options = {
       hostname: 'open-api.affiliate.shopee.com.br',
       port: 443,
@@ -43,7 +40,6 @@ export default async function handler(req, res) {
       }
     };
 
-    // Faz a requisição HTTPS
     const data = await new Promise((resolve, reject) => {
       const reqShopee = https.request(options, (resShopee) => {
         let responseBody = '';
@@ -62,22 +58,43 @@ export default async function handler(req, res) {
       reqShopee.end();
     });
 
-    // Se a Shopee recusar a credencial (Veremos o motivo exato)
     if (data.errors || data.error) {
         return res.status(400).json({ 
-            erro_identificado: 'A Shopee recusou o seu AppID ou Assinatura de Afiliado.', 
+            erro_identificado: 'A Shopee recusou os campos.', 
             detalhes_oficiais_da_shopee: data.errors || data
         });
     }
     
-    // Sucesso! Extrai as ofertas
-    const produtos = data.data?.productOfferV2?.nodes || [];
-    return res.status(200).json(produtos);
+    // Extrai os produtos que a Shopee enviou
+    const nodes = data.data?.productOfferV2?.nodes || [];
+    
+    // TRADUÇÃO: Pega o idioma da Shopee e transforma no idioma que o seu site (index.html) entende
+    const produtosFormatados = nodes.map(n => {
+        const precoAtual = parseFloat(n.price) || 0;
+        const porcentagemDesconto = parseFloat(n.priceDiscountRate) || 0;
+        
+        // Calcula o preço antigo com base no desconto para ficar bonito no site
+        let precoAntigo = precoAtual;
+        if (porcentagemDesconto > 0 && porcentagemDesconto < 100) {
+            precoAntigo = precoAtual / (1 - (porcentagemDesconto / 100));
+        }
+
+        return {
+            offerName: n.itemName || "Oferta Shopee",
+            price: precoAntigo,            // O site vai ler isso como Preço Riscado
+            discountPrice: precoAtual,     // O site vai ler isso como Preço Novo
+            discountRate: porcentagemDesconto,
+            offerLink: n.offerLink,
+            imageUrl: n.imageUrl
+        };
+    });
+
+    return res.status(200).json(produtosFormatados);
 
   } catch (error) {
     console.error("Erro na Vercel:", error.message);
     return res.status(500).json({ 
-        erro_identificado: 'Falha na comunicação de rede com a Shopee', 
+        erro_identificado: 'Falha interna', 
         detalhes: error.message 
     });
   }
