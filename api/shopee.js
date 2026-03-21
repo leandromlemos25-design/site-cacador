@@ -5,15 +5,19 @@ export default async function handler(req, res) {
   const appId = '18349310952';
   const appSecret = 'OVT5GSP5CARZR74TXZ2L3J4RRQACTAG2'; 
 
+  // MUDANÇA: Agora o backend aceita buscas (ex: ?q=iphone)
+  const searchQuery = req.query?.q || "";
+  const limit = searchQuery ? 3 : 12; // Se for busca do chat, traz 3. Se for pro catálogo, 12.
+  const keywordFilter = searchQuery ? `, keyword: "${searchQuery}"` : "";
+
   try {
     const timestamp = Math.floor(Date.now() / 1000).toString();
     
-    // MUDANÇA: Trocamos itemName por productName.
-    // Note que price, priceDiscountRate, offerLink e imageUrl já foram aprovados por eles!
+    // Injetamos a palavra-chave (keyword) na requisição se ela existir
     const graphqlPayload = JSON.stringify({
       query: `
         {
-          productOfferV2(page: 1, limit: 12) {
+          productOfferV2(page: 1, limit: ${limit}${keywordFilter}) {
             nodes {
               productName
               price
@@ -66,15 +70,13 @@ export default async function handler(req, res) {
         });
     }
     
-    // Extrai os produtos que a Shopee enviou
     const nodes = data.data?.productOfferV2?.nodes || [];
     
-    // TRADUÇÃO: Prepara os dados pro seu site
     const produtosFormatados = nodes.map(n => {
         const precoAtual = parseFloat(n.price) || 0;
         const porcentagemDesconto = parseFloat(n.priceDiscountRate) || 0;
-        
         let precoAntigo = precoAtual;
+        
         if (porcentagemDesconto > 0 && porcentagemDesconto < 100) {
             precoAntigo = precoAtual / (1 - (porcentagemDesconto / 100));
         }
@@ -92,7 +94,6 @@ export default async function handler(req, res) {
     return res.status(200).json(produtosFormatados);
 
   } catch (error) {
-    console.error("Erro na Vercel:", error.message);
     return res.status(500).json({ 
         erro_identificado: 'Falha interna', 
         detalhes: error.message 
