@@ -23,12 +23,7 @@
   "@context": "https://schema.org",
   "@type": "WebSite",
   "name": "O Caçador de Oferta",
-  "url": "https://ocacadordeofertas.com/",
-  "potentialAction": {
-    "@type": "SearchAction",
-    "target": "https://ocacadordeofertas.com/#ofertas?q={search_term_string}",
-    "query-input": "required name=search_term_string"
-  }
+  "url": "https://ocacadordeofertas.com/"
 }
 </script>
 <script type="application/ld+json">
@@ -1098,7 +1093,7 @@ footer{
       
       <div class="form-group">
         <label class="form-label" for="pedidoProduto">O que você procura? *</label>
-        <input class="form-input" id="pedidoProduto" placeholder='Ex: "PlayStation 5 256GB"' aria-label="Nome do produto procurado">
+        <input class="form-input" id="pedidoProduto" placeholder='Ex: "PlayStation 5 256GB"' aria-label="Nome do produto procurado" oninput="document.getElementById('formSubmit').disabled = !this.value.trim()">
       </div>
       <div class="form-group">
         <label class="form-label" for="pedidoOrcamento">Orçamento Máximo (Opcional)</label>
@@ -1124,10 +1119,11 @@ footer{
   <div class="newsletter-box fade-up">
     <h2 class="newsletter-title">Não perca o melhor do dia!</h2>
     <p class="newsletter-sub">Assine a nossa newsletter gratuita e receba um resumo das 5 melhores ofertas diárias diretamente no seu e-mail. Sem spam, só descontos reais.</p>
-    <form class="newsletter-form" onsubmit="event.preventDefault(); window.mostrarToast('✅', 'E-mail registado com sucesso!'); this.reset();">
+    <form class="newsletter-form" onsubmit="event.preventDefault(); window.mostrarToast('📬', 'Newsletter em breve! Por agora, siga-nos no Telegram.'); this.reset();">
       <input type="email" class="newsletter-input" placeholder="Escreva o seu melhor e-mail" required aria-label="Endereço de e-mail para newsletter">
       <button type="submit" class="btn-primary" style="border-radius: 12px; padding: 14px 28px;" aria-label="Inscrever-se na Newsletter">Assinar Grátis</button>
     </form>
+    <p style="font-size:12px;color:var(--text3);margin-top:12px;">A newsletter está sendo preparada. Enquanto isso, receba ofertas em tempo real no nosso <a href="https://t.me/ocacadordeoferta" target="_blank" style="color:var(--accent);font-weight:600;">Grupo do Telegram</a>.</p>
   </div>
 </section>
 
@@ -1204,8 +1200,8 @@ footer{
 // ==========================================
 // CONFIGURAÇÕES GERAIS DA API & DADOS
 // ==========================================
-// ⚠️ DEIXE VAZIO PARA TESTAR AQUI! Só coloque a sua chave verdadeira quando for alojar na Vercel/Servidor.
-const apiKey = "AIzaSyD33jtItO6IzG_MpQxhXyN8oFpJb3G5iFs"; 
+// A chave da API Gemini fica no servidor (Vercel Serverless Function).
+const GEMINI_PROXY_URL = "/api/gemini";
 
 const CONFIG = {
     SHEET_ID: "1Ug9wQKO9HfCRrTsjZz8gDe7dCVDxXH2ehMC3nGkb6Xw",
@@ -1256,49 +1252,40 @@ let chatHistorico = [];
 // ==========================================
 // MOTOR DE INTELIGÊNCIA ARTIFICIAL (GEMINI API)
 // ==========================================
-async function chamarGemini(promptTexto, systemInst = "") {
-    const modelName = apiKey ? "gemini-2.5-flash" : "gemini-2.5-flash-preview-09-2025";
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
-    const payload = {
-        contents: [{ role: "user", parts: [{ text: promptTexto }] }]
-    };
-    
-    if (systemInst) {
-        payload.systemInstruction = { parts: [{ text: systemInst }] };
-    }
-
+async function chamarGemini(promptTexto, systemInst = "", historico = []) {
     let delay = 1000;
     let ultimoErro = "";
-    for (let i = 0; i < 5; i++) {
+
+    for (let i = 0; i < 3; i++) {
         try {
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
+            const response = await fetch(GEMINI_PROXY_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    prompt: promptTexto,
+                    systemInstruction: systemInst || undefined,
+                    history: historico.length > 0 ? historico : undefined,
+                }),
             });
-            
+
             const result = await response.json();
 
             if (!response.ok) {
-                ultimoErro = result.error?.message || response.statusText;
-                throw new Error(`API Error: ${response.status} - ${ultimoErro}`);
+                ultimoErro = result.error || result.detail || response.statusText;
+                throw new Error(`Proxy Error: ${response.status} - ${ultimoErro}`);
             }
-            
-            if (!result.candidates || !result.candidates[0] || !result.candidates[0].content) {
-                if (result.candidates?.[0]?.finishReason === 'SAFETY') {
-                     return "Desculpe, a política de segurança da plataforma bloqueou a análise deste pedido. 🛡️";
-                }
-                ultimoErro = "Resposta vazia da API";
-                throw new Error("Resposta inválida da API");
+
+            if (result.blocked) {
+                return result.text;
             }
-            
-            return result.candidates[0].content.parts[0].text;
+
+            return result.text;
         } catch (error) {
-            console.error(`Tentativa ${i+1} falhou:`, error);
-            if (i === 4) {
-                return `Desculpe, a IA está indisponível. (Erro: ${ultimoErro || error.message}) 😔`;
+            console.error(`Tentativa ${i + 1} falhou:`, error);
+            if (i === 2) {
+                return `Desculpe, a IA está indisponível no momento. (${ultimoErro || error.message}) 😔`;
             }
-            await new Promise(r => setTimeout(r, delay));
+            await new Promise((r) => setTimeout(r, delay));
             delay *= 2;
         }
     }
@@ -1373,7 +1360,7 @@ function lerCache() {
         const raw = localStorage.getItem(CACHE_KEY);
         if (!raw) return null;
         const { ts, data } = JSON.parse(raw);
-        if (Date.now() - ts > 4 * 60 * 1000) return null;
+        if (Date.now() - ts > CONFIG.REFRESH_INTERVAL) return null;
         return data;
     } catch { return null; }
 }
@@ -1399,14 +1386,20 @@ function toggleFavorito(id) {
 function compartilharOferta(titulo, link) {
     if (navigator.share) {
         navigator.share({ title: 'O Caçador de Oferta', text: `🔥 Olha essa promoção: ${titulo}`, url: link }).catch(console.error);
+    } else if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(`${titulo}\n${link}`)
+            .then(() => mostrarToast("🔗", "Link copiado!"))
+            .catch(() => mostrarToast("⚠️", "Não foi possível copiar o link."));
     } else {
         const el = document.createElement('textarea');
         el.value = `${titulo}\n${link}`;
+        el.style.position = 'fixed';
+        el.style.opacity = '0';
         document.body.appendChild(el);
         el.select();
-        document.execCommand('copy');
+        try { document.execCommand('copy'); mostrarToast("🔗", "Link copiado!"); }
+        catch { mostrarToast("⚠️", "Não foi possível copiar."); }
         document.body.removeChild(el);
-        mostrarToast("🔗", "Link copiado!");
     }
 }
 
@@ -1455,28 +1448,25 @@ function getSkeletonsHTML(qtd = 6) {
 // ==========================================
 async function carregarOfertasShopee() {
     try {
-        // Isso fará um GET para o seu arquivo serverless na Vercel (ex: /api/shopee)
         const response = await fetch('/api/shopee');
         if (!response.ok) throw new Error('Falha ao obter ofertas da Shopee pelo servidor.');
         
         const ofertasShopee = await response.json();
         
-        // Combina as ofertas da planilha atual com as novas ofertas diretas da API
         if (ofertasShopee && ofertasShopee.length > 0) {
-            // Filtramos para não duplicar IDs ou criar problemas com a lista da Planilha
             const maxId = todasOfertas.length > 0 ? Math.max(...todasOfertas.map(o => o.id)) : 0;
             
             const novasFormatadas = ofertasShopee.map((oferta, index) => ({
                 id: maxId + index + 1,
                 loja: "shopee",
-                titulo: oferta.offer_name || "Oferta Shopee",
+                titulo: oferta.offerName || "Oferta Shopee",
                 precoAntigo: oferta.price || 0, 
-                precoNovo: oferta.discount_price || 0,
-                desconto: oferta.discount_rate || 0,
-                link: oferta.offer_link || "#",
-                img: oferta.image_url || "🧡",
+                precoNovo: oferta.discountPrice || 0,
+                desconto: oferta.discountRate || 0,
+                link: oferta.offerLink || "#",
+                img: oferta.imageUrl || "🧡",
                 categoria: "Shopee",
-                selo: "API Exclusiva",
+                selo: "🔥 EXCLUSIVO",
                 ativo: true,
                 timestamp: Date.now()
             }));
@@ -1486,7 +1476,6 @@ async function carregarOfertasShopee() {
         }
     } catch (err) {
         console.warn("Aviso Shopee API Frontend:", err.message);
-        // Falhas não quebram o site inteiro, apenas não mostram os itens extras.
     }
 }
 
@@ -1519,39 +1508,65 @@ async function carregarOfertas(silencioso = false) {
         const json = JSON.parse(text.substring(text.indexOf("(") + 1, text.lastIndexOf(")")));
         const cols = json.table.cols.map(c => (c.label || "").toLowerCase().trim());
         
-        const novas = json.table.rows.map((row, i) => {
-            const get = (l, cIdx) => {
-                const idx = cols.indexOf(l);
-                const val = idx >= 0 && row.c[idx] ? (row.c[idx].v || "") : "";
-                return val === "" && row.c[cIdx] ? row.c[cIdx].v || "" : val;
-            };
+        const COL_MAP = {
+            loja:         { nomes: ["loja", "store"],          idx: 0 },
+            titulo:       { nomes: ["titulo", "título", "title", "nome", "produto"], idx: 1 },
+            preco_antigo: { nomes: ["preco_antigo", "preço_antigo", "old_price", "preco antigo"], idx: 2 },
+            preco_novo:   { nomes: ["preco_novo", "preço_novo", "new_price", "preco novo", "preco", "preço"], idx: 3 },
+            link:         { nomes: ["link", "url"],            idx: 4 },
+            data:         { nomes: ["data", "date"],           idx: 5 },
+            emoji:        { nomes: ["emoji", "icone"],         idx: 6 },
+            categoria:    { nomes: ["categoria", "category"],  idx: 7 },
+            selo:         { nomes: ["selo", "badge", "tag"],   idx: 8 },
+            ativo:        { nomes: ["ativo", "active"],        idx: 9 },
+            imagem:       { nomes: ["imagem", "image", "img"], idx: 10 },
+        };
 
-            const pA = parsePreco(get("preco_antigo", 3));
-            const pN = parsePreco(get("preco_novo", 4));
+        const colIdx = {};
+        for (const [campo, config] of Object.entries(COL_MAP)) {
+            let encontrado = -1;
+            for (const nome of config.nomes) {
+                const idx = cols.indexOf(nome);
+                if (idx >= 0) { encontrado = idx; break; }
+            }
+            colIdx[campo] = encontrado >= 0 ? encontrado : config.idx;
+        }
+
+        const getCel = (row, campo) => {
+            const idx = colIdx[campo];
+            if (idx >= 0 && idx < row.c.length && row.c[idx]) {
+                return row.c[idx].v || "";
+            }
+            return "";
+        };
+        
+        const novas = json.table.rows.map((row, i) => {
+            const pA = parsePreco(getCel(row, "preco_antigo"));
+            const pN = parsePreco(getCel(row, "preco_novo"));
             
-            let ts = get("data", 0) ? parseDataCustom(get("data", 0)) : (Date.now() - i * 60000);
+            let ts = getCel(row, "data") ? parseDataCustom(String(getCel(row, "data"))) : (Date.now() - i * 60000);
             if (isNaN(ts)) ts = Date.now() - i * 60000;
 
-            const ativoStr = String(get("ativo", 9)).toLowerCase().trim();
+            const ativoStr = String(getCel(row, "ativo")).toLowerCase().trim();
             const ativo = !["nao", "não", "false", "0"].includes(ativoStr);
             
-            const isUrl = (s) => s && (s.startsWith("http") || s.startsWith("//"));
-            const colEmoji = String(get("emoji", 6) || row.c[6]?.v || "");
-            const colImagem = String(get("imagem", 10) || row.c[10]?.v || "");
+            const isUrl = (s) => s && (String(s).startsWith("http") || String(s).startsWith("//"));
+            const colEmoji = String(getCel(row, "emoji") || "");
+            const colImagem = String(getCel(row, "imagem") || "");
             
             const imgRaw = isUrl(colImagem) ? colImagem : (isUrl(colEmoji) ? colEmoji : "");
             const emojiF = !isUrl(colEmoji) && colEmoji ? colEmoji : "🛒";
 
             return {
                 id: i + 1,
-                loja: normalizarLoja(String(get("loja", 1) || row.c[1]?.v || "")),
-                titulo: get("titulo", 2) || "Produto Oferta",
+                loja: normalizarLoja(String(getCel(row, "loja") || "")),
+                titulo: getCel(row, "titulo") || "Produto Oferta",
                 precoAntigo: pA, precoNovo: pN,
                 desconto: pA > 0 && pA > pN ? Math.round((1 - pN / pA) * 100) : 0,
-                link: get("link", 5) || "#",
+                link: getCel(row, "link") || "#",
                 img: imgRaw || emojiF,
-                categoria: get("categoria", 7) || "Geral",
-                selo: get("selo", 8) || "",
+                categoria: getCel(row, "categoria") || "Geral",
+                selo: getCel(row, "selo") || "",
                 ativo, timestamp: ts
             };
         }).filter(o => o.ativo && o.precoNovo > 0);
@@ -1563,7 +1578,7 @@ async function carregarOfertas(silencioso = false) {
 
         todasOfertas = novas;
         
-        // Logo após carregar a planilha, tenta puxar também as ofertas exclusivas da Shopee via servidor Vercel
+        // Logo após carregar a planilha, tenta puxar também as ofertas da Shopee via servidor Vercel
         await carregarOfertasShopee();
 
         ultimaAtualizacao = Date.now();
@@ -1609,13 +1624,9 @@ function criarCardHTML(o, delayIdx) {
            <div style="display:none;font-size:56px">🛒</div>`
         : `<div style="font-size:56px">${esc(o.img)}</div>`;
 
-    let vezes = 1;
-    if (o.precoNovo >= 150) vezes = 10;
-    else if (o.precoNovo >= 100) vezes = 8;
-    else if (o.precoNovo >= 50) vezes = 5;
-    else if (o.precoNovo >= 30) vezes = 3;
-    else if (o.precoNovo >= 15) vezes = 2;
-    const parcelaHtml = vezes > 1 ? `ou <strong>${vezes}x</strong> de <strong>${formatarMoeda(o.precoNovo/vezes)}</strong>` : `<strong style="color:var(--green)">À vista no Pix</strong>`;
+    const parcelaHtml = o.precoNovo >= 50
+        ? `<span style="color:var(--text3);font-style:italic">Parcela na loja →</span>`
+        : `<strong style="color:var(--green)">Preço acessível</strong>`;
 
     return `
     <div class="oferta-card fade-up" style="animation-delay:${(delayIdx%10)*0.05}s">
@@ -1839,11 +1850,11 @@ async function analisarOferta(idOferta) {
         - Desconto reportado: ${oferta.desconto}%
     `;
 
-    const systemInstruction = `Você é um especialista em compras e inteligência de mercado português de Portugal.
-O seu objetivo é analisar a oferta e dizer se "Vale a pena?" de forma muito direta, simpática e profissional.
+    const systemInstruction = `Você é um especialista em compras e inteligência de mercado brasileiro.
+Seu objetivo é analisar a oferta e dizer se "Vale a pena?" de forma direta, simpática e profissional.
 Sempre justifique se o desconto parece real ou se é "metade do dobro" baseado no seu conhecimento geral sobre a categoria do produto.
 Use emojis para tornar o texto mais leve.
-Forneça a sua resposta em, no máximo, 2 ou 3 parágrafos curtos.
+Forneça sua resposta em, no máximo, 2 ou 3 parágrafos curtos.
 Finalize sempre atribuindo uma "Nota do Teteco" de 1 a 10.`;
 
     const resposta = await chamarGemini(promptText, systemInstruction);
@@ -1892,32 +1903,33 @@ async function enviarMsg(sugestao = null) {
     _addMsgChat(esc(texto), "user");
     chatHistorico.push({role: "user", content: texto});
 
-    const idMsg = "typing-" + Date.now();
     _addMsgChat(`<div class="typing-dots"><span></span><span></span><span></span></div>`, "bot");
     const typingMsg = document.getElementById("chatMessages").lastChild;
 
     const contextoOfertas = todasOfertas.slice(0, 20).map(o => `- ${o.titulo} (Loja: ${o.loja}) por R$ ${o.precoNovo}`).join('\n');
     
-    const systemPrompt = `Você é o Teteco, um assistente de inteligência artificial português de Portugal do site "O Caçador de Oferta".
-O seu papel é ajudar os clientes a encontrar os melhores produtos e descontos.
-Sempre interaja usando o português de Portugal (ex: ecrã, telemóvel, rato, utilizar, etc.).
-Seja muito amigável, entusiasmado, direto e use emojis (✨, 🎯, 🛒, 📉).
-Aqui estão as principais ofertas ativas neste exato momento no nosso catálogo:
+    const systemPrompt = `Você é o Teteco, um assistente de compras do site "O Caçador de Oferta".
+Ajude os clientes a encontrar os melhores produtos e descontos.
+Use o português do Brasil. Seja amigável, entusiasmado, direto e use emojis (✨, 🎯, 🛒, 📉).
+Ofertas ativas no catálogo agora:
 ${contextoOfertas}
-Se o utilizador perguntar por algum produto que esteja nesta lista ou semelhante, recomende-o vivamente e mencione sempre o preço e a loja!
-Se não houver nada relacionado na lista, diga gentilmente que vai pedir à equipa humana para caçar essa promoção e colocá-la no grupo do Telegram.
-Nunca invente preços ou produtos que não estão na lista acima.`;
+Se o utilizador perguntar por algum produto que esteja nesta lista ou semelhante, recomende-o e mencione o preço e a loja.
+Se não houver nada relacionado na lista, diga gentilmente que vai pedir à equipa para caçar essa promoção e colocá-la no grupo do Telegram.
+Nunca invente preços ou produtos que não estão na lista acima.
+Responda de forma concisa — no máximo 3 parágrafos curtos.`;
 
-    const historicoTexto = chatHistorico.map(h => `${h.role === 'user' ? 'Utilizador' : 'Teteco'}: ${h.content}`).join('\n');
-    const promptFinal = `${historicoTexto}\nTeteco:`;
+    const historicoRecente = chatHistorico.slice(-10);
 
-    const resposta = await chamarGemini(promptFinal, systemPrompt);
+    const resposta = await chamarGemini(texto, systemPrompt, historicoRecente.slice(0, -1));
     
     typingMsg.remove();
     _addMsgChat(_formatarRespostaIA(resposta), "bot");
     chatHistorico.push({role: "assistant", content: resposta});
 }
 
+// ==========================================
+// EXPORTAÇÃO GLOBAL (Impede erros ReferenceError em ambientes rígidos)
+// ==========================================
 window.navegar = navegar;
 window.toggleTema = toggleTema;
 window.toggleMenu = toggleMenu;
@@ -1934,6 +1946,9 @@ window.enviarMsg = enviarMsg;
 window.analisarOferta = analisarOferta;
 window.fecharAiModal = fecharAiModal;
 
+// ==========================================
+// INICIALIZAÇÃO
+// ==========================================
 initTema();
 renderSocial();
 renderFormLojas();
