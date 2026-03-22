@@ -344,10 +344,11 @@ img, video{max-width:100%;display:block}
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: #ffffff; /* Fundo branco para destacar a logo */
+  background: var(--accent);
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 16px;
   box-shadow: 0 4px 10px var(--accent-glow);
 }
 .mock-header-text strong {
@@ -1354,8 +1355,9 @@ const CONFIG = {
     TIKTOK: "https://www.tiktok.com/@o.cacador.de.oferta",
     FACEBOOK: "https://www.facebook.com/share/18X4uDszrG/",
     TWITTER: "https://x.com/ocacadordeoferta",
-    REFRESH_INTERVAL: 5 * 60 * 1000,
+    REFRESH_INTERVAL: 2 * 60 * 60 * 1000, // Atualiza a cada 2 horas
     HORAS_NOVO: 24,
+    DIAS_EXPIRACAO: 7, // Deleta ofertas do site após 1 semana
     ITEMS_PER_PAGE: 12
 };
 
@@ -1710,7 +1712,12 @@ async function carregarOfertas(silencioso = false) {
                 selo: getCel(row, "selo") || "",
                 ativo, timestamp: ts
             };
-        }).filter(o => o.ativo && o.precoNovo > 0);
+        }).filter(o => {
+            // Filtro de expiração: Apaga as ofertas velhas para manter o site limpo
+            const maxIdadeMs = CONFIG.DIAS_EXPIRACAO * 24 * 60 * 60 * 1000;
+            const isRecente = (Date.now() - o.timestamp) <= maxIdadeMs;
+            return o.ativo && o.precoNovo > 0 && isRecente;
+        });
 
         if (silencioso && todasOfertas.length > 0) {
             const qtdNovos = novas.length - todasOfertas.length;
@@ -1810,7 +1817,19 @@ function criarCardHTML(o, delayIdx) {
 function renderDestaques() {
     const grid = document.getElementById("destaqueGrid");
     if (!grid || todasOfertas.length === 0) return;
-    const dest = aplicarOrdem(todasOfertas.filter(o => o.selo || o.desconto >= 40)).slice(0, 4);
+    
+    // Filtra quem tem a palavra DESTAQUE ou um super desconto
+    let destCandidatos = todasOfertas.filter(o => (o.selo && o.selo.includes("DESTAQUE")) || o.desconto >= 40);
+    
+    // Força os itens manuais marcados como "DESTAQUE" a ficarem no topo absoluto da vitrine VIP
+    destCandidatos.sort((a, b) => {
+        const aDest = (a.selo && a.selo.includes("DESTAQUE")) ? 1 : 0;
+        const bDest = (b.selo && b.selo.includes("DESTAQUE")) ? 1 : 0;
+        if (aDest !== bDest) return bDest - aDest;
+        return b.timestamp - a.timestamp;
+    });
+
+    const dest = destCandidatos.slice(0, 4);
     grid.innerHTML = dest.length ? dest.map((o, i) => criarCardHTML(o, i)).join("") : `<div class="empty-state">Sem destaques no momento.</div>`;
     initLazyLoading();
 }
