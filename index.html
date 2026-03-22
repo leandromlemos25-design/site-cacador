@@ -344,11 +344,10 @@ img, video{max-width:100%;display:block}
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: var(--accent);
+  background: #ffffff; /* Fundo branco para destacar a logo */
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
   box-shadow: 0 4px 10px var(--accent-glow);
 }
 .mock-header-text strong {
@@ -608,14 +607,14 @@ img, video{max-width:100%;display:block}
 }
 .ai-btn:hover{transform:scale(1.08); box-shadow:0 4px 20px rgba(255, 122, 0, 0.4);}
 
-/* NOVO CÉREBRO VISUAL DO TETECO - Renderização perfeita sem usar img scale */
+/* CÉREBRO VISUAL DO TETECO */
 .teteco-avatar-bg {
   width: 100%;
   height: 100%;
   border-radius: 50%;
   background-image: url('teteco.png');
-  background-size: 160%; /* Zoom suave, sem distorcer pixels */
-  background-position: center 15%; /* Foca exatamente no rosto */
+  background-size: 160%;
+  background-position: center 15%;
   background-repeat: no-repeat;
   position: absolute;
   top: 0; left: 0;
@@ -623,7 +622,7 @@ img, video{max-width:100%;display:block}
 }
 .fallback-emoji {
   position: absolute;
-  z-index: 1; /* Fica escondido atrás da foto, caso falhe ele aparece */
+  z-index: 1;
 }
 
 /* Load more */
@@ -758,7 +757,7 @@ img, video{max-width:100%;display:block}
 .chat-window.open{display:flex}
 .chat-header{
   padding:14px 16px;display:flex;align-items:center;gap:12px;
-  background:var(--brand-blue); /* Cabeçalho azul corporativo da marca */
+  background:var(--brand-blue);
 }
 .chat-avatar{
   width:38px;height:38px;border-radius:50%;overflow:hidden;
@@ -971,38 +970,27 @@ footer{
 </head>
 <body>
 
-<!-- NAVBAR COM A LOGO 100% EM CÓDIGO (SEM IMAGEM, SEM FUNDO BRANCO) -->
+<!-- NAVBAR COM A LOGO 100% EM CÓDIGO -->
 <nav id="navbar">
   <div class="nav-logo">
     <div class="custom-logo-container">
       <svg class="custom-logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
         <g transform="translate(25, 55) rotate(-30)">
-          <!-- Etiqueta 1 -->
           <rect x="-18" y="-14" width="36" height="28" rx="4" fill="var(--brand-blue)"></rect>
-          <!-- % -->
           <circle cx="-6" cy="-4" r="2.5" fill="#fff"></circle>
           <circle cx="6" cy="4" r="2.5" fill="#fff"></circle>
           <line x1="-6" y1="6" x2="6" y2="-6" stroke="#fff" stroke-width="2" stroke-linecap="round"></line>
         </g>
-        
         <g transform="translate(52, 38) rotate(-15)">
-          <!-- Etiqueta 2 -->
           <rect x="-18" y="-18" width="36" height="36" rx="5" fill="var(--brand-blue)"></rect>
           <circle cx="10" cy="-8" r="2.5" fill="#fff"></circle>
-          <!-- Estrela -->
           <polygon points="-4,-6 -2,0 4,0 -1,4 1,10 -4,6 -9,10 -7,4 -12,0 -6,0" fill="#fff"></polygon>
         </g>
-
-        <!-- Lupa -->
         <circle cx="58" cy="38" r="20" stroke="var(--accent)" stroke-width="6.5" fill="none"></circle>
-        <!-- Cabo Lupa -->
         <g transform="translate(72, 52) rotate(45)">
           <line x1="0" y1="0" x2="18" y2="0" stroke="var(--accent)" stroke-width="6.5" stroke-linecap="round"></line>
-          <!-- Seta na Lupa -->
           <polygon points="14,-7 26,0 14,7" fill="var(--accent)"></polygon>
         </g>
-
-        <!-- Brilhos (Sparkles) -->
         <path d="M 30 18 Q 33 18 33 15 Q 33 18 36 18 Q 33 18 33 21 Q 33 18 30 18 Z" fill="var(--accent)"></path>
         <circle cx="42" cy="16" r="1.5" fill="var(--accent)"></circle>
       </svg>
@@ -1082,7 +1070,21 @@ footer{
         <div class="phone-screen">
            
            <div class="mock-header">
-             <div class="mock-avatar">🎯</div>
+             <div class="mock-avatar">
+                <!-- LOGO SVG NO LUGAR DO ANTIGO EMOJI 🎯 -->
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px; margin-left: 2px;">
+                  <g transform="translate(25, 55) rotate(-30)">
+                    <rect x="-18" y="-14" width="36" height="28" rx="4" fill="var(--brand-blue)"></rect>
+                    <circle cx="-6" cy="-4" r="2.5" fill="#fff"></circle><circle cx="6" cy="4" r="2.5" fill="#fff"></circle><line x1="-6" y1="6" x2="6" y2="-6" stroke="#fff" stroke-width="2" stroke-linecap="round"></line>
+                  </g>
+                  <g transform="translate(52, 38) rotate(-15)">
+                    <rect x="-18" y="-18" width="36" height="36" rx="5" fill="var(--brand-blue)"></rect><circle cx="10" cy="-8" r="2.5" fill="#fff"></circle><polygon points="-4,-6 -2,0 4,0 -1,4 1,10 -4,6 -9,10 -7,4 -12,0 -6,0" fill="#fff"></polygon>
+                  </g>
+                  <circle cx="58" cy="38" r="20" stroke="var(--accent)" stroke-width="6.5" fill="none"></circle>
+                  <g transform="translate(72, 52) rotate(45)"><line x1="0" y1="0" x2="18" y2="0" stroke="var(--accent)" stroke-width="6.5" stroke-linecap="round"></line><polygon points="14,-7 26,0 14,7" fill="var(--accent)"></polygon></g>
+                  <path d="M 30 18 Q 33 18 33 15 Q 33 18 36 18 Q 33 18 33 21 Q 33 18 30 18 Z" fill="var(--accent)"></path><circle cx="42" cy="16" r="1.5" fill="var(--accent)"></circle>
+                </svg>
+             </div>
              <div class="mock-header-text">
                <strong>O Caçador de Ofertas</strong>
                <span>Agora mesmo</span>
