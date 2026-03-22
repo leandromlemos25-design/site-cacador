@@ -26,13 +26,40 @@
 </script>
 
 <style>
-/* ══ RESET E VARIÁVEIS (MINIFICADO PARA POUPAR ESPAÇO) ══ */
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0} html{scroll-behavior:smooth} body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);transition:background .3s,color .3s;overflow-x:hidden;width: 100%;} a{text-decoration:none;color:inherit} button{cursor:pointer;border:none;background:none;font-family:inherit;outline:none;} img, video{max-width:100%;display:block}
-:root{--bg: #09101a; --bg2: #0f1724; --surface: #131d2c; --surface2: #1a2639; --surface3: #22324a; --border: #2a3b55; --border2: #3b5275; --text: #f0f4f8; --text2: #a2b3c7; --text3: #758ca6; --accent: #ff7a00; --accent2: #ffa040; --accent-glow: rgba(255, 122, 0, 0.35); --brand-blue: #1e60b3; --gold: #f5c518; --green: #22c55e; --shadow: rgba(0,0,0,0.5); --card-bg: #131d2c; --navbar-bg: rgba(9, 16, 26, 0.92);}
-[data-theme="light"]{--bg: #f4f7fb; --bg2: #e9eef5; --surface: #ffffff; --surface2: #f0f4f8; --surface3: #e1e8f0; --border: #d1dce8; --border2: #b0c4d9; --text: #0d1b2a; --text2: #33475b; --text3: #5c738a; --accent: #ff7a00; --accent2: #e66e00; --accent-glow: rgba(255, 122, 0, 0.2); --brand-blue: #103b70; --shadow: rgba(0,0,0,0.08); --card-bg: #ffffff; --navbar-bg: rgba(244, 247, 251, 0.94);}
-.syne{font-family:'Syne',sans-serif}
+/* ==========================================================================
+   RESET E VARIÁVEIS BASE
+   ========================================================================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  transition: background .3s, color .3s;
+  overflow-x: hidden;
+  width: 100%;
+}
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; border: none; background: none; font-family: inherit; outline: none; }
+img, video { max-width: 100%; display: block; }
 
-/* AUTOCOMPLETE & SLIDER */
+:root {
+  --bg: #09101a; --bg2: #0f1724; --surface: #131d2c; --surface2: #1a2639; --surface3: #22324a; 
+  --border: #2a3b55; --border2: #3b5275; --text: #f0f4f8; --text2: #a2b3c7; --text3: #758ca6; 
+  --accent: #ff7a00; --accent2: #ffa040; --accent-glow: rgba(255, 122, 0, 0.35); --brand-blue: #1e60b3; 
+  --gold: #f5c518; --green: #22c55e; --shadow: rgba(0,0,0,0.5); --card-bg: #131d2c; --navbar-bg: rgba(9, 16, 26, 0.92);
+}
+[data-theme="light"] {
+  --bg: #f4f7fb; --bg2: #e9eef5; --surface: #ffffff; --surface2: #f0f4f8; --surface3: #e1e8f0; 
+  --border: #d1dce8; --border2: #b0c4d9; --text: #0d1b2a; --text2: #33475b; --text3: #5c738a; 
+  --accent: #ff7a00; --accent2: #e66e00; --accent-glow: rgba(255, 122, 0, 0.2); --brand-blue: #103b70; 
+  --shadow: rgba(0,0,0,0.08); --card-bg: #ffffff; --navbar-bg: rgba(244, 247, 251, 0.94);
+}
+.syne { font-family: 'Syne', sans-serif; }
+
+/* ==========================================================================
+   AUTOCOMPLETE, SLIDER & ELEMENTOS DA UI
+   ========================================================================== */
 .autocomplete-list { position: absolute; top: 100%; left: 0; right: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; max-height: 200px; overflow-y: auto; z-index: 100; display: none; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
 .autocomplete-item { padding: 10px 14px; cursor: pointer; color: var(--text); font-size: 13px; border-bottom: 1px solid var(--border2); display: flex; align-items: center; gap: 8px; }
 .autocomplete-item:hover { background: var(--surface2); }
@@ -42,16 +69,19 @@ input[type=range] { -webkit-appearance: none; width: 100%; background: transpare
 input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 18px; width: 18px; border-radius: 50%; background: var(--accent); cursor: pointer; margin-top: -7px; }
 input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: var(--border2); border-radius: 2px; }
 
-/* COMPONENTES */
 .btn-alerta { flex: 1; padding: 10px; border-radius: 10px; font-size: 12px; font-weight: 700; text-align: center; transition: all .2s; background: var(--surface2); color: var(--text2); border: 1px solid var(--border2); display: flex; align-items: center; justify-content: center; gap: 6px; }
 .btn-alerta:hover { background: var(--surface3); color: var(--text); }
 .btn-telegram-push { flex: 1; padding: 10px; border-radius: 10px; font-size: 12px; font-weight: 700; text-align: center; transition: all .2s; background: rgba(0, 136, 204, 0.15); color: #0088cc; border: 1px solid rgba(0, 136, 204, 0.3); display: flex; align-items: center; justify-content: center; gap: 6px; text-decoration: none;}
 .btn-telegram-push:hover { background: #0088cc; color: #fff; }
 .expire-timer { font-size: 11px; font-weight: 700; color: #ff4d4d; display: flex; align-items: center; gap: 4px; margin-top: 6px; }
+
+/* CUPONS */
 .cupons-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
 .cupom-card { background: var(--surface); border: 1px dashed var(--border2); border-radius: 16px; padding: 24px; text-align: center; position: relative; transition: all 0.3s; }
 .cupom-card:hover { border-color: var(--accent); transform: translateY(-3px); }
 .cupom-codigo { background: var(--bg); padding: 12px; border-radius: 8px; font-family: monospace; font-size: 20px; font-weight: 800; color: var(--accent); letter-spacing: 2px; margin: 15px 0; border: 1px solid var(--border); user-select: all; cursor: copy; }
+
+/* LOGO EM CSS */
 .custom-logo-container { display: flex; align-items: center; gap: 10px; text-decoration: none; transition: transform 0.2s; }
 .custom-logo-container:hover { transform: scale(1.02); }
 .custom-logo-svg { width: 44px; height: 44px; flex-shrink: 0; filter: drop-shadow(0 2px 8px var(--accent-glow)); }
@@ -73,6 +103,7 @@ input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cur
 .nav-theme:hover{background:var(--surface3)}
 .nav-mobile-btn{display:none;width:38px;height:38px;border-radius:9px;background:var(--surface2);align-items:center;justify-content:center;flex-direction:column;gap:5px;border:1px solid var(--border)}
 .nav-mobile-btn span{display:block;width:18px;height:2px;background:var(--text);border-radius:2px;transition:.3s}
+
 #mobileMenu{display:none;position:fixed;top:70px;left:0;right:0;z-index:999;background:var(--bg2);border-bottom:1px solid var(--border);padding:16px;flex-direction:column;gap:4px;}
 #mobileMenu.open{display:flex}
 #mobileMenu .nav-btn{font-size:16px;padding:12px 16px;width:100%;text-align:left}
@@ -118,6 +149,7 @@ input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cur
 .mock-msg strong {display: block;font-size: 13px;margin-bottom: 6px;color: var(--text);line-height: 1.3;}
 .mock-msg p {font-size: 11px;color: var(--text2);line-height: 1.5;margin-bottom: 0;}
 .mock-price {font-size: 15px;font-weight: 800;color: var(--accent);font-family: 'Syne', sans-serif;}
+
 .teteco-glow-bg{position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);width:340px;height:340px;background:radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);border-radius:50%;filter:blur(12px);animation:glow-pulse 4s ease-in-out infinite;z-index:1;}
 @keyframes glow-pulse{0%,100%{opacity:0.6;transform:translate(-50%, -50%) scale(1)} 50%{opacity:1;transform:translate(-50%, -50%) scale(1.15)}}
 .teteco-particles{position:absolute;inset:0;z-index:1;pointer-events:none}
@@ -487,7 +519,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:40px 80px
   </section>
 </div>
 
-<!-- ═══ CUPONS (Fase 2) ═══ -->
+<!-- ═══ CUPONS ═══ -->
 <div class="page" id="page-cupons">
   <section class="section">
     <span class="section-label">Descontos Extras</span>
@@ -581,7 +613,6 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:40px 80px
   </div>
 </div>
 
-<!-- Modal Alerta de Preço (Fase 3) -->
 <div class="ai-modal" id="alertaModal">
   <div class="ai-modal-content" style="border-color: var(--brand-blue); max-width: 400px; text-align: center;">
     <button class="chat-close" onclick="document.getElementById('alertaModal').classList.remove('open')" style="position:absolute; top:16px; right:16px; color:var(--text); background:none; border:none; font-size:20px; cursor:pointer;">✕</button>
@@ -634,7 +665,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:40px 80px
 
 <script>
 // ==========================================
-// LÓGICA JAVASCRIPT: CONFIGURAÇÕES GERAIS E DADOS
+// CONFIGURAÇÕES GERAIS E DADOS
 // ==========================================
 const GEMINI_PROXY_URL = "/api/gemini";
 const CONFIG = {
@@ -947,9 +978,9 @@ function getFilteredOfertas() {
         
         let passSearch = true;
         if (busca) {
-            // Nova lógica: Procura apenas palavras que COMEÇAM com o termo digitado
-            const palavrasTitulo = o.titulo.toLowerCase().split(/\s+/);
-            const palavrasCategoria = o.categoria.toLowerCase().split(/\s+/);
+            // Lógica melhorada: A palavra tem de COMEÇAR com a busca
+            const palavrasTitulo = o.titulo.toLowerCase().split(/[\s-]+/);
+            const palavrasCategoria = o.categoria.toLowerCase().split(/[\s-]+/);
             
             const matchTitulo = palavrasTitulo.some(p => p.startsWith(busca));
             const matchCategoria = palavrasCategoria.some(p => p.startsWith(busca));
@@ -1036,7 +1067,7 @@ window.mostrarAutocomplete = function() {
     
     // Filtro inteligente: Verifica se alguma palavra do título COMEÇA com a busca
     const sugestoes = todasOfertas.filter(o => {
-        const palavrasTitulo = o.titulo.toLowerCase().split(/\s+/);
+        const palavrasTitulo = o.titulo.toLowerCase().split(/[\s-]+/);
         return palavrasTitulo.some(palavra => palavra.startsWith(busca));
     }).slice(0, 5); 
     
@@ -1086,54 +1117,155 @@ function fecharAiModal() { document.getElementById('aiModal').classList.remove('
 function toggleChat() { chatOpen = !chatOpen; document.getElementById("chatWindow").classList.toggle("open", chatOpen); const fab = document.getElementById("chatFab"), fabIcon = document.getElementById("chatFabIcon"), fabClose = document.getElementById("chatFabClose"); if(chatOpen) { fab.classList.add("active"); fabIcon.style.display = "none"; fabClose.style.display = "flex"; document.getElementById("chatBadge").style.display="none"; if(chatHistorico.length===0) setTimeout(()=> document.getElementById("chatSuggestions").style.display="flex", 1500); } else { fab.classList.remove("active"); fabIcon.style.display = "flex"; fabClose.style.display = "none"; } }
 function _addMsgChat(html, tipo) { const msgs = document.getElementById("chatMessages"), div = document.createElement("div"); div.className = `chat-msg ${tipo}`; div.innerHTML = html; msgs.appendChild(div); msgs.scrollTop = msgs.scrollHeight; }
 
+// Função auxiliar para executar buscas em lote de forma paralela
+async function executarBuscasParalelas(termos, configIA) {
+    let todas = [];
+    const promessas = termos.filter(t => t).map(async (termo) => {
+        try {
+            const res = await fetch('/api/shopee?q=' + encodeURIComponent(termo));
+            const ofertas = await res.json();
+            if(Array.isArray(ofertas)) return ofertas;
+        } catch(e) { return []; }
+        return [];
+    });
+    
+    const resultados = await Promise.all(promessas);
+    resultados.forEach(res => todas = todas.concat(res));
+
+    // Filtrar, remover duplicatas e remover lixo
+    let unicas = [];
+    let links = new Set();
+    
+    todas.forEach(o => {
+        if(!links.has(o.offerLink)) {
+            const preco = o.discountPrice || o.price;
+            const tituloLower = o.offerName.toLowerCase();
+            
+            // FILTRO DINÂMICO ANTI-LIXO 4.0
+            if(preco >= (configIA.preco_minimo_dinamico || 0)) {
+                let palavrasAExcluir = configIA.palavras_excluir || [];
+                // Se for um modelo caro genérico, adiciona proteção extra contra acessórios
+                const isCaro = ['iphone','playstation','ps4','ps5','xbox','nintendo','switch','console','celular','smartphone','tv','notebook','laptop','macbook','ipad','galaxy s','poco','redmi','moto g','geladeira','ar condicionado','lavadora','fogão'].some(kw => tituloLower.includes(kw));
+                if(isCaro && preco < 400) return; // Corta direto se for muito barato pra ser real
+
+                const temPalavraProibida = palavrasAExcluir.some(palavra => tituloLower.includes(palavra.toLowerCase()));
+                if(!temPalavraProibida) {
+                    links.add(o.offerLink);
+                    unicas.push(o);
+                }
+            }
+        }
+    });
+    
+    // Ordena do menor preço para o maior
+    return unicas.sort((a,b) => (a.discountPrice || a.price) - (b.discountPrice || b.price));
+}
+
+// NOVO TETECO 4.0 - NORMALIZADOR TURBO E CASCATA
 async function enviarMsg(sugestao = null) {
-    const input = document.getElementById("chatInput"), texto = sugestao || input.value.trim(); 
+    const input = document.getElementById("chatInput");
+    const texto = sugestao || input.value.trim(); 
     if(!texto) return; 
     
     input.value = ""; document.getElementById("chatSuggestions").style.display = "none"; 
     _addMsgChat(esc(texto), "user"); chatHistorico.push({role: "user", content: texto}); 
     const idMsg = "typing-" + Date.now(); _addMsgChat(`<div class="typing-dots" id="${idMsg}"><span></span><span></span><span></span></div>`, "bot"); const typingMsg = document.getElementById(idMsg).parentNode;
     
-    const contextoOfertas = todasOfertas.slice(0, 20).map(o => `- ${o.titulo} (Loja: ${o.loja}) por R$ ${o.precoNovo}`).join('\n');
-    const systemPrompt = `Você é o Teteco, assistente de compras de ELITE do "O Caçador de Ofertas". Sua missão é gerar vendas blindando buscas contra acessórios. REGRAS: 1. SMARTPHONES: "Smartphone", marca, memória "Original". 2. NOTEBOOKS/PCS: linha do produto ou processador. 3. TVS/ELETRO: "Smart TV 4K" ou modelo. 4. CONSOLES: "Console" e "Original". Sempre responda amigavelmente terminando com a tag [BUSCAR: Termo Otimizado]. Ex: "Deixa comigo! [BUSCAR: Smartphone Apple iPhone 15 128GB Original]". Ofertas hoje:\n${contextoOfertas}`;
+    // PROMPT 4.0 DEFINITIVO
+    const systemPrompt = `Você é o especialista máximo em buscas do Mercado Livre Brasil e Shopee.
+Cliente disse: "${texto}"
+Faça EXATAMENTE este output:
+MENSAGEM: Uma mensagem amigável e curta animando o cliente (ex: "Deixa comigo! Estou buscando as melhores opções lacradas e perfeitas... 🔍").
+1. Primeiro normalize a query (corrija abreviações, typos, gíria BR, adicione memória/cor se mencionada).
+2. Gere 8 tags [BUSCAR_1] até [BUSCAR_8] do mais hiper-específico (1) até amplo (8).
+3. No final devolva o JSON EXATAMENTE neste formato (pode usar bloco json):
+{
+  "categoria": "Smartphone",
+  "preco_minimo_dinamico": 5200,
+  "palavras_excluir": ["usado","réplica","capa","película","seminovo"],
+  "condicao_ideal": "new",
+  "score_confianca": 94,
+  "modo_aproximado": false
+}
+Regras de ouro:
+- Sempre use linguagem natural do brasileiro ("iPhone", "celular", "lacrado")
+- Inclua memória e cor OBRIGATORIAMENTE no BUSCAR_1 se o cliente falou
+- Crie variações com "Titanio", "Preto", "Lacrado", "Original", "128GB"
+- Se a query for muito curta (ex: "ip16"), gere sinônimos fortes no nível 3 e 4
+- Nunca invente specs que o cliente não mencionou
+- score_confianca: 95+ = query excelente, abaixo de 70 = acione modo_aproximado (true) automaticamente`;
     
     let resposta = await chamarGemini(texto, systemPrompt, chatHistorico.slice(-10).slice(0, -1)); 
     if (!resposta) resposta = "Desculpe, ocorreu uma falha na minha ligação. 😔"; 
     
     typingMsg.remove(); 
-    const matchBusca = resposta.match(/\[BUSCAR:\s*(.+?)\]/i); 
-    let textoVisivel = _formatarRespostaIA(resposta.replace(/\[BUSCAR:\s*(.+?)\]/i, '').trim()); 
-    _addMsgChat(textoVisivel, "bot");
+
+    // Extrai a MENSAGEM inicial amigável
+    let msgCliente = "Deixa comigo! Estou analisando o mercado para encontrar isso para você... 🔍";
+    const msgMatch = resposta.match(/MENSAGEM:\s*(.*?)(?=\[BUSCAR|{)/is);
+    if(msgMatch) msgCliente = msgMatch[1].trim();
+
+    _addMsgChat(msgCliente, "bot");
     
-    if (matchBusca) {
-        const termoBusca = matchBusca[1].trim(); 
-        chatHistorico.push({role: "assistant", content: textoVisivel + ` (Iniciou busca por: ${termoBusca})`}); 
+    // Extrai as 8 tags de busca
+    const buscas = [];
+    for(let i=1; i<=8; i++) {
+        const m = resposta.match(new RegExp(`\\[BUSCAR_${i}:\\s*(.+?)\\]`, 'i'));
+        if(m) buscas.push(m[1].trim());
+    }
+
+    // Extrai o JSON de Configuração Dinâmica
+    let configIA = { preco_minimo_dinamico: 0, palavras_excluir: ["capa", "pelicula", "película", "caixa"], modo_aproximado: false, score_confianca: 50 };
+    try {
+        const jsonStr = resposta.substring(resposta.indexOf('{'), resposta.lastIndexOf('}') + 1);
+        if(jsonStr) configIA = { ...configIA, ...JSON.parse(jsonStr) };
+    } catch(e) { console.warn("Falha ao ler JSON da IA"); }
+
+    if (buscas.length > 0) {
+        chatHistorico.push({role: "assistant", content: msgCliente + ` (Iniciou cascata de busca)`}); 
         const typingId2 = "typing-busca-" + Date.now(); _addMsgChat(`<div class="typing-dots" id="${typingId2}"><span></span><span></span><span></span></div>`, "bot"); 
         const typingBusca = document.getElementById(typingId2).parentNode;
         
         try {
-            const resShopee = await fetch('/api/shopee?q=' + encodeURIComponent(termoBusca)); 
-            let ofertasEncontradas = await resShopee.json(); 
+            let ofertasFinais = [];
+
+            // NÍVEL 1 - Hiper Específico (Tags 1 e 2)
+            ofertasFinais = await executarBuscasParalelas([buscas[0], buscas[1]], configIA);
+
+            // NÍVEL 2 - Balanceado (Tags 3, 4, 5)
+            if(ofertasFinais.length < 3) {
+                const nv2 = await executarBuscasParalelas([buscas[2], buscas[3], buscas[4]], configIA);
+                // Adiciona apenas as que ainda não estão na lista
+                nv2.forEach(o => { if(!ofertasFinais.find(ext => ext.offerLink === o.offerLink)) ofertasFinais.push(o); });
+            }
+
+            // NÍVEL 3 - Amplo (Tags 6, 7, 8)
+            if(ofertasFinais.length < 3) {
+                const nv3 = await executarBuscasParalelas([buscas[5], buscas[6], buscas[7]], configIA);
+                nv3.forEach(o => { if(!ofertasFinais.find(ext => ext.offerLink === o.offerLink)) ofertasFinais.push(o); });
+            }
+            
             typingBusca.remove();
             
-            if (ofertasEncontradas && Array.isArray(ofertasEncontradas)) {
-                const isAparelhoCaro = ['iphone','playstation','ps4','ps5','xbox','nintendo','switch','console','celular','smartphone','tv','notebook','laptop','macbook','ipad','galaxy s','poco','redmi','moto g','geladeira','ar condicionado','lavadora','fogão'].some(kw => termoBusca.toLowerCase().includes(kw));
-                if (isAparelhoCaro) ofertasEncontradas = ofertasEncontradas.filter(o => (o.discountPrice || o.price) >= 400);
+            // NÍVEL 4 & 5 - Renderização Inteligente ou Telegram
+            if (ofertasFinais.length > 0) {
+                let isAproximado = configIA.modo_aproximado || configIA.score_confianca < 70;
                 
-                if (ofertasEncontradas.length > 0) {
-                    let htmlOfertas = `<p style="margin-bottom:10px; font-size:13px;">Acabei de encontrar estas opções exclusivas para "<b>${esc(termoBusca)}</b>":</p><div style="display:flex; flex-direction:column; gap:8px;">` + ofertasEncontradas.slice(0, 3).map(o => `<a href="${esc(o.offerLink)}" target="_blank" style="display:flex; gap:10px; background:var(--bg2); padding:10px; border-radius:12px; border:1px solid var(--border); text-decoration:none; color:var(--text); align-items:center;"><img src="${esc(o.imageUrl)}" style="width:50px; height:50px; object-fit:cover; border-radius:8px; border:1px solid var(--border2); flex-shrink:0;"><div style="flex:1; min-width:0;"><div style="font-size:11px; font-weight:600; line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${esc(o.offerName)}</div><div style="color:var(--accent); font-weight:800; font-size:14px; margin-top:4px;">${formatarMoeda(o.discountPrice || o.price)}</div></div></a>`).join('') + `</div>`;
-                    _addMsgChat(htmlOfertas, "bot"); 
-                    chatHistorico.push({role: "assistant", content: `Mostrei resultados.`});
-                } else { 
-                    _addMsgChat(`Poxa, vasculhei a Shopee inteira mas só encontrei acessórios ou itens esgotados para "<b>${termoBusca}</b>". Quer que eu peça no grupo do Telegram? 😔`, "bot"); 
-                    chatHistorico.push({role: "assistant", content: `A busca só retornou acessórios.`}); 
-                }
+                let textoIntro = isAproximado
+                    ? `Não achei *exatamente* isso, mas encontrei estes similares perfeitos, lacrados e com ótimo preço:`
+                    : `Acabei de encontrar estas opções exclusivas para "<b>${esc(buscas[0] || texto)}</b>":`;
+                
+                let htmlOfertas = `<p style="margin-bottom:10px; font-size:13px;">${textoIntro}</p><div style="display:flex; flex-direction:column; gap:8px;">` + ofertasFinais.slice(0, 3).map(o => `<a href="${esc(o.offerLink)}" target="_blank" style="display:flex; gap:10px; background:var(--bg2); padding:10px; border-radius:12px; border:1px solid var(--border); text-decoration:none; color:var(--text); align-items:center;"><img src="${esc(o.imageUrl)}" style="width:50px; height:50px; object-fit:cover; border-radius:8px; border:1px solid var(--border2); flex-shrink:0;"><div style="flex:1; min-width:0;"><div style="font-size:11px; font-weight:600; line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${esc(o.offerName)}</div><div style="color:var(--accent); font-weight:800; font-size:14px; margin-top:4px;">${formatarMoeda(o.discountPrice || o.price)}</div></div></a>`).join('') + `</div>`;
+                
+                _addMsgChat(htmlOfertas, "bot"); 
+                chatHistorico.push({role: "assistant", content: `Mostrei resultados.`});
             } else { 
-                _addMsgChat(`Poxa, não encontrei ofertas para "<b>${termoBusca}</b>" no momento.`, "bot"); 
+                _addMsgChat(`Poxa, vasculhei tudo até o fundo do baú mas não encontrei "${esc(texto)}" em estoque com esses requisitos. Posso pedir no grupo VIP do Telegram para a equipe procurar para si? 😔`, "bot"); 
+                chatHistorico.push({role: "assistant", content: `A busca não encontrou resultados satisfatórios, ativou fallback do Telegram.`}); 
             }
         } catch { 
             typingBusca.remove(); 
-            _addMsgChat(`Tentei buscar "<b>${termoBusca}</b>", mas a conexão falhou. 🔌`, "bot"); 
+            _addMsgChat(`Tentei buscar, mas a conexão com as lojas falhou. 🔌`, "bot"); 
         }
     } else { 
         chatHistorico.push({role: "assistant", content: resposta}); 
