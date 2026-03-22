@@ -665,7 +665,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:40px 80px
 
 <script>
 // ==========================================
-// CONFIGURAÇÕES GERAIS E DADOS
+// LÓGICA JAVASCRIPT: CONFIGURAÇÕES GERAIS E DADOS
 // ==========================================
 const GEMINI_PROXY_URL = "/api/gemini";
 const CONFIG = {
@@ -1161,7 +1161,7 @@ async function executarBuscasParalelas(termos, configIA) {
     return unicas.sort((a,b) => (a.discountPrice || a.price) - (b.discountPrice || b.price));
 }
 
-// NOVO TETECO 4.0 - NORMALIZADOR TURBO E CASCATA
+// NOVO TETECO 4.0 - NORMALIZADOR TURBO E CASCATA + CALENDÁRIO FIX
 async function enviarMsg(sugestao = null) {
     const input = document.getElementById("chatInput");
     const texto = sugestao || input.value.trim(); 
@@ -1171,18 +1171,28 @@ async function enviarMsg(sugestao = null) {
     _addMsgChat(esc(texto), "user"); chatHistorico.push({role: "user", content: texto}); 
     const idMsg = "typing-" + Date.now(); _addMsgChat(`<div class="typing-dots" id="${idMsg}"><span></span><span></span><span></span></div>`, "bot"); const typingMsg = document.getElementById(idMsg).parentNode;
     
-    // PROMPT 4.0 DEFINITIVO
+    // 💡 INJETANDO O CONTEXTO DE DATA E MODELOS ATUAIS
+    const dataAtual = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+    const contextoOfertas = todasOfertas.slice(0, 20).map(o => `- ${o.titulo} (Loja: ${o.loja}) por R$ ${o.precoNovo}`).join('\n');
+    
+    // PROMPT 4.0 DEFINITIVO + CONTEXTO DE TEMPO
     const systemPrompt = `Você é o especialista máximo em buscas do Mercado Livre Brasil e Shopee.
+HOJE É: ${dataAtual}. 
+COMO ASSISTENTE EM 2026, ESTES SÃO OS MODELOS ATUAIS DE REFERÊNCIA:
+- Apple: iPhone 16, 16 Plus, 16 Pro, 16 Pro Max
+- Samsung: Galaxy S25, S25+, S25 Ultra, A55, A35
+- Xiaomi: Poco X6, Poco F6, Redmi Note 13
+
 Cliente disse: "${texto}"
 Faça EXATAMENTE este output:
-MENSAGEM: Uma mensagem amigável e curta animando o cliente (ex: "Deixa comigo! Estou buscando as melhores opções lacradas e perfeitas... 🔍").
-1. Primeiro normalize a query (corrija abreviações, typos, gíria BR, adicione memória/cor se mencionada).
+MENSAGEM: Uma mensagem amigável e curta animando o cliente. SE o cliente pedir algo que AINDA NÃO LANÇOU (ex: iPhone 17, Galaxy S26), avise com humor que ele veio do futuro, diga que ainda não lançou, e avise que vai pesquisar o top de linha atual (ex: iPhone 16).
+1. Primeiro normalize a query (corrija abreviações, typos, gíria BR, adicione memória/cor se mencionada. Se pediu modelo do futuro, converta para o modelo mais recente real).
 2. Gere 8 tags [BUSCAR_1] até [BUSCAR_8] do mais hiper-específico (1) até amplo (8).
 3. No final devolva o JSON EXATAMENTE neste formato (pode usar bloco json):
 {
   "categoria": "Smartphone",
   "preco_minimo_dinamico": 5200,
-  "palavras_excluir": ["usado","réplica","capa","película","seminovo"],
+  "palavras_excluir": ["usado","réplica","capa","película","seminovo", "caixa vazia"],
   "condicao_ideal": "new",
   "score_confianca": 94,
   "modo_aproximado": false
@@ -1190,10 +1200,10 @@ MENSAGEM: Uma mensagem amigável e curta animando o cliente (ex: "Deixa comigo! 
 Regras de ouro:
 - Sempre use linguagem natural do brasileiro ("iPhone", "celular", "lacrado")
 - Inclua memória e cor OBRIGATORIAMENTE no BUSCAR_1 se o cliente falou
-- Crie variações com "Titanio", "Preto", "Lacrado", "Original", "128GB"
-- Se a query for muito curta (ex: "ip16"), gere sinônimos fortes no nível 3 e 4
+- Se o cliente pedir um modelo que NÃO EXISTE, gere as tags BUSCAR para o modelo ATUAL correspondente.
 - Nunca invente specs que o cliente não mencionou
-- score_confianca: 95+ = query excelente, abaixo de 70 = acione modo_aproximado (true) automaticamente`;
+- score_confianca: 95+ = query excelente, abaixo de 70 = acione modo_aproximado (true) automaticamente
+Ofertas hoje:\n${contextoOfertas}`;
     
     let resposta = await chamarGemini(texto, systemPrompt, chatHistorico.slice(-10).slice(0, -1)); 
     if (!resposta) resposta = "Desculpe, ocorreu uma falha na minha ligação. 😔"; 
