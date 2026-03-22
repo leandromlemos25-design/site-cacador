@@ -196,6 +196,11 @@ body{
               <label class="form-label">Selo Especial (Opcional)</label>
               <input type="text" id="f_selo" class="form-input" placeholder="Ex: FRETE GRÁTIS, CUPOM, EXCLUSIVO" oninput="updatePreview()">
             </div>
+            
+            <div class="form-group full" style="flex-direction: row; align-items: center; gap: 10px; background: var(--bg2); padding: 15px; border-radius: 12px; border: 1px solid var(--accent);">
+              <input type="checkbox" id="f_destaque" checked style="width: 20px; height: 20px; accent-color: var(--accent);" onchange="updatePreview()">
+              <label for="f_destaque" style="font-weight: 700; color: var(--text); cursor: pointer;">🔥 Enviar para a vitrine de Destaques do site</label>
+            </div>
           </div>
 
           <button type="button" id="btnSubmit" class="btn-submit" onclick="enviarParaSite()">
@@ -255,7 +260,7 @@ body{
 // ==========================================
 // COLE AQUI O SEU LINK DO APPS SCRIPT (PASSO 1)
 // ==========================================
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxcgbh_3Tc-amPFl36RIoYZSex8Eo0qWhRSwf-vJxROJfV0k992YGTHVSyatk7GDxmz/exec";
+const APPS_SCRIPT_URL = "COLE_O_SEU_LINK_DO_APPS_SCRIPT_AQUI";
 
 
 const LOJAS = {
@@ -281,7 +286,12 @@ function updatePreview() {
     const pAntigo = parseFloat(document.getElementById('f_preco_antigo').value) || 0;
     const pNovo = parseFloat(document.getElementById('f_preco_novo').value) || 0;
     const imagem = document.getElementById('f_imagem').value;
-    const selo = document.getElementById('f_selo').value;
+    let selo = document.getElementById('f_selo').value;
+    const isDestaque = document.getElementById('f_destaque').checked;
+
+    if (isDestaque) {
+        selo = selo ? `🔥 DESTAQUE | ${selo}` : "🔥 DESTAQUE";
+    }
 
     const loja = LOJAS[lojaID];
 
@@ -368,7 +378,12 @@ function enviarParaSite() {
     const pAntigo = document.getElementById('f_preco_antigo').value || "";
     const imagem = document.getElementById('f_imagem').value || "";
     const categoria = document.getElementById('f_cat').value || "Geral";
-    const selo = document.getElementById('f_selo').value || "";
+    let selo = document.getElementById('f_selo').value || "";
+    const isDestaque = document.getElementById('f_destaque').checked;
+
+    if (isDestaque) {
+        selo = selo ? `🔥 DESTAQUE | ${selo}` : "🔥 DESTAQUE";
+    }
 
     const hoje = new Date();
     const dataFormatada = `${String(hoje.getDate()).padStart(2, '0')}/${String(hoje.getMonth()+1).padStart(2, '0')}/${hoje.getFullYear()} ${String(hoje.getHours()).padStart(2, '0')}:${String(hoje.getMinutes()).padStart(2, '0')}`;
