@@ -9,14 +9,12 @@
 <meta property="og:description" content="As melhores promoções da internet, verificadas e atualizadas diariamente.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://ocacadordeofertas.com">
-<meta property="og:image" content="https://ocacadordeofertas.com/logo.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
 <meta name="theme-color" content="#09101a" id="themeColor">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<!-- O ícone do site (Favicon) agora é a sua logo -->
-<link rel="icon" href="logo.png" type="image/png">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎯</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <!-- ═══ SEO SCHEMA.ORG ═══ -->
@@ -34,7 +32,6 @@
   "@type": "Organization",
   "name": "O Caçador de Ofertas",
   "url": "https://ocacadordeofertas.com/",
-  "logo": "https://ocacadordeofertas.com/logo.png",
   "sameAs": [
     "https://t.me/ocacadordeoferta",
     "https://www.instagram.com/ocacadorde_ofertas",
@@ -78,7 +75,7 @@ img, video{max-width:100%;display:block}
   --accent: #ff7a00; /* Laranja da Logo */
   --accent2: #ffa040;
   --accent-glow: rgba(255, 122, 0, 0.35);
-  --brand-blue: #103b70; /* Azul da Logo */
+  --brand-blue: #1e60b3; /* Azul ajustado para ter brilho no modo escuro */
   
   --gold: #f5c518;
   --green: #22c55e;
@@ -103,7 +100,7 @@ img, video{max-width:100%;display:block}
   --accent: #ff7a00;
   --accent2: #e66e00;
   --accent-glow: rgba(255, 122, 0, 0.2);
-  --brand-blue: #103b70;
+  --brand-blue: #103b70; /* Azul escuro original da Logo no modo claro */
   
   --shadow: rgba(0,0,0,0.08);
   --card-bg: #ffffff;
@@ -112,32 +109,59 @@ img, video{max-width:100%;display:block}
 
 .syne{font-family:'Syne',sans-serif}
 
+/* ══ ESTILOS DA NOVA LOGO EM CSS/SVG ══ */
+.custom-logo-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  transition: transform 0.2s;
+}
+.custom-logo-container:hover {
+  transform: scale(1.02);
+}
+.custom-logo-svg {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 8px var(--accent-glow));
+}
+.custom-logo-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.custom-logo-text-top {
+  font-family: 'Syne', sans-serif;
+  font-size: 19px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--text);
+  letter-spacing: -0.5px;
+}
+.custom-logo-text-bottom {
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--accent);
+  font-style: italic;
+  letter-spacing: 0.5px;
+  margin-top: 3px;
+}
+
 /* ══ NAVBAR ══ */
 #navbar{
   position:fixed;top:0;left:0;right:0;z-index:2000;
   display:flex;align-items:center;justify-content:space-between;
-  padding:0 32px;height:64px;
+  padding:0 32px;height:70px;
   background:var(--navbar-bg);
   backdrop-filter:blur(20px);
   border-bottom:1px solid var(--border);
   transition:all .3s;
 }
 #navbar.scrolled{box-shadow:0 4px 40px rgba(0,0,0,.4)}
-.nav-logo{display:flex;align-items:center;}
-/* Estilo da Logo Oficial */
-.brand-logo-img {
-  height: 42px;
-  width: auto;
-  border-radius: 8px;
-  background: #ffffff; /* Fundo branco para a logo ficar sempre legível no modo escuro */
-  padding: 4px 10px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.2);
-  transition: transform 0.2s;
-}
-.brand-logo-img:hover {
-  transform: scale(1.05);
-}
-
 .nav-links{display:flex;align-items:center;gap:4px}
 .nav-btn{
   padding:8px 16px;border-radius:8px;
@@ -171,7 +195,7 @@ img, video{max-width:100%;display:block}
 
 /* ══ MOBILE MENU ══ */
 #mobileMenu{
-  display:none;position:fixed;top:64px;left:0;right:0;z-index:999;
+  display:none;position:fixed;top:70px;left:0;right:0;z-index:999;
   background:var(--bg2);border-bottom:1px solid var(--border);
   padding:16px;flex-direction:column;gap:4px;
 }
@@ -179,19 +203,18 @@ img, video{max-width:100%;display:block}
 #mobileMenu .nav-btn{font-size:16px;padding:12px 16px;width:100%;text-align:left}
 
 /* ══ PAGES ══ */
-.page{display:none;padding-top:64px}
+.page{display:none;padding-top:70px}
 .page.active{display:block}
 
 /* ══ HERO ══ */
 #hero{
-  min-height:calc(100vh - 64px);
+  min-height:calc(100vh - 70px);
   display:grid;grid-template-columns:1fr 1fr;
   align-items:center;gap:60px;
   padding:80px 80px 80px;
   position:relative;
   overflow:hidden;
   max-width: 100vw;
-  /* Fundo sutil usando as cores da marca */
   background:linear-gradient(135deg, var(--bg) 0%, var(--surface) 50%, var(--bg) 100%);
 }
 #hero::before{
@@ -575,11 +598,10 @@ img, video{max-width:100%;display:block}
 }
 .btn-partilhar:hover{background:var(--surface3)}
 
-/* ══ BOTÃO IA E AVATAR (NOVO ESTILO MATCHING LOGO) ══ */
+/* ══ BOTÃO IA E AVATAR (ESTILO OTIMIZADO) ══ */
 .ai-btn{
   width:38px;flex-shrink:0;border-radius:10px;
   display:flex;align-items:center;justify-content:center;
-  /* Degradê utilizando as cores da sua logo! */
   background:linear-gradient(135deg, var(--brand-blue), var(--accent));
   border:none; color:#fff; font-size:16px;
   transition:all .2s; box-shadow:0 0 15px rgba(255, 122, 0, 0.2);
@@ -949,10 +971,46 @@ footer{
 </head>
 <body>
 
-<!-- NAVBAR COM A LOGO OFICIAL -->
+<!-- NAVBAR COM A LOGO 100% EM CÓDIGO (SEM IMAGEM, SEM FUNDO BRANCO) -->
 <nav id="navbar">
   <div class="nav-logo">
-    <img src="logo.png" alt="O Caçador de Ofertas" class="brand-logo-img">
+    <div class="custom-logo-container">
+      <svg class="custom-logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <g transform="translate(25, 55) rotate(-30)">
+          <!-- Etiqueta 1 -->
+          <rect x="-18" y="-14" width="36" height="28" rx="4" fill="var(--brand-blue)"></rect>
+          <!-- % -->
+          <circle cx="-6" cy="-4" r="2.5" fill="#fff"></circle>
+          <circle cx="6" cy="4" r="2.5" fill="#fff"></circle>
+          <line x1="-6" y1="6" x2="6" y2="-6" stroke="#fff" stroke-width="2" stroke-linecap="round"></line>
+        </g>
+        
+        <g transform="translate(52, 38) rotate(-15)">
+          <!-- Etiqueta 2 -->
+          <rect x="-18" y="-18" width="36" height="36" rx="5" fill="var(--brand-blue)"></rect>
+          <circle cx="10" cy="-8" r="2.5" fill="#fff"></circle>
+          <!-- Estrela -->
+          <polygon points="-4,-6 -2,0 4,0 -1,4 1,10 -4,6 -9,10 -7,4 -12,0 -6,0" fill="#fff"></polygon>
+        </g>
+
+        <!-- Lupa -->
+        <circle cx="58" cy="38" r="20" stroke="var(--accent)" stroke-width="6.5" fill="none"></circle>
+        <!-- Cabo Lupa -->
+        <g transform="translate(72, 52) rotate(45)">
+          <line x1="0" y1="0" x2="18" y2="0" stroke="var(--accent)" stroke-width="6.5" stroke-linecap="round"></line>
+          <!-- Seta na Lupa -->
+          <polygon points="14,-7 26,0 14,7" fill="var(--accent)"></polygon>
+        </g>
+
+        <!-- Brilhos (Sparkles) -->
+        <path d="M 30 18 Q 33 18 33 15 Q 33 18 36 18 Q 33 18 33 21 Q 33 18 30 18 Z" fill="var(--accent)"></path>
+        <circle cx="42" cy="16" r="1.5" fill="var(--accent)"></circle>
+      </svg>
+      <div class="custom-logo-text">
+        <span class="custom-logo-text-top">O CAÇADOR</span>
+        <span class="custom-logo-text-bottom">DE OFERTAS</span>
+      </div>
+    </div>
   </div>
   <div class="nav-links">
     <button class="nav-btn active" data-page="home" onclick="window.navegar('home')" aria-label="Página Inicial">Início</button>
@@ -1181,14 +1239,32 @@ footer{
   </div>
 </section>
 
-<!-- ═══ FOOTER ═══ -->
+<!-- ═══ FOOTER COM A LOGO EM CÓDIGO ═══ -->
 <footer>
   <div class="footer-inner">
     <div>
       <div class="footer-brand">
-        <img src="logo.png" alt="O Caçador de Ofertas" style="height: 32px; background: #ffffff; padding: 4px 8px; border-radius: 6px;">
+        <!-- Replicando a logo no Footer também, para manter a perfeição visual -->
+        <div class="custom-logo-container" style="opacity: 0.9;">
+          <svg class="custom-logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <g transform="translate(25, 55) rotate(-30)">
+              <rect x="-18" y="-14" width="36" height="28" rx="4" fill="var(--brand-blue)"></rect>
+              <circle cx="-6" cy="-4" r="2.5" fill="#fff"></circle><circle cx="6" cy="4" r="2.5" fill="#fff"></circle><line x1="-6" y1="6" x2="6" y2="-6" stroke="#fff" stroke-width="2" stroke-linecap="round"></line>
+            </g>
+            <g transform="translate(52, 38) rotate(-15)">
+              <rect x="-18" y="-18" width="36" height="36" rx="5" fill="var(--brand-blue)"></rect><circle cx="10" cy="-8" r="2.5" fill="#fff"></circle><polygon points="-4,-6 -2,0 4,0 -1,4 1,10 -4,6 -9,10 -7,4 -12,0 -6,0" fill="#fff"></polygon>
+            </g>
+            <circle cx="58" cy="38" r="20" stroke="var(--accent)" stroke-width="6.5" fill="none"></circle>
+            <g transform="translate(72, 52) rotate(45)"><line x1="0" y1="0" x2="18" y2="0" stroke="var(--accent)" stroke-width="6.5" stroke-linecap="round"></line><polygon points="14,-7 26,0 14,7" fill="var(--accent)"></polygon></g>
+            <path d="M 30 18 Q 33 18 33 15 Q 33 18 36 18 Q 33 18 33 21 Q 33 18 30 18 Z" fill="var(--accent)"></path><circle cx="42" cy="16" r="1.5" fill="var(--accent)"></circle>
+          </svg>
+          <div class="custom-logo-text">
+            <span class="custom-logo-text-top">O CAÇADOR</span>
+            <span class="custom-logo-text-bottom">DE OFERTAS</span>
+          </div>
+        </div>
       </div>
-      <p class="footer-brand-tag" style="margin-top: 8px;">A sua plataforma de inteligência em descontos.</p>
+      <p class="footer-brand-tag" style="margin-top: 12px;">A sua plataforma de inteligência em descontos.</p>
     </div>
     <div class="footer-socials" id="footerSocials"></div>
   </div>
@@ -1370,14 +1446,14 @@ function _formatarRespostaIA(txt) {
 function initTema() {
     const theme = localStorage.getItem("cdf_theme") || "dark";
     document.documentElement.setAttribute("data-theme", theme);
-    document.getElementById("themeColor").setAttribute("content", theme === "dark" ? "#0d0d0d" : "#f5f5f0");
+    document.getElementById("themeColor").setAttribute("content", theme === "dark" ? "#09101a" : "#f4f7fb");
 }
 function toggleTema() {
     const current = document.documentElement.getAttribute("data-theme");
     const next = current === "dark" ? "light" : "dark";
     document.documentElement.setAttribute("data-theme", next);
     localStorage.setItem("cdf_theme", next);
-    document.getElementById("themeColor").setAttribute("content", next === "dark" ? "#0d0d0d" : "#f5f5f0");
+    document.getElementById("themeColor").setAttribute("content", next === "dark" ? "#09101a" : "#f4f7fb");
 }
 
 const esc = (s) => String(s).replace(/[&<>'"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[c]));
