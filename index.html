@@ -1367,7 +1367,7 @@ window.salvarAlerta = function() {
 };
 
 // ==========================================================================
-// CÉREBRO IA: TETECO 5.0 (CASCATA PARALELA E FILTRO ANTI-ACESSÓRIOS)
+// CÉREBRO IA: TETECO 6.0 (CASCATA BLINDADA)
 // ==========================================================================
 
 async function analisarOferta(idOferta) { 
@@ -1436,14 +1436,13 @@ async function executarBuscasParalelas(termos, configIA, userQuery) {
     let hardcodedExclusions = [];
     let hardMinPrice = 0;
 
-    // REGRAS DE BETÃO (JavaScript puro, para nunca falhar)
+    // REGRAS DE BETÃO: Força a filtragem independentemente da IA
     if (queryLower.includes('notebook') || queryLower.includes('laptop') || queryLower.includes('macbook')) {
         hardcodedExclusions = ['teclado', 'mouse', 'carregador', 'fonte', 'cabo', 'bateria', 'tela', 'display', 'placa', 'carcaça', 'adesivo', 'suporte', 'memória', 'hd', 'ssd', 'cooler'];
         hardMinPrice = 800; 
     } else if (queryLower.includes('iphone') || queryLower.includes('celular') || queryLower.includes('smartphone')) {
         hardcodedExclusions = ['capa', 'capinha', 'película', 'pelicula', 'carregador', 'cabo', 'bateria', 'tela', 'display', 'placa', 'caixa vazia', 'sucata', 'fundo', 'lente'];
-        hardMinPrice = 300; 
-        if(queryLower.includes('iphone')) hardMinPrice = 800; 
+        hardMinPrice = 800; 
     } else if (queryLower.includes('tv') || queryLower.includes('televisão') || queryLower.includes('televisao')) {
         hardcodedExclusions = ['controle', 'placa', 'tela', 'display', 'suporte', 'pé', 'cabo', 'tira', 'led', 'antena'];
         hardMinPrice = 600;
@@ -1453,19 +1452,18 @@ async function executarBuscasParalelas(termos, configIA, userQuery) {
     const allExclusions = [...new Set([...aiExclusions, ...hardcodedExclusions])];
     const finalMinPrice = Math.max(configIA.preco_minimo_dinamico || 0, hardMinPrice);
 
-    // Exceção vital: Se o utilizador pediu "teclado para notebook", não podemos bloquear a palavra teclado!
+    // Exceção: Se o cliente realmente pediu um teclado, não bloqueia
     const userWantsAccessory = hardcodedExclusions.some(p => new RegExp(`\\b${p}\\b`, 'i').test(queryLower));
 
     resultados.flat().forEach(o => {
-        if (!links.has(o.offerLink) && o.discountPrice) {
+        if (!links.has(o.offerLink)) {
+            // CORREÇÃO CRÍTICA DO BUG DO NOTEBOOK: Alguns itens não têm discountPrice
+            const preco = (o.discountPrice && o.discountPrice > 0) ? o.discountPrice : (o.price || 0);
             const titulo = (o.offerName || "").toLowerCase();
             
-            // Regra 1: Passar no Preço Mínimo Blindado (ou se for pedido direto de acessório)
-            if (o.discountPrice >= finalMinPrice || userWantsAccessory) {
-                
+            if (preco >= finalMinPrice || userWantsAccessory) {
                 let isLixo = false;
                 if (!userWantsAccessory) {
-                    // Regra 2: Bloquear palavras proibidas isoladas (ex: "tela" bloqueia, "estela" passa)
                     isLixo = allExclusions.some(p => new RegExp(`\\b${p}\\b`, 'i').test(titulo));
                 }
 
@@ -1477,11 +1475,15 @@ async function executarBuscasParalelas(termos, configIA, userQuery) {
         }
     });
     
-    return unicas.sort((a,b) => (a.discountPrice || a.price) - (b.discountPrice || b.price));
+    return unicas.sort((a,b) => {
+        const precoA = (a.discountPrice && a.discountPrice > 0) ? a.discountPrice : a.price;
+        const precoB = (b.discountPrice && b.discountPrice > 0) ? b.discountPrice : b.price;
+        return precoA - precoB;
+    });
 }
 
 // ==========================================
-// TETECO AI 5.0 – Cascata Extrema 
+// TETECO AI 6.0 – Cascata Extrema
 // ==========================================
 async function enviarMsg(sugestao = null) {
     const input = document.getElementById("chatInput");
@@ -1501,50 +1503,70 @@ async function enviarMsg(sugestao = null) {
     const dataAtual = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
     const contextoOfertas = todasOfertas.slice(0, 20).map(o => `- ${o.titulo} (Loja: ${o.loja}) por R$ ${o.precoNovo}`).join('\n');
     
-    // PROMPT 5.0 - SUPER ESTRITO
-    const systemPrompt = `Você é o Teteco AI 5.0 — especialista máximo em Mercado Livre e Shopee Brasil.
-HOJE É: ${dataAtual}. ESTES SÃO OS MODELOS ATUAIS DE REFERÊNCIA:
-- Apple: iPhone 16 (todas as versões)
-- Samsung: Galaxy S25 (todas as versões) e Galaxy Book4
+    // PROMPT 6.0 - BLINDADO CONTRA CONVERSA FIADA
+    const systemPrompt = `Você é o Teteco AI 6.0, o assistente de compras mais avançado do Brasil.
+HOJE É: ${dataAtual} DE 2026.
+MODELOS ATUAIS DE TOPO: iPhone 16, Galaxy S25.
+SE O CLIENTE PEDIR UM IPHONE 17, AJA COM HUMOR, INFORME QUE AINDA NÃO FOI LANÇADO E BUSQUE OBRIGATORIAMENTE PELO IPHONE 16. NUNCA BUSQUE PELO IPHONE 15.
 
-Cliente: "${texto}"
+Sua única função é extrair a intenção de compra e formatar a saída EXATAMENTE como o template abaixo. NÃO adicione nenhum texto conversacional livre fora do template. 
+A API da Shopee falha com muitas palavras. Use no máximo 3 ou 4 palavras por tag.
 
-Responda EXATAMENTE neste formato (nada mais, nada menos):
-MENSAGEM: Mensagem curta e animada (1 linha)
-[BUSCAR_1: termo mais específico]
-[BUSCAR_2: ...]
-[BUSCAR_3: ...]
-[BUSCAR_4: ...]
-[BUSCAR_5: ...]
-[BUSCAR_6: ...]
-[BUSCAR_7: ...]
-[BUSCAR_8: ...]
-{"categoria": "Notebook", "preco_minimo_dinamico": 1500, "palavras_excluir": ["usado","teclado","mouse","fonte","carregador","tela","placa"], "modo_aproximado": false, "score_confianca": 90}
+TEMPLATE OBRIGATÓRIO (Preencha os dados e responda apenas isto):
+MENSAGEM: [Sua resposta humanizada e animada aqui]
+[BUSCAR_1: termo hiper específico (max 4 palavras)]
+[BUSCAR_2: termo específico]
+[BUSCAR_3: termo específico]
+[BUSCAR_4: termo médio]
+[BUSCAR_5: termo médio]
+[BUSCAR_6: termo amplo]
+[BUSCAR_7: termo amplo]
+[BUSCAR_8: termo amplo]
+{"categoria": "NomeCategoria", "preco_minimo_dinamico": 100, "palavras_excluir": ["capa", "película"], "modo_aproximado": false, "score_confianca": 90}
 
-Regras obrigatórias:
-1. Se o cliente pedir "Notebook", OBRIGATORIAMENTE coloque palavras como "teclado", "fonte", "carregador", "tela", "bateria" no array palavras_excluir e defina o preco_minimo_dinamico realista para um aparelho inteiro (ex: 1200). 
-2. Se pedir "iPhone", exclua "capa", "película", "caixa vazia", "carregador" e defina preço mínimo alto (ex: 1500).
-3. Se pedir algo do futuro (ex: iPhone 17), avise na MENSAGEM com humor que não lançou e busque o topo de linha atual (iPhone 16).
-Ofertas hoje:\n${contextoOfertas}`;
+Exemplo se o cliente pedir "notebook samsung":
+MENSAGEM: Deixa comigo! Vou buscar os melhores notebooks Samsung para você... 🔍
+[BUSCAR_1: Notebook Samsung Galaxy]
+[BUSCAR_2: Notebook Samsung Core]
+[BUSCAR_3: Notebook Samsung Book]
+[BUSCAR_4: Laptop Samsung]
+[BUSCAR_5: Notebook Samsung i5]
+[BUSCAR_6: Notebook Samsung]
+[BUSCAR_7: Computador Samsung]
+[BUSCAR_8: Galaxy Book]
+{"categoria": "Notebook", "preco_minimo_dinamico": 1000, "palavras_excluir": ["teclado","mouse","fonte","tela","carregador"], "modo_aproximado": true, "score_confianca": 95}
+
+Cliente pediu: "${texto}"
+Ofertas de hoje:\n${contextoOfertas}`;
     
     let resposta = await chamarGemini(texto, systemPrompt, chatHistorico.slice(-8)); 
     typingMsg.remove();
     
-    // PARSE ROBUSTO 5.0
+    // PARSE ROBUSTO 6.0
     let msgCliente = "Deixa comigo! Buscando as melhores opções lacradas... 🔍";
-    const msgMatch = resposta.match(/MENSAGEM:\s*(.+?)(?=\[BUSCAR_|\{)/is);
     
-    if (msgMatch) {
+    // Tenta extrair a MENSAGEM
+    const msgMatch = resposta.match(/MENSAGEM:\s*([^\n\[]+)/i);
+    if (msgMatch && msgMatch[1].trim().length > 0) {
         msgCliente = msgMatch[1].trim();
+    } else {
+        // Fallback: Pega a primeira frase gerada que não seja uma Tag
+        const sentences = resposta.split('\n');
+        if (sentences[0] && !sentences[0].includes('[')) msgCliente = sentences[0];
     }
     
     _addMsgChat(safeHTML(_formatarRespostaIA(msgCliente)), "bot");
     
-    // Extrai as 8 buscas com regex
+    // Extrai as buscas
     const buscas = [];
     for (let i = 1; i <= 8; i++) {
         const match = resposta.match(new RegExp(`\\[BUSCAR_${i}:\\s*(.+?)\\]`, 'i'));
         if (match) buscas.push(match[1].trim());
+    }
+
+    // Se o Gemini falhou em gerar tags, força uma busca básica
+    if (buscas.length === 0) {
+        buscas.push(texto);
     }
     
     // JSON seguro
@@ -1552,14 +1574,7 @@ Ofertas hoje:\n${contextoOfertas}`;
     try {
         let jsonStr = resposta.match(/\{[\s\S]*\}/)[0];
         configIA = { ...configIA, ...JSON.parse(jsonStr) };
-    } catch(e) { 
-        /* fallback silencioso */ 
-    }
-
-    if (buscas.length < 3) {
-        _addMsgChat(safeHTML("Poxa, não consegui entender direito. Pode repetir o modelo exato? 😅"), "bot");
-        return;
-    }
+    } catch(e) { }
 
     chatHistorico.push({role: "assistant", content: msgCliente + ` (Iniciou cascata de busca)`});
     
@@ -1574,16 +1589,17 @@ Ofertas hoje:\n${contextoOfertas}`;
         if (ofertasFinais.length > 0) {
             const isAproximado = configIA.modo_aproximado || configIA.score_confianca < 75;
             const intro = isAproximado 
-                 ? `Não achei **exato**, mas esses similares lacrados estão incríveis:` 
-                 : `Encontrei essas opções perfeitas para você:`;
+                 ? `Não achei exatamente esse modelo, mas olha estes similares perfeitos que estão com ótimo preço:` 
+                 : `Encontrei estas opções exclusivas para você:`;
             
-            let html = `<p style="margin-bottom:10px">${safeHTML(_formatarRespostaIA(intro))}</p><div style="display:flex;flex-direction:column;gap:10px;">`;
+            let html = `<p style="margin-bottom:10px">${safeHTML(intro)}</p><div style="display:flex;flex-direction:column;gap:10px;">`;
             
             ofertasFinais.slice(0, 4).forEach(o => {
+                const precoReal = (o.discountPrice && o.discountPrice > 0) ? o.discountPrice : o.price;
                 html += `<a href="${esc(o.offerLink)}" target="_blank" style="display:flex;gap:12px;background:var(--bg2);padding:12px;border-radius:14px;text-decoration:none;color:var(--text);">
                     <img src="${esc(o.imageUrl || '')}" style="width:60px;height:60px;object-fit:cover;border-radius:8px;" onerror="this.style.display='none'">
                     <div style="flex:1"><div style="font-weight:600;line-height:1.3">${esc(o.offerName)}</div>
-                    <div style="color:var(--accent);font-weight:800;margin-top:4px">${formatarMoeda(o.discountPrice || o.price)}</div></div>
+                    <div style="color:var(--accent);font-weight:800;margin-top:4px">${formatarMoeda(precoReal)}</div></div>
                 </a>`;
             });
             
@@ -1591,7 +1607,7 @@ Ofertas hoje:\n${contextoOfertas}`;
             _addMsgChat(html, "bot");
             chatHistorico.push({role: "assistant", content: `Mostrei resultados.`});
         } else {
-            _addMsgChat(safeHTML(`Vasculhei todas as lojas e não achei em estoque agora. Quer que eu peça direto no grupo VIP do Telegram?`), "bot");
+            _addMsgChat(safeHTML(`Poxa, vasculhei todas as lojas, mas para "${texto}" só encontrei acessórios ou itens esgotados. Quer que eu peça no grupo do Telegram? 😔`), "bot");
             chatHistorico.push({role: "assistant", content: `A busca não encontrou resultados satisfatórios.`});
         }
     } catch (err) {
