@@ -9,41 +9,93 @@
 
 <style>
 /* ══ RESET & BASE ══ */
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{ font-family:'DM Sans',sans-serif; background:#09101a; color:#f0f4f8; min-height:100vh; display:flex; overflow-x:hidden; }
-:root{
-  --bg: #09101a; --bg2: #0f1724; --surface: #131d2c; --surface2: #1a2639; --surface3: #22324a;
-  --border: #2a3b55; --border2: #3b5275; --text: #f0f4f8; --text2: #a2b3c7; --text3: #758ca6;
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #09101a;
+  color: #f0f4f8;
+  min-height: 100vh;
+  display: flex;
+  overflow-x: hidden;
+}
+:root {
+  --bg: #09101a; --bg2: #0f1724;
+  --surface: #131d2c; --surface2: #1a2639; --surface3: #22324a;
+  --border: #2a3b55; --border2: #3b5275;
+  --text: #f0f4f8; --text2: #a2b3c7; --text3: #758ca6;
   --accent: #ff7a00; --brand-blue: #1e60b3; --green: #22c55e;
 }
-.sidebar { width: 280px; background: var(--surface); border-right: 1px solid var(--border); padding: 30px 20px; display: flex; flex-direction: column; gap: 30px; }
-.main-content { flex: 1; padding: 40px; overflow-y: auto; background: radial-gradient(circle at top right, rgba(30, 96, 179, 0.1), transparent 40%), var(--bg); }
-.brand { display:flex; align-items:center; gap:12px; font-family:'Syne',sans-serif; font-weight:800; font-size:18px; color:var(--text); }
+
+/* ══ LAYOUT DO PAINEL ══ */
+.sidebar {
+  width: 280px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+.main-content {
+  flex: 1;
+  padding: 40px;
+  overflow-y: auto;
+  background: radial-gradient(circle at top right, rgba(30, 96, 179, 0.1), transparent 40%), var(--bg);
+}
+
+/* ══ SIDEBAR ══ */
+.brand { display: flex; align-items: center; gap: 12px; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px; color: var(--text); }
 .brand svg { width: 32px; height: 32px; }
 .menu { display: flex; flex-direction: column; gap: 8px; }
-.menu-item { padding: 14px 16px; border-radius: 12px; display: flex; align-items: center; gap: 12px; color: var(--text2); font-weight: 600; text-decoration: none; transition: 0.2s; background: transparent; border: 1px solid transparent; cursor: pointer; text-align: left; width: 100%; }
+.menu-item {
+  padding: 14px 16px; border-radius: 12px; display: flex; align-items: center; gap: 12px;
+  color: var(--text2); font-weight: 600; text-decoration: none; transition: 0.2s;
+  background: transparent; border: 1px solid transparent; cursor: pointer; text-align: left; width: 100%;
+}
 .menu-item.active { background: var(--brand-blue); color: #fff; box-shadow: 0 4px 15px rgba(30, 96, 179, 0.3); }
 .menu-item:not(.active):hover { background: var(--surface2); color: var(--text); }
+
+/* ══ FORMULÁRIO ══ */
 .header { margin-bottom: 30px; }
 .header h1 { font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 800; margin-bottom: 8px; }
 .header p { color: var(--text2); font-size: 15px; }
+
 .dashboard-grid { display: grid; grid-template-columns: 1fr 340px; gap: 40px; align-items: start; }
 @media(max-width: 1024px) { .dashboard-grid { grid-template-columns: 1fr; } .sidebar { display: none; } }
+
 .form-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 32px; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
 .form-group { display: flex; flex-direction: column; gap: 8px; }
 .form-group.full { grid-column: 1 / -1; }
 .form-label { font-size: 13px; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: 0.5px; }
-.form-input, .form-select { padding: 14px 16px; border-radius: 12px; border: 1px solid var(--border2); background: var(--bg2); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 15px; outline: none; transition: 0.2s; width: 100%; }
+
+.form-input, .form-select {
+  padding: 14px 16px; border-radius: 12px; border: 1px solid var(--border2);
+  background: var(--bg2); color: var(--text); font-family: 'DM Sans', sans-serif;
+  font-size: 15px; outline: none; transition: 0.2s; width: 100%;
+}
 .form-input:focus, .form-select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(255, 122, 0, 0.1); }
 .form-select option { background: var(--surface); }
-.btn-submit { width: 100%; padding: 16px; border-radius: 12px; background: var(--accent); color: #fff; font-weight: 800; font-size: 16px; font-family: 'Syne', sans-serif; cursor: pointer; border: none; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 4px 20px rgba(255, 122, 0, 0.3); margin-top: 10px; }
+
+.btn-submit {
+  width: 100%; padding: 16px; border-radius: 12px; background: var(--accent); color: #fff;
+  font-weight: 800; font-size: 16px; font-family: 'Syne', sans-serif; cursor: pointer;
+  border: none; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 10px;
+  box-shadow: 0 4px 20px rgba(255, 122, 0, 0.3); margin-top: 10px;
+}
 .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(255, 122, 0, 0.4); }
 .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+/* ══ PREVIEW CARD ══ */
 .preview-panel { position: sticky; top: 40px; }
 .preview-title { font-size: 14px; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
 .preview-title::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 10px var(--green); }
-.oferta-card { background: var(--surface); border: 1px solid var(--border2); border-radius: 18px; overflow: hidden; display: flex; flex-direction: column; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.3); pointer-events: none; }
+
+.oferta-card {
+  background: var(--surface); border: 1px solid var(--border2); border-radius: 18px;
+  overflow: hidden; display: flex; flex-direction: column; position: relative;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3); pointer-events: none;
+}
 .oferta-img { height: 180px; display: flex; align-items: center; justify-content: center; position: relative; border-bottom: 1px solid var(--border); background: #fff; }
 .oferta-img img { max-height: 140px; max-width: 140px; object-fit: contain; }
 .oferta-img .emoji-fallback { font-size: 64px; }
@@ -59,6 +111,8 @@ body{ font-family:'DM Sans',sans-serif; background:#09101a; color:#f0f4f8; min-h
 .oferta-preco-novo { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: var(--accent); }
 .oferta-economia { font-size: 11px; color: var(--green); font-weight: 600; }
 .oferta-btn { padding: 10px; border-radius: 10px; font-size: 13px; font-weight: 700; text-align: center; margin-top: 10px; }
+
+/* MODAIS */
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 9999; display: none; align-items: center; justify-content: center; }
 .modal-overlay.active { display: flex; }
 .modal-content { background: var(--surface); padding: 40px; border-radius: 20px; border: 1px solid var(--border); max-width: 400px; width: 90%; text-align: center; }
@@ -89,6 +143,7 @@ body{ font-family:'DM Sans',sans-serif; background:#09101a; color:#f0f4f8; min-h
     </div>
   </div>
 
+  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="brand">
       <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -108,6 +163,7 @@ body{ font-family:'DM Sans',sans-serif; background:#09101a; color:#f0f4f8; min-h
     </div>
   </aside>
 
+  <!-- MAIN CONTENT -->
   <main class="main-content">
     <div class="header">
       <h1>Painel de Publicação</h1>
@@ -115,9 +171,12 @@ body{ font-family:'DM Sans',sans-serif; background:#09101a; color:#f0f4f8; min-h
     </div>
 
     <div class="dashboard-grid">
+      
+      <!-- FORMULÁRIO -->
       <div class="form-panel">
         <form id="offerForm">
           <div class="form-row">
+            
             <div class="form-group full">
               <label class="form-label">Título do Produto</label>
               <input type="text" id="f_titulo" class="form-input" placeholder="Ex: Smart TV 55 4K Samsung..." required oninput="updatePreview()">
@@ -138,9 +197,22 @@ body{ font-family:'DM Sans',sans-serif; background:#09101a; color:#f0f4f8; min-h
               </select>
             </div>
             
+            <!-- NOVA ÁREA DE CATEGORIA (Agora é Dropdown) -->
             <div class="form-group">
               <label class="form-label">Categoria</label>
-              <input type="text" id="f_cat" class="form-input" placeholder="Ex: Eletrônicos" value="Geral" oninput="updatePreview()">
+              <select id="f_cat" class="form-select" onchange="updatePreview()">
+                <option value="Geral">Geral</option>
+                <option value="Smartphones">Smartphones</option>
+                <option value="Informática">Informática</option>
+                <option value="TV e Áudio">TV e Áudio</option>
+                <option value="Eletrodomésticos">Eletrodomésticos</option>
+                <option value="Casa e Cozinha">Casa e Cozinha</option>
+                <option value="Games">Games</option>
+                <option value="Beleza e Saúde">Beleza e Saúde</option>
+                <option value="Moda e Acessórios">Moda e Acessórios</option>
+                <option value="Supermercado">Supermercado</option>
+                <option value="Esporte e Lazer">Esporte e Lazer</option>
+              </select>
             </div>
 
             <div class="form-group">
@@ -168,10 +240,12 @@ body{ font-family:'DM Sans',sans-serif; background:#09101a; color:#f0f4f8; min-h
               <input type="text" id="f_selo" class="form-input" placeholder="Ex: FRETE GRÁTIS, CUPOM, EXCLUSIVO" oninput="updatePreview()">
             </div>
             
+            <!-- CAIXA DE DESTAQUE -->
             <div class="form-group full" style="flex-direction: row; align-items: center; gap: 10px; background: var(--bg2); padding: 15px; border-radius: 12px; border: 1px solid var(--accent);">
               <input type="checkbox" id="f_destaque" checked style="width: 20px; height: 20px; accent-color: var(--accent);" onchange="updatePreview()">
               <label for="f_destaque" style="font-weight: 700; color: var(--text); cursor: pointer;">🔥 Enviar para a vitrine de Destaques do site</label>
             </div>
+
           </div>
 
           <button type="button" id="btnSubmit" class="btn-submit" onclick="enviarParaSite()">
@@ -181,19 +255,23 @@ body{ font-family:'DM Sans',sans-serif; background:#09101a; color:#f0f4f8; min-h
         </form>
       </div>
 
+      <!-- PREVIEW -->
       <div class="preview-panel">
         <div class="preview-title">Preview Ao Vivo</div>
+        
         <div class="oferta-card">
           <div class="badges-top-left" id="prev_badges">
             <div class="oferta-desconto" id="prev_badge_desc" style="display:none;"></div>
             <div class="oferta-selo" id="prev_badge_selo" style="display:none;"></div>
           </div>
           <div class="badge-novo">NOVO</div>
+          
           <div class="oferta-img" id="prev_img_container">
             <div class="emoji-fallback" id="prev_emoji">🛒</div>
             <img id="prev_img" style="display:none;" src="" alt="preview">
             <div class="oferta-loja-badge" id="prev_loja_badge">Loja</div>
           </div>
+          
           <div class="oferta-body">
             <div class="oferta-cat" id="prev_cat">Geral</div>
             <div class="oferta-titulo" id="prev_titulo">Sua oferta vai aparecer aqui...</div>
@@ -205,10 +283,12 @@ body{ font-family:'DM Sans',sans-serif; background:#09101a; color:#f0f4f8; min-h
             <div class="oferta-btn" id="prev_btn" style="background:#333; color:#fff;">Pegar Oferta 🛒</div>
           </div>
         </div>
+
       </div>
     </div>
   </main>
 
+  <!-- MODAL DE SUCESSO -->
   <div class="modal-overlay" id="successModal">
     <div class="modal-content">
       <h3>Publicado! 🎉</h3>
@@ -219,7 +299,7 @@ body{ font-family:'DM Sans',sans-serif; background:#09101a; color:#f0f4f8; min-h
 
 <script>
 // ══ LÓGICA DO LOGIN ══
-const PIN_CORRETO = "1234"; // Pode alterar o seu PIN aqui
+const PIN_CORRETO = "100815"; // Pode alterar o seu PIN aqui
 let APPS_SCRIPT_URL = localStorage.getItem("cdf_script_url") || "";
 
 function verificarAcesso() {
@@ -253,19 +333,28 @@ document.getElementById("adminPin").addEventListener("keyup", function(event) {
 });
 
 const LOJAS = {
-    amazon: { nome: "Amazon", cor: "#FF9900" }, shopee: { nome: "Shopee", cor: "#EE4D2D" },
-    magalu: { nome: "Magalu", cor: "#0086FF" }, mercadolivre: { nome: "Mercado Livre", cor: "#FFE600" },
-    aliexpress: { nome: "AliExpress", cor: "#E43225" }, americanas: { nome: "Americanas", cor: "#E4002B" },
-    casasbahia: { nome: "Casas Bahia", cor: "#0057A8" }, netshoes: { nome: "Netshoes", cor: "#007A4C" },
+    amazon: { nome: "Amazon", cor: "#FF9900" }, 
+    shopee: { nome: "Shopee", cor: "#EE4D2D" },
+    magalu: { nome: "Magalu", cor: "#0086FF" }, 
+    mercadolivre: { nome: "Mercado Livre", cor: "#FFE600" },
+    aliexpress: { nome: "AliExpress", cor: "#E43225" }, 
+    americanas: { nome: "Americanas", cor: "#E4002B" },
+    casasbahia: { nome: "Casas Bahia", cor: "#0057A8" }, 
+    netshoes: { nome: "Netshoes", cor: "#007A4C" },
     outras: { nome: "Outras", cor: "#8B5CF6" }
 };
 
-function formatMoney(num) { return Number(num).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); }
+function formatMoney(num) { 
+    return Number(num).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); 
+}
 
 function updatePreview() {
     const titulo = document.getElementById('f_titulo').value || 'Sua oferta vai aparecer aqui...';
     const lojaID = document.getElementById('f_loja').value;
-    const categoria = document.getElementById('f_cat').value || 'Geral';
+    
+    // Agora o JavaScript pega o valor selecionado no Dropdown da Categoria
+    const categoria = document.getElementById('f_cat').value; 
+    
     const pAntigo = parseFloat(document.getElementById('f_preco_antigo').value) || 0;
     const pNovo = parseFloat(document.getElementById('f_preco_novo').value) || 0;
     const imagem = document.getElementById('f_imagem').value;
@@ -275,66 +364,123 @@ function updatePreview() {
     if (isDestaque) { selo = selo ? `🔥 DESTAQUE | ${selo}` : "🔥 DESTAQUE"; }
 
     const loja = LOJAS[lojaID];
+    
     document.getElementById('prev_titulo').textContent = titulo;
     document.getElementById('prev_cat').textContent = categoria;
     
     const badgeLoja = document.getElementById('prev_loja_badge');
-    badgeLoja.textContent = loja.nome; badgeLoja.style.background = loja.cor + '22'; badgeLoja.style.color = loja.cor;
+    badgeLoja.textContent = loja.nome; 
+    badgeLoja.style.background = loja.cor + '22'; 
+    badgeLoja.style.color = loja.cor;
 
     const btn = document.getElementById('prev_btn');
-    btn.style.background = loja.cor + '15'; btn.style.color = loja.cor; btn.style.border = `1px solid ${loja.cor}40`;
+    btn.style.background = loja.cor + '15'; 
+    btn.style.color = loja.cor; 
+    btn.style.border = `1px solid ${loja.cor}40`;
 
     document.getElementById('prev_p_novo').textContent = formatMoney(pNovo);
-    const elPAntigo = document.getElementById('prev_p_antigo'), elEconomia = document.getElementById('prev_economia'), elDesconto = document.getElementById('prev_badge_desc');
+    const elPAntigo = document.getElementById('prev_p_antigo'), 
+          elEconomia = document.getElementById('prev_economia'), 
+          elDesconto = document.getElementById('prev_badge_desc');
 
     if (pAntigo > pNovo) {
-        elPAntigo.style.display = 'block'; elPAntigo.textContent = formatMoney(pAntigo);
-        elEconomia.style.display = 'block'; elEconomia.textContent = `Poupa ${formatMoney(pAntigo - pNovo)}`;
+        elPAntigo.style.display = 'block'; 
+        elPAntigo.textContent = formatMoney(pAntigo);
+        elEconomia.style.display = 'block'; 
+        elEconomia.textContent = `Poupa ${formatMoney(pAntigo - pNovo)}`;
         const descPct = Math.round((1 - pNovo / pAntigo) * 100);
-        elDesconto.style.display = 'block'; elDesconto.textContent = `-${descPct}%`;
+        elDesconto.style.display = 'block'; 
+        elDesconto.textContent = `-${descPct}%`;
     } else {
-        elPAntigo.style.display = 'none'; elEconomia.style.display = 'none'; elDesconto.style.display = 'none';
+        elPAntigo.style.display = 'none'; 
+        elEconomia.style.display = 'none'; 
+        elDesconto.style.display = 'none';
     }
 
     const elSelo = document.getElementById('prev_badge_selo');
-    if (selo) { elSelo.style.display = 'block'; elSelo.textContent = selo; elSelo.style.background = loja.cor; } else { elSelo.style.display = 'none'; }
+    if (selo) { 
+        elSelo.style.display = 'block'; 
+        elSelo.textContent = selo; 
+        elSelo.style.background = loja.cor; 
+    } else { 
+        elSelo.style.display = 'none'; 
+    }
 
     const elImg = document.getElementById('prev_img'), elEmoji = document.getElementById('prev_emoji');
     const isUrl = imagem.startsWith('http') || imagem.startsWith('//');
-    if (isUrl) { elImg.style.display = 'block'; elImg.src = imagem; elEmoji.style.display = 'none'; setTimeout(() => elImg.style.opacity = 1, 100);
-    } else { elImg.style.display = 'none'; elEmoji.style.display = 'block'; elEmoji.textContent = imagem || '🛒'; }
+    if (isUrl) { 
+        elImg.style.display = 'block'; 
+        elImg.src = imagem; 
+        elEmoji.style.display = 'none'; 
+        setTimeout(() => elImg.style.opacity = 1, 100);
+    } else { 
+        elImg.style.display = 'none'; 
+        elEmoji.style.display = 'block'; 
+        elEmoji.textContent = imagem || '🛒'; 
+    }
 }
 
 function enviarParaSite() {
     if (!APPS_SCRIPT_URL) { alert("Configure o link do Apps Script clicando em 'Reconfigurar Link' no menu."); return; }
 
-    const titulo = document.getElementById('f_titulo').value, pNovo = document.getElementById('f_preco_novo').value, link = document.getElementById('f_link').value;
+    const titulo = document.getElementById('f_titulo').value;
+    const pNovo = document.getElementById('f_preco_novo').value;
+    const link = document.getElementById('f_link').value;
+    
     if(!titulo || !pNovo || !link) { alert("Preencha pelo menos o Título, Preço Novo e Link!"); return; }
 
-    const btnSubmit = document.getElementById('btnSubmit'), btnSubmitTxt = document.getElementById('btnSubmitTxt');
-    btnSubmit.disabled = true; btnSubmitTxt.textContent = "A publicar no site...";
+    const btnSubmit = document.getElementById('btnSubmit');
+    const btnSubmitTxt = document.getElementById('btnSubmitTxt');
+    
+    btnSubmit.disabled = true; 
+    btnSubmitTxt.textContent = "A publicar no site...";
 
-    const loja = document.getElementById('f_loja').value, pAntigo = document.getElementById('f_preco_antigo').value || "", imagem = document.getElementById('f_imagem').value || "", categoria = document.getElementById('f_cat').value || "Geral";
+    const loja = document.getElementById('f_loja').value;
+    const pAntigo = document.getElementById('f_preco_antigo').value || "";
+    const imagem = document.getElementById('f_imagem').value || "";
+    const categoria = document.getElementById('f_cat').value || "Geral";
+    
     let selo = document.getElementById('f_selo').value || "";
-    if (document.getElementById('f_destaque').checked) { selo = selo ? `🔥 DESTAQUE | ${selo}` : "🔥 DESTAQUE"; }
+    if (document.getElementById('f_destaque').checked) { 
+        selo = selo ? `🔥 DESTAQUE | ${selo}` : "🔥 DESTAQUE"; 
+    }
 
     const hoje = new Date();
     const dataFormatada = `${String(hoje.getDate()).padStart(2, '0')}/${String(hoje.getMonth()+1).padStart(2, '0')}/${hoje.getFullYear()} ${String(hoje.getHours()).padStart(2, '0')}:${String(hoje.getMinutes()).padStart(2, '0')}`;
+    
     let isEmoji = "", isImgUrl = "";
     if (imagem.startsWith("http")) { isImgUrl = imagem; } else { isEmoji = imagem; }
 
     const formData = new URLSearchParams();
-    formData.append('loja', loja); formData.append('titulo', titulo); formData.append('precoAntigo', pAntigo); formData.append('precoNovo', pNovo); formData.append('link', link); formData.append('data', dataFormatada); formData.append('emoji', isEmoji); formData.append('categoria', categoria); formData.append('selo', selo); formData.append('imagem', isImgUrl);
+    formData.append('loja', loja); 
+    formData.append('titulo', titulo); 
+    formData.append('precoAntigo', pAntigo); 
+    formData.append('precoNovo', pNovo); 
+    formData.append('link', link); 
+    formData.append('data', dataFormatada); 
+    formData.append('emoji', isEmoji); 
+    formData.append('categoria', categoria); 
+    formData.append('selo', selo); 
+    formData.append('imagem', isImgUrl);
 
     fetch(APPS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: formData }).then(() => {
         document.getElementById('successModal').classList.add('active');
-        btnSubmit.disabled = false; btnSubmitTxt.textContent = "Publicar Direto no Site";
+        btnSubmit.disabled = false; 
+        btnSubmitTxt.textContent = "Publicar Direto no Site";
     }).catch(err => {
         alert("Ocorreu um erro de conexão. Tente novamente.");
-        btnSubmit.disabled = false; btnSubmitTxt.textContent = "Publicar Direto no Site";
+        btnSubmit.disabled = false; 
+        btnSubmitTxt.textContent = "Publicar Direto no Site";
     });
 }
-function fecharModal() { document.getElementById('successModal').classList.remove('active'); document.getElementById('offerForm').reset(); updatePreview(); }
+
+function fecharModal() { 
+    document.getElementById('successModal').classList.remove('active'); 
+    document.getElementById('offerForm').reset(); 
+    updatePreview(); 
+}
+
+// Inicializa o preview na hora que abre a página
 updatePreview();
 </script>
 </body>
