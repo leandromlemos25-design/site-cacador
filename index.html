@@ -500,25 +500,29 @@ img, video{max-width:100%;display:block}
   position:absolute;bottom:8px;left:8px;
   padding:3px 10px;border-radius:6px;
   font-size:11px;font-weight:700;
+  z-index:10;
 }
 .oferta-desconto{
   position:absolute;top:10px;left:10px;
   padding:4px 10px;border-radius:8px;
   font-size:12px;font-weight:800;color:#fff;
+  z-index:10;
 }
 .oferta-selo{
   position:absolute;top:10px;left:10px;
   padding:4px 10px;border-radius:8px;
   font-size:11px;font-weight:700;
+  z-index:10;
 }
 .badge-novo{
   position:absolute;top:10px;right:44px;
   padding:3px 8px;border-radius:6px;
   background:var(--green);color:#fff;
   font-size:10px;font-weight:800;letter-spacing:0.5px;
+  z-index:10;
 }
 .btn-favorito{
-  position:absolute;top:8px;right:8px;z-index:2;
+  position:absolute;top:8px;right:8px;z-index:10;
   width:32px;height:32px;border-radius:8px;
   background:var(--surface);border:1px solid var(--border);
   display:flex;align-items:center;justify-content:center;
@@ -1039,7 +1043,7 @@ footer{
   <section class="section">
     <div style="text-align:center;max-width:600px;margin:0 auto 40px">
       <span class="section-label">Comunidade</span>
-      <h2 class="section-title">📱 Não perca nenhum bug</h2>
+      <h2 class="section-title">📱 Não perca nenhuma oferta</h2>
       <p class="section-sub" style="margin:0 auto">As ofertas relâmpago esgotam em minutos. Siga o Caçador nas suas redes favoritas e seja o primeiro a saber.</p>
     </div>
     <div class="social-grid" id="socialGrid"></div>
@@ -1185,7 +1189,8 @@ footer{
 
 <!-- ═══ CHATBOT IA ═══ -->
 <button class="chat-fab" id="chatFab" onclick="window.toggleChat()" aria-label="Abrir assistente virtual Teteco">
-  <span id="chatFabIcon">🤖</span>
+  <img id="chatFabIcon" src="teteco.png" alt="Teteco" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+  <span id="chatFabClose" style="display:none; font-size: 20px;">✕</span>
   <div class="badge-notif" id="chatBadge" style="display:none"></div>
 </button>
 
@@ -1884,16 +1889,20 @@ function toggleChat() {
     document.getElementById("chatWindow").classList.toggle("open", chatOpen);
     const fab = document.getElementById("chatFab");
     const fabIcon = document.getElementById("chatFabIcon");
+    const fabClose = document.getElementById("chatFabClose");
+    
     if(chatOpen) {
         fab.classList.add("active"); 
-        fabIcon.innerHTML = "✕";
+        fabIcon.style.display = "none";
+        fabClose.style.display = "block";
         document.getElementById("chatBadge").style.display="none";
         if(chatHistorico.length===0){
             setTimeout(()=> document.getElementById("chatSuggestions").style.display="flex", 1500);
         }
     } else {
         fab.classList.remove("active"); 
-        fabIcon.innerHTML = "🤖";
+        fabIcon.style.display = "block";
+        fabClose.style.display = "none";
     }
 }
 
