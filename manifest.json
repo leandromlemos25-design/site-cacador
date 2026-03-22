@@ -1,0 +1,16 @@
+{
+  "name": "O Caçador de Ofertas",
+  "short_name": "Ofertas",
+  "description": "As melhores promoções da internet verificadas diariamente.",
+  "start_url": "/#home",
+  "display": "standalone",
+  "background_color": "#09101a",
+  "theme_color": "#09101a",
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
