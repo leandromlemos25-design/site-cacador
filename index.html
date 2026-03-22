@@ -557,7 +557,7 @@ img, video{max-width:100%;display:block}
 }
 .btn-partilhar:hover{background:var(--surface3)}
 
-/* ══ BOTÃO IA (NOVO) ══ */
+/* ══ BOTÃO IA E AVATAR (ESTILO OTIMIZADO) ══ */
 .ai-btn{
   width:38px;flex-shrink:0;border-radius:10px;
   display:flex;align-items:center;justify-content:center;
@@ -566,6 +566,18 @@ img, video{max-width:100%;display:block}
   transition:all .2s; box-shadow:0 0 15px rgba(232, 28, 255, 0.3);
 }
 .ai-btn:hover{transform:scale(1.08); box-shadow:0 4px 20px rgba(232, 28, 255, 0.5);}
+
+.teteco-avatar-img {
+  width: 145%;
+  height: 145%;
+  max-width: none;
+  object-fit: cover;
+  object-position: center top;
+  margin-left: -22.5%;
+  margin-top: -3%;
+  image-rendering: high-quality;
+  image-rendering: -webkit-optimize-contrast;
+}
 
 /* Load more */
 #loadMoreTrigger{grid-column:1/-1;display:flex;justify-content:center;padding:24px}
@@ -704,7 +716,7 @@ img, video{max-width:100%;display:block}
 .chat-avatar{
   width:38px;height:38px;border-radius:50%;overflow:hidden;
   flex-shrink:0;border:2px solid rgba(255,255,255,0.3);
-  background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:22px;
+  background:var(--surface2);position:relative;
 }
 .chat-header-info h4{color:#fff;font-size:14px;font-weight:700}
 .chat-header-info p{color:rgba(255,255,255,.6);font-size:11px}
@@ -1190,8 +1202,8 @@ footer{
 
 <!-- ═══ CHATBOT IA ═══ -->
 <button class="chat-fab" id="chatFab" onclick="window.toggleChat()" aria-label="Abrir assistente virtual Teteco">
-  <div id="chatFabIcon" style="width: 100%; height: 100%; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center;">
-    <img src="teteco.png" alt="Teteco" style="width: 100%; height: 100%; object-fit: cover; object-position: center 0%; transform: scale(1.4) translateY(8%);" onerror="this.parentElement.innerHTML='<span style=\'font-size:32px;\'>🤖</span>'">
+  <div id="chatFabIcon" style="width: 100%; height: 100%; border-radius: 50%; overflow: hidden; position: relative;">
+    <img src="teteco.png" alt="Teteco" class="teteco-avatar-img" onerror="this.parentElement.innerHTML='<span style=\'font-size:32px; display:flex; align-items:center; justify-content:center; width:100%; height:100%;\'>🤖</span>'">
   </div>
   <span id="chatFabClose" style="display:none; font-size: 20px;">✕</span>
   <div class="badge-notif" id="chatBadge" style="display:none"></div>
@@ -1199,8 +1211,8 @@ footer{
 
 <div class="chat-window" id="chatWindow">
   <div class="chat-header">
-    <div class="chat-avatar" aria-hidden="true">
-      <img src="teteco.png" alt="Teteco" style="width: 100%; height: 100%; object-fit: cover; object-position: center 0%; transform: scale(1.4) translateY(8%);">
+    <div class="chat-avatar" aria-hidden="true" style="position: relative;">
+      <img src="teteco.png" alt="Teteco" class="teteco-avatar-img">
     </div>
     <div class="chat-header-info">
       <h4>Teteco AI ✨</h4>
@@ -1908,7 +1920,7 @@ function toggleChat() {
         }
     } else {
         fab.classList.remove("active"); 
-        fabIcon.style.display = "flex";
+        fabIcon.style.display = "block";
         fabClose.style.display = "none";
     }
 }
