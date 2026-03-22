@@ -702,7 +702,7 @@ img, video{max-width:100%;display:block}
   background:var(--accent);
 }
 .chat-avatar{
-  width:38px;height:38px;border-radius:10px;overflow:hidden;
+  width:38px;height:38px;border-radius:50%;overflow:hidden;
   flex-shrink:0;border:2px solid rgba(255,255,255,0.3);
   background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:22px;
 }
@@ -1190,7 +1190,7 @@ footer{
 
 <!-- ═══ CHATBOT IA ═══ -->
 <button class="chat-fab" id="chatFab" onclick="window.toggleChat()" aria-label="Abrir assistente virtual Teteco">
-  <img id="chatFabIcon" src="teteco.png" alt="Teteco" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;" onerror="this.outerHTML='<span id=\'chatFabIcon\' style=\'font-size:32px;\'>🤖</span>'">
+  <img id="chatFabIcon" src="teteco.png" alt="Teteco" style="width: 100%; height: 100%; border-radius: 50%; object-fit: contain; padding: 2px;" onerror="this.outerHTML='<span id=\'chatFabIcon\' style=\'font-size:32px;\'>🤖</span>'">
   <span id="chatFabClose" style="display:none; font-size: 20px;">✕</span>
   <div class="badge-notif" id="chatBadge" style="display:none"></div>
 </button>
@@ -1198,7 +1198,7 @@ footer{
 <div class="chat-window" id="chatWindow">
   <div class="chat-header">
     <div class="chat-avatar" aria-hidden="true">
-      <img src="teteco.png" alt="Teteco" style="width: 100%; height: 100%; object-fit: cover;">
+      <img src="teteco.png" alt="Teteco" style="width: 100%; height: 100%; object-fit: contain; padding: 2px;">
     </div>
     <div class="chat-header-info">
       <h4>Teteco AI ✨</h4>
