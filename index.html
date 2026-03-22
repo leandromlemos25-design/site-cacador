@@ -17,46 +17,42 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="logo.png" type="image/png">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"O Caçador de Ofertas","url":"https://ocacadordeofertas.com/"}
 </script>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Organization","name":"O Caçador de Ofertas","url":"https://ocacadordeofertas.com/","sameAs":["https://t.me/ocacadordeoferta","https://www.instagram.com/ocacadorde_ofertas","https://www.tiktok.com/@o.cacador.de.oferta","https://www.facebook.com/share/18X4uDszrG/","https://x.com/ocacadordeoferta"]}
 </script>
-
 <style>
 /* ==========================================================================
    RESET E VARIÁVEIS BASE
    ========================================================================== */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
-body { 
-  font-family: 'DM Sans', sans-serif; 
-  background: var(--bg); 
-  color: var(--text); 
-  transition: background .3s, color .3s; 
-  overflow-x: hidden; 
-  width: 100%; 
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  transition: background .3s, color .3s;
+  overflow-x: hidden;
+  width: 100%;
 }
 a { text-decoration: none; color: inherit; }
 button { cursor: pointer; border: none; background: none; font-family: inherit; outline: none; }
 img, video { max-width: 100%; display: block; }
-
 :root {
-  --bg: #09101a; --bg2: #0f1724; --surface: #131d2c; --surface2: #1a2639; --surface3: #22324a; 
-  --border: #2a3b55; --border2: #3b5275; --text: #f0f4f8; --text2: #a2b3c7; --text3: #758ca6; 
-  --accent: #ff7a00; --accent2: #ffa040; --accent-glow: rgba(255, 122, 0, 0.35); --brand-blue: #1e60b3; 
+  --bg: #09101a; --bg2: #0f1724; --surface: #131d2c; --surface2: #1a2639; --surface3: #22324a;
+  --border: #2a3b55; --border2: #3b5275; --text: #f0f4f8; --text2: #a2b3c7; --text3: #758ca6;
+  --accent: #ff7a00; --accent2: #ffa040; --accent-glow: rgba(255, 122, 0, 0.35); --brand-blue: #1e60b3;
   --gold: #f5c518; --green: #22c55e; --shadow: rgba(0,0,0,0.5); --card-bg: #131d2c; --navbar-bg: rgba(9, 16, 26, 0.92);
 }
 [data-theme="light"] {
-  --bg: #f4f7fb; --bg2: #e9eef5; --surface: #ffffff; --surface2: #f0f4f8; --surface3: #e1e8f0; 
-  --border: #d1dce8; --border2: #b0c4d9; --text: #0d1b2a; --text2: #33475b; --text3: #5c738a; 
-  --accent: #ff7a00; --accent2: #e66e00; --accent-glow: rgba(255, 122, 0, 0.2); --brand-blue: #103b70; 
+  --bg: #f4f7fb; --bg2: #e9eef5; --surface: #ffffff; --surface2: #f0f4f8; --surface3: #e1e8f0;
+  --border: #d1dce8; --border2: #b0c4d9; --text: #0d1b2a; --text2: #33475b; --text3: #5c738a;
+  --accent: #ff7a00; --accent2: #e66e00; --accent-glow: rgba(255, 122, 0, 0.2); --brand-blue: #103b70;
   --shadow: rgba(0,0,0,0.08); --card-bg: #ffffff; --navbar-bg: rgba(244, 247, 251, 0.94);
 }
 .syne { font-family: 'Syne', sans-serif; }
-
 /* ==========================================================================
    AUTOCOMPLETE, SLIDER & ELEMENTOS DA UI
    ========================================================================== */
@@ -68,19 +64,16 @@ img, video { max-width: 100%; display: block; }
 input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
 input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 18px; width: 18px; border-radius: 50%; background: var(--accent); cursor: pointer; margin-top: -7px; }
 input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: var(--border2); border-radius: 2px; }
-
 .btn-alerta { flex: 1; padding: 10px; border-radius: 10px; font-size: 12px; font-weight: 700; text-align: center; transition: all .2s; background: var(--surface2); color: var(--text2); border: 1px solid var(--border2); display: flex; align-items: center; justify-content: center; gap: 6px; }
 .btn-alerta:hover { background: var(--surface3); color: var(--text); }
 .btn-telegram-push { flex: 1; padding: 10px; border-radius: 10px; font-size: 12px; font-weight: 700; text-align: center; transition: all .2s; background: rgba(0, 136, 204, 0.15); color: #0088cc; border: 1px solid rgba(0, 136, 204, 0.3); display: flex; align-items: center; justify-content: center; gap: 6px; text-decoration: none;}
 .btn-telegram-push:hover { background: #0088cc; color: #fff; }
 .expire-timer { font-size: 11px; font-weight: 700; color: #ff4d4d; display: flex; align-items: center; gap: 4px; margin-top: 6px; }
-
 /* CUPONS */
 .cupons-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
 .cupom-card { background: var(--surface); border: 1px dashed var(--border2); border-radius: 16px; padding: 24px; text-align: center; position: relative; transition: all 0.3s; }
 .cupom-card:hover { border-color: var(--accent); transform: translateY(-3px); }
 .cupom-codigo { background: var(--bg); padding: 12px; border-radius: 8px; font-family: monospace; font-size: 20px; font-weight: 800; color: var(--accent); letter-spacing: 2px; margin: 15px 0; border: 1px solid var(--border); user-select: all; cursor: copy; }
-
 /* LOGO EM CSS */
 .custom-logo-container { display: flex; align-items: center; gap: 10px; text-decoration: none; transition: transform 0.2s; }
 .custom-logo-container:hover { transform: scale(1.02); }
@@ -88,7 +81,6 @@ input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cur
 .custom-logo-text { display: flex; flex-direction: column; justify-content: center; align-items: center; }
 .custom-logo-text-top { font-family: 'Syne', sans-serif; font-size: 19px; font-weight: 800; line-height: 1; color: var(--text); letter-spacing: -0.5px; }
 .custom-logo-text-bottom { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 800; line-height: 1; color: var(--accent); font-style: italic; letter-spacing: 0.5px; margin-top: 3px; }
-
 /* NAVBAR E LAYOUT */
 #navbar{position:fixed;top:0;left:0;right:0;z-index:2000;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:70px;background:var(--navbar-bg);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:all .3s;}
 #navbar.scrolled{box-shadow:0 4px 40px rgba(0,0,0,.4)}
@@ -103,13 +95,11 @@ input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cur
 .nav-theme:hover{background:var(--surface3)}
 .nav-mobile-btn{display:none;width:38px;height:38px;border-radius:9px;background:var(--surface2);align-items:center;justify-content:center;flex-direction:column;gap:5px;border:1px solid var(--border)}
 .nav-mobile-btn span{display:block;width:18px;height:2px;background:var(--text);border-radius:2px;transition:.3s}
-
 #mobileMenu{display:none;position:fixed;top:70px;left:0;right:0;z-index:999;background:var(--bg2);border-bottom:1px solid var(--border);padding:16px;flex-direction:column;gap:4px;}
 #mobileMenu.open{display:flex}
 #mobileMenu .nav-btn{font-size:16px;padding:12px 16px;width:100%;text-align:left}
 .page{display:none;padding-top:70px}
 .page.active{display:block}
-
 /* HERO */
 #hero{min-height:calc(100vh - 70px);display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:60px;padding:80px 80px 80px;position:relative;overflow:hidden;max-width: 100vw;background:linear-gradient(135deg, var(--bg) 0%, var(--surface) 50%, var(--bg) 100%);}
 #hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 70% at 75% 50%, var(--accent-glow) 0%, transparent 70%);pointer-events:none;}
@@ -131,7 +121,6 @@ input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cur
 .hero-stat{text-align:left}
 .hero-stat-val{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--accent)}
 .hero-stat-label{font-size:12px;color:var(--text3);margin-top:2px;font-weight:500}
-
 /* MOCKUP E UI */
 .hero-mascot-side{display:flex;align-items:center;justify-content:center;position:relative;width: 100%;}
 .phone-mockup {width: 280px;height: 560px;background: var(--bg2);border: 12px solid var(--surface3);border-radius: 44px;position: relative;z-index: 10;box-shadow: 0 35px 70px rgba(0,0,0,0.6), inset 0 0 0 2px rgba(255,255,255,0.05);animation: floatPhone 6s ease-in-out infinite;overflow: hidden;}
@@ -149,14 +138,12 @@ input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cur
 .mock-msg strong {display: block;font-size: 13px;margin-bottom: 6px;color: var(--text);line-height: 1.3;}
 .mock-msg p {font-size: 11px;color: var(--text2);line-height: 1.5;margin-bottom: 0;}
 .mock-price {font-size: 15px;font-weight: 800;color: var(--accent);font-family: 'Syne', sans-serif;}
-
 .teteco-glow-bg{position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);width:340px;height:340px;background:radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);border-radius:50%;filter:blur(12px);animation:glow-pulse 4s ease-in-out infinite;z-index:1;}
 @keyframes glow-pulse{0%,100%{opacity:0.6;transform:translate(-50%, -50%) scale(1)} 50%{opacity:1;transform:translate(-50%, -50%) scale(1.15)}}
 .teteco-particles{position:absolute;inset:0;z-index:1;pointer-events:none}
 .particle{position:absolute;font-size:20px;animation:particle-float 4s ease-in-out infinite;opacity:0.85;pointer-events:none;}
 .p1{top:10%;left:5%;animation-delay:0s} .p2{top:25%;right:2%;animation-delay:0.8s} .p3{top:55%;left:2%;animation-delay:1.6s} .p4{top:70%;right:8%;animation-delay:2.4s} .p5{top:40%;left:-5%;animation-delay:1.2s}
 @keyframes particle-float{0%,100%{transform:translateY(0) rotate(0deg);opacity:0.7} 33%{transform:translateY(-12px) rotate(10deg);opacity:1} 66%{transform:translateY(6px) rotate(-8deg);opacity:0.8}}
-
 /* LISTAGENS E FILTROS */
 .section{padding:80px 80px} .section-alt{background:var(--bg2)}
 .section-label{display:inline-block;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:12px;}
@@ -184,7 +171,6 @@ input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cur
 .ord-btn.active{background:var(--surface3);color:var(--text);border-color:var(--accent)}
 .contagem-wrap{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
 #contagem{font-size:13px;color:var(--text3)}
-
 /* CARDS DE OFERTA */
 .ofertas-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px;}
 .oferta-card{background:var(--card-bg);border:1px solid var(--border);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;position:relative;transition:all .3s;}
@@ -209,19 +195,16 @@ input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cur
 .oferta-btn{flex:1;padding:10px;border-radius:10px;font-size:13px;font-weight:700;text-align:center;transition:all .2s;}
 .btn-partilhar{width:38px;flex-shrink:0;border-radius:10px;display:flex;align-items:center;justify-content:center;background:var(--surface2);border:1px solid var(--border2);color:var(--text2);transition:all .2s;}
 .btn-partilhar:hover{background:var(--surface3)}
-
 .ai-btn{width:38px;flex-shrink:0;border-radius:10px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg, var(--brand-blue), var(--accent));border:none; color:#fff; font-size:16px;transition:all .2s; box-shadow:0 0 15px rgba(255, 122, 0, 0.2);}
 .ai-btn:hover{transform:scale(1.08); box-shadow:0 4px 20px rgba(255, 122, 0, 0.4);}
 .teteco-avatar-bg {width: 100%;height: 100%;border-radius: 50%;background-image: url('teteco.png');background-size: 160%;background-position: center 15%;background-repeat: no-repeat;position: absolute;top: 0; left: 0;z-index: 2;}
 .fallback-emoji {position: absolute;z-index: 1;}
-
 #loadMoreTrigger{grid-column:1/-1;display:flex;justify-content:center;padding:24px}
 .loader-spinner{width:32px;height:32px;border:3px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite}
 .empty-state{grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--text3);font-size:15px;}
 .empty-state-icon{font-size:48px;margin-bottom:16px}
 .skeleton{background:linear-gradient(90deg,var(--surface) 25%,var(--surface2) 50%,var(--surface) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:8px}
 @keyframes shimmer{0%{background-position:200% 0} 100%{background-position:-200% 0}}
-
 /* WIDGETS GERAIS */
 .destaque-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px;}
 .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:60px;}
@@ -235,7 +218,6 @@ input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cur
 .social-card:hover{transform:translateY(-4px);border-color:var(--border2);box-shadow:0 10px 30px var(--shadow)}
 .social-icon{font-size:28px}
 .social-card span{font-size:13px;font-weight:600;color:var(--text2)}
-
 .form-box{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:36px;max-width:640px;margin:0 auto;}
 .form-title{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;margin-bottom:6px}
 .form-sub{color:var(--text2);font-size:14px;margin-bottom:28px}
@@ -254,7 +236,6 @@ input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cur
 .fav-empty{text-align:center;padding:80px 20px;color:var(--text3)}
 .fav-empty .emoji{font-size:56px;margin-bottom:16px}
 .fav-empty h3{font-size:20px;font-weight:700;color:var(--text);margin-bottom:8px}
-
 /* CHAT */
 .chat-fab{position:fixed;bottom:24px;right:24px;z-index:300;width:60px;height:60px;border-radius:50%;background:var(--surface2);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font-size:32px; box-shadow:0 4px 20px var(--accent-glow);cursor:pointer;transition:all .3s;padding:0;}
 .chat-fab:hover{transform:scale(1.08);box-shadow:0 6px 30px var(--accent-glow)}
@@ -288,7 +269,6 @@ input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cur
 #chatSendBtn{width:38px;height:38px;border-radius:10px;flex-shrink:0;background:var(--accent);color:#fff;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .2s;}
 #chatSendBtn:hover{transform:scale(1.05)}
 #chatSendBtn:disabled{opacity:.4;cursor:not-allowed;transform:none}
-
 /* MODAIS */
 .ai-modal {position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 3000; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(5px);}
 .ai-modal.open { display: flex; animation: fadeIn .3s ease; }
@@ -296,7 +276,6 @@ input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cur
 @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 .ai-modal-header {display:flex; align-items:center; gap:10px; margin-bottom:16px; border-bottom: 1px solid var(--border); padding-bottom: 12px;}
 .ai-modal-body {font-size:14px; line-height:1.6; color:var(--text2); max-height:60vh; overflow-y:auto; padding-right:8px;}
-
 /* NEWSLETTER & FOOTER */
 .newsletter-section {background: var(--surface2);padding: 60px 20px;text-align: center;border-top: 1px solid var(--border);}
 .newsletter-box {max-width: 600px;margin: 0 auto;}
@@ -314,7 +293,6 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:40px 80px
 .footer-social{width:38px;height:38px;border-radius:9px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text3);transition:all .2s;}
 .footer-social:hover{color:var(--text);border-color:var(--border2)}
 .footer-copy{text-align:center;margin-top:28px;padding-top:20px;border-top:1px solid var(--border);color:var(--text3);font-size:12px;max-width:1400px;margin-left:auto;margin-right:auto;}
-
 /* UTILITÁRIOS */
 #btnScrollTop{display:none;position:fixed;bottom:96px;left:24px;z-index:99;width:42px;height:42px;border-radius:10px;background:var(--surface);border:1px solid var(--border2);color:var(--text2);font-size:18px;align-items:center;justify-content:center;transition:all .2s;box-shadow:0 4px 15px var(--shadow);}
 #btnScrollTop:hover{background:var(--surface3)}
@@ -329,7 +307,6 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:40px 80px
 .fade-up{animation:fade-up .5s ease both}
 @keyframes fade-up{from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)}}
 .lazy-img{opacity:0;transition:opacity .3s}
-
 /* RESPONSIVE */
 @media(max-width:1024px){
   #hero{grid-template-columns:1fr;padding:60px 40px;min-height:auto;gap:40px}
@@ -349,7 +326,6 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:40px 80px
 </style>
 </head>
 <body>
-
 <!-- NAVBAR -->
 <nav id="navbar">
   <div class="nav-logo">
@@ -377,13 +353,12 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:40px 80px
   <div class="nav-actions">
     <button class="nav-theme" onclick="window.toggleTema()">🌓</button>
     <a class="nav-cta" href="https://t.me/ocacadordeoferta" target="_blank">
-      <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.94z"/></svg> 
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.94z"/></svg>
       <span class="desktop-only">Entrar no Grupo</span>
     </a>
     <button class="nav-mobile-btn" onclick="window.toggleMenu()"><span></span><span></span><span></span></button>
   </div>
 </nav>
-
 <!-- MOBILE MENU -->
 <div id="mobileMenu">
   <button class="nav-btn" data-page="home" onclick="window.navegar('home')">Início</button>
@@ -392,33 +367,30 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:40px 80px
   <button class="nav-btn" data-page="favoritos" onclick="window.navegar('favoritos')">❤️ Favoritos</button>
   <button class="nav-btn" data-page="pedir" onclick="window.navegar('pedir')">Pedir Oferta</button>
 </div>
-
 <!-- ═══ PÁGINA HOME ═══ -->
 <div class="page active" id="page-home">
   <section id="hero">
     <div class="teteco-particles">
       <div class="particle p1">🏷️</div><div class="particle p2">💰</div><div class="particle p3">🛒</div>
     </div>
-    
+   
     <div class="hero-text-side fade-up">
       <div class="hero-badge">🔥 OFERTAS ATUALIZADAS 24/7</div>
       <h1 class="hero-title">Não pague o preço cheio.<br>Nós caçamos as <span class="accent">Melhores Ofertas</span>.</h1>
       <p class="hero-sub">Promoções imperdíveis da Amazon, Shopee, Mercado Livre e muito mais. O Teteco vasculha a internet para poupar o seu dinheiro.</p>
-      
+     
       <div class="hero-btns">
         <a class="btn-primary" href="https://t.me/ocacadordeoferta" target="_blank">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.94z"/></svg> 
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.94z"/></svg>
           Entrar no Grupo VIP
         </a>
         <button class="btn-ghost" onclick="window.navegar('ofertas')">Ver Catálogo</button>
       </div>
-
       <div class="hero-stats">
         <div class="hero-stat"><div class="hero-stat-val" id="stat-total">0</div><div class="hero-stat-label">Ofertas Ativas</div></div>
         <div class="hero-stat"><div class="hero-stat-val">24h</div><div class="hero-stat-label">Monitoramento</div></div>
       </div>
     </div>
-
     <!-- MOCKUP CELULAR -->
     <div class="hero-mascot-side fade-up fade-up-1">
       <div class="teteco-glow-bg"></div>
@@ -444,7 +416,6 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:40px 80px
       </div>
     </div>
   </section>
-
   <!-- STATS -->
   <section class="section section-alt">
     <div class="stats-row" id="statsGrid">
@@ -459,21 +430,19 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:40px 80px
     </div>
     <div class="destaque-grid" id="destaqueGrid"></div>
   </section>
-
   <!-- REDES SOCIAIS -->
   <section class="section">
     <div style="text-align:center;max-width:600px;margin:0 auto 40px"><span class="section-label">Comunidade</span><h2 class="section-title">📱 Não perca nenhuma oferta</h2><p class="section-sub" style="margin:0 auto">As ofertas relâmpago esgotam em minutos. Siga o Caçador nas suas redes favoritas e seja o primeiro a saber.</p></div>
     <div class="social-grid" id="socialGrid"></div>
   </section>
 </div>
-
 <!-- ═══ OFERTAS ═══ -->
 <div class="page" id="page-ofertas">
   <section class="section">
     <span class="section-label">Catálogo Completo</span>
     <h1 class="section-title fade-up">🏷️ Todas as Ofertas</h1>
     <p class="section-sub fade-up fade-up-1">Busque, filtre e ordene as melhores promoções da internet.</p>
-    
+   
     <div class="filtros-wrap fade-up fade-up-1">
       <div class="busca-input-wrap">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
@@ -481,7 +450,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:40px 80px
         <div id="autocompleteResults" class="autocomplete-list"></div>
       </div>
       <div class="lojas-scroll" id="lojasFilter"></div>
-      
+     
       <div class="price-slider-wrap">
         <div class="price-slider-info">
           <span>Filtrar por Preço:</span>
@@ -489,7 +458,6 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:40px 80px
         </div>
         <input type="range" id="priceFilter" min="0" max="15000" step="100" value="15000" oninput="window.updatePriceFilterDisplay()" onchange="window.filtrarOfertas()">
       </div>
-
       <div class="ord-wrap">
         <span class="ord-label">Ordenar:</span>
         <button class="ord-btn active" data-ord="recente" onclick="window.ordenar('recente',this)">🕐 Mais Recente</button>
@@ -498,18 +466,15 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:40px 80px
         <button class="ord-btn" data-ord="maior" onclick="window.ordenar('maior',this)">💎 Maior Preço</button>
       </div>
     </div>
-
     <div class="refresh-bar fade-up fade-up-2" id="refreshBar">
       <div style="display:flex;align-items:center;gap:8px"><div class="refresh-dot"></div><span>Monitoramento Ativo</span></div>
       <span id="refreshStatus">Atualizando...</span>
     </div>
-
     <div class="contagem-wrap fade-up fade-up-2"><div id="contagem">Carregando ofertas...</div></div>
     <div class="ofertas-grid" id="ofertasGrid"></div>
     <div id="loadMoreTrigger" style="display:none"><div class="loader-spinner"></div></div>
   </section>
 </div>
-
 <!-- ═══ FAVORITOS ═══ -->
 <div class="page" id="page-favoritos">
   <section class="section">
@@ -518,14 +483,13 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:40px 80px
     <div class="ofertas-grid" id="favoritosGrid"></div>
   </section>
 </div>
-
 <!-- ═══ CUPONS ═══ -->
 <div class="page" id="page-cupons">
   <section class="section">
     <span class="section-label">Descontos Extras</span>
     <h1 class="section-title fade-up">🎟️ Cupons de Desconto</h1>
     <p class="section-sub fade-up fade-up-1">Aplique estes códigos no carrinho de compras e poupe ainda mais.</p>
-    
+   
     <div class="cupons-grid fade-up fade-up-2">
       <div class="cupom-card">
         <div class="oferta-loja-badge" style="background:#FF990022;color:#FF9900;position:static;display:inline-block;margin-bottom:10px;">Amazon</div>
@@ -548,7 +512,6 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:40px 80px
     </div>
   </section>
 </div>
-
 <!-- ═══ PEDIR OFERTA ═══ -->
 <div class="page" id="page-pedir">
   <section class="section">
@@ -563,7 +526,6 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:40px 80px
     </div>
   </section>
 </div>
-
 <!-- ═══ NEWSLETTER ═══ -->
 <section class="newsletter-section">
   <div class="newsletter-box fade-up">
@@ -576,7 +538,6 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:40px 80px
     <p style="font-size:12px;color:var(--text3);margin-top:12px;">A newsletter está sendo preparada. Enquanto isso, receba ofertas em tempo real no nosso <a href="https://t.me/ocacadordeoferta" target="_blank" style="color:var(--accent);font-weight:600;">Grupo do Telegram</a>.</p>
   </div>
 </section>
-
 <!-- ═══ FOOTER ═══ -->
 <footer>
   <div class="footer-inner">
@@ -599,12 +560,10 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:40px 80px
   </div>
   <div class="footer-copy">© 2026 O Caçador de Ofertas. Powered by Teteco Bot AI 🤖.<br>Nós recebemos uma comissão por compras feitas através dos nossos links, sem custo adicional para si.</div>
 </footer>
-
 <!-- ═══ COMPONENTES FLUTUANTES E MODAIS ═══ -->
 <div id="toast-container" aria-live="polite"></div>
 <button id="btnScrollTop" onclick="window.scrollTo(0,0)" title="Voltar ao topo"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
 <button class="fab-busca" id="fabBusca" onclick="window.navegar('ofertas')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>Procurar Oferta</button>
-
 <div class="ai-modal" id="aiModal">
   <div class="ai-modal-content">
     <button class="chat-close" onclick="window.fecharAiModal()" style="position:absolute; top:16px; right:16px; color:var(--text); background:none; border:none; font-size:20px; cursor:pointer;">✕</button>
@@ -612,7 +571,6 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:40px 80px
     <div class="ai-modal-body" id="aiModalBody"></div>
   </div>
 </div>
-
 <div class="ai-modal" id="alertaModal">
   <div class="ai-modal-content" style="border-color: var(--brand-blue); max-width: 400px; text-align: center;">
     <button class="chat-close" onclick="document.getElementById('alertaModal').classList.remove('open')" style="position:absolute; top:16px; right:16px; color:var(--text); background:none; border:none; font-size:20px; cursor:pointer;">✕</button>
@@ -629,7 +587,6 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:40px 80px
     <button class="btn-primary" style="width:100%; justify-content:center;" onclick="window.salvarAlerta()">Ativar Alerta Diário</button>
   </div>
 </div>
-
 <!-- ═══ CHATBOT IA ═══ -->
 <button class="chat-fab" id="chatFab" onclick="window.toggleChat()" aria-label="Abrir assistente virtual Teteco">
   <div id="chatFabIcon" style="width: 100%; height: 100%; position: relative; display: flex; align-items: center; justify-content: center; border-radius: 50%; overflow: hidden;">
@@ -639,7 +596,6 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:40px 80px
   <span id="chatFabClose" style="display:none; font-size: 20px;">✕</span>
   <div class="badge-notif" id="chatBadge" style="display:none"></div>
 </button>
-
 <div class="chat-window" id="chatWindow">
   <div class="chat-header">
     <div class="chat-avatar" aria-hidden="true" style="position: relative; display: flex; align-items: center; justify-content: center; font-size: 22px;">
@@ -662,26 +618,24 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:40px 80px
     <button id="chatSendBtn" onclick="window.enviarMsg()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg></button>
   </div>
 </div>
-
 <script>
-// ==========================================================================
-// LÓGICA JAVASCRIPT: CONFIGURAÇÕES GERAIS E DADOS
-// ==========================================================================
+// ==========================================
+// CONFIGURAÇÕES GERAIS E DADOS
+// ==========================================
 const GEMINI_PROXY_URL = "/api/gemini";
 const CONFIG = {
-    SHEET_ID: "1Ug9wQKO9HfCRrTsjZz8gDe7dCVDxXH2ehMC3nGkb6Xw", 
+    SHEET_ID: "1Ug9wQKO9HfCRrTsjZz8gDe7dCVDxXH2ehMC3nGkb6Xw",
     SHEET_TAB: "Página1",
-    TELEGRAM: "https://t.me/ocacadordeoferta", 
+    TELEGRAM: "https://t.me/ocacadordeoferta",
     INSTAGRAM: "https://www.instagram.com/ocacadorde_ofertas",
-    TIKTOK: "https://www.tiktok.com/@o.cacador.de.oferta", 
+    TIKTOK: "https://www.tiktok.com/@o.cacador.de.oferta",
     FACEBOOK: "https://www.facebook.com/share/18X4uDszrG/",
     TWITTER: "https://x.com/ocacadordeoferta",
-    REFRESH_INTERVAL: 2 * 60 * 60 * 1000, 
-    HORAS_NOVO: 24, 
-    DIAS_EXPIRACAO: 7, 
+    REFRESH_INTERVAL: 2 * 60 * 60 * 1000,
+    HORAS_NOVO: 24,
+    DIAS_EXPIRACAO: 7,
     ITEMS_PER_PAGE: 12
 };
-
 const LOJAS = {
     todas: { nome: "Todas", emoji: "🔥", cor: "#ff4d00" }, amazon: { nome: "Amazon", emoji: "📦", cor: "#FF9900" },
     shopee: { nome: "Shopee", emoji: "🧡", cor: "#EE4D2D" }, magalu: { nome: "Magalu", emoji: "💙", cor: "#0086FF" },
@@ -690,29 +644,21 @@ const LOJAS = {
     submarino: { nome: "Submarino", emoji: "🚢", cor: "#0033A0" }, netshoes: { nome: "Netshoes", emoji: "👟", cor: "#007A4C" },
     outras: { nome: "Outras", emoji: "🏷️", cor: "#8B5CF6" }
 };
-
 const REDES = [
     { nome: "Telegram", url: CONFIG.TELEGRAM, svg: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.94z"/></svg>', cor: "#0088CC" },
     { nome: "Instagram", url: CONFIG.INSTAGRAM, svg: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>', cor: "#E4405F" },
     { nome: "TikTok", url: CONFIG.TIKTOK, svg: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.16-3.44-3.37-3.46-5.7-.02-1.43.34-2.84 1.05-4.04 1.63-2.64 4.88-3.9 7.82-2.92v4.06c-1.12-.4-2.42-.31-3.43.3-1.05.62-1.68 1.78-1.62 3.02.04 1.15.68 2.21 1.7 2.76 1.06.56 2.4.61 3.49.12 1.15-.52 1.88-1.68 1.91-2.96.06-4.57.01-9.15.03-13.73l-.02-.02z"/></svg>', cor: "#fff" },
     { nome: "Facebook", url: CONFIG.FACEBOOK, svg: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm3 8h-1.35c-.538 0-.65.221-.65.778v1.222h2l-.209 2h-1.791v7h-3v-7h-2v-2h2v-2.308c0-1.769.931-2.692 3.029-2.692h1.971v3z"/></svg>', cor: "#1877F2" }
 ];
-
 let todasOfertas = [], lojaAtual = "todas", ordemAtual = "recente", debounceTimer = null, refreshTimer = null, ultimaAtualizacao = null, paginaAtual = 1, observerIntersection = null, formLojaSelecionada = "", chatOpen = false, chatHistorico = [];
-
-// ==========================================================================
-// FUNÇÕES ÚTEIS E COMUNICAÇÃO COM O GEMINI
-// ==========================================================================
-
+// ==========================================
+// FUNÇÕES ÚTEIS
+// ==========================================
 async function chamarGemini(promptTexto, systemInst = "", historico = []) {
     let delay = 1000;
     for (let i = 0; i < 3; i++) {
         try {
-            const response = await fetch(GEMINI_PROXY_URL, { 
-                method: "POST", 
-                headers: { "Content-Type": "application/json" }, 
-                body: JSON.stringify({ prompt: promptTexto, systemInstruction: systemInst || undefined, history: historico.length > 0 ? historico : undefined }) 
-            });
+            const response = await fetch(GEMINI_PROXY_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ prompt: promptTexto, systemInstruction: systemInst || undefined, history: historico.length > 0 ? historico : undefined }) });
             const result = await response.json();
             if (!response.ok) throw new Error(`Proxy Error: ${response.status} - ${result.error || response.statusText}`);
             return result.text;
@@ -722,146 +668,98 @@ async function chamarGemini(promptTexto, systemInst = "", historico = []) {
         }
     }
 }
-
-function _formatarRespostaIA(txt) { 
-    return txt ? txt.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/\*(.*?)\*/g, '<i>$1</i>').replace(/\n/g, '<br>') : ""; 
+function _formatarRespostaIA(txt) {
+    return txt ? txt.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/\*(.*?)\*/g, '<i>$1</i>').replace(/\n/g, '<br>') : "";
 }
-
 function initTema() {
     const theme = localStorage.getItem("cdf_theme") || "dark";
     document.documentElement.setAttribute("data-theme", theme);
     document.getElementById("themeColor").setAttribute("content", theme === "dark" ? "#09101a" : "#f4f7fb");
-    if ('serviceWorker' in navigator) { 
-        window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(()=>{})); 
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(()=>{}));
     }
 }
-
 function toggleTema() {
     const next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
     document.documentElement.setAttribute("data-theme", next); localStorage.setItem("cdf_theme", next);
     document.getElementById("themeColor").setAttribute("content", next === "dark" ? "#09101a" : "#f4f7fb");
 }
-
 const esc = s => String(s).replace(/[&<>'"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' }[c]));
 const formatarMoeda = v => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-
-// Segurança Extra
-function safeHTML(html) { 
-    return String(html).replace(/<script/gi, "&lt;script"); 
+function safeHTML(html) {
+    return String(html).replace(/<script/gi, "&lt;script");
 }
-
-function parsePreco(val) { 
-    if (typeof val === 'number') return val; 
-    if (!val) return 0; 
-    const s = String(val).trim(); 
-    return s.includes(',') ? parseFloat(s.replace(/[R$\s\.]/g, '').replace(',', '.')) || 0 : parseFloat(s.replace(/[R$\s]/g, '')) || 0; 
+function parsePreco(val) {
+    if (typeof val === 'number') return val;
+    if (!val) return 0;
+    const s = String(val).trim();
+    return s.includes(',') ? parseFloat(s.replace(/[R$\s\.]/g, '').replace(',', '.')) || 0 : parseFloat(s.replace(/[R$\s]/g, '')) || 0;
 }
-
-function parseDataCustom(str) { 
-    if (!str) return NaN; 
-    const parts = str.split(/[\s/:]+/); 
-    return parts.length >= 3 ? new Date(parseInt(parts[2], 10), parseInt(parts[1], 10) - 1, parseInt(parts[0], 10), parts[3] ? parseInt(parts[3], 10) : 0, parts[4] ? parseInt(parts[4], 10) : 0).getTime() : Date.parse(str); 
+function parseDataCustom(str) {
+    if (!str) return NaN;
+    const parts = str.split(/[\s/:]+/);
+    return parts.length >= 3 ? new Date(parseInt(parts[2], 10), parseInt(parts[1], 10) - 1, parseInt(parts[0], 10), parts[3] ? parseInt(parts[3], 10) : 0, parts[4] ? parseInt(parts[4], 10) : 0).getTime() : Date.parse(str);
 }
-
-function normalizarLoja(raw) { 
-    const v = raw.toLowerCase().trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, ""); 
-    const mapa = { amazon: ["amazon"], shopee: ["shopee"], magalu: ["magalu","magazineluiza","magazine","luiza"], mercadolivre: ["mercadolivre","meli","ml","mercado"], aliexpress: ["aliexpress","ali"], americanas: ["americanas"], casasbahia: ["casasbahia","casas","bahia"], submarino: ["submarino"], netshoes: ["netshoes"] }; 
-    for (const [k, a] of Object.entries(mapa)) if (a.some(x => v.includes(x))) return k; return "outras"; 
+function normalizarLoja(raw) {
+    const v = raw.toLowerCase().trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, "");
+    const mapa = { amazon: ["amazon"], shopee: ["shopee"], magalu: ["magalu","magazineluiza","magazine","luiza"], mercadolivre: ["mercadolivre","meli","ml","mercado"], aliexpress: ["aliexpress","ali"], americanas: ["americanas"], casasbahia: ["casasbahia","casas","bahia"], submarino: ["submarino"], netshoes: ["netshoes"] };
+    for (const [k, a] of Object.entries(mapa)) if (a.some(x => v.includes(x))) return k; return "outras";
 }
-
 function salvarCache(data) { try { localStorage.setItem("cdf_v2_cache", JSON.stringify({ ts: Date.now(), data })); } catch {} }
-
-function lerCache() { 
-    try { 
-        const raw = localStorage.getItem("cdf_v2_cache"); 
-        if (!raw) return null; 
-        const { ts, data } = JSON.parse(raw); 
-        return Date.now() - ts > CONFIG.REFRESH_INTERVAL ? null : data; 
-    } catch { 
-        return null; 
-    } 
-}
-
+function lerCache() { try { const raw = localStorage.getItem("cdf_v2_cache"); if (!raw) return null; const { ts, data } = JSON.parse(raw); return Date.now() - ts > CONFIG.REFRESH_INTERVAL ? null : data; } catch { return null; } }
 function getFavoritos() { try { return JSON.parse(localStorage.getItem("cdf_favs") || "[]"); } catch { return []; } }
 function salvarFavoritos(ids) { try { localStorage.setItem("cdf_favs", JSON.stringify(ids)); } catch {} }
 function isFavorito(id) { return getFavoritos().includes(id); }
-
-function toggleFavorito(id) { 
-    const favs = getFavoritos(), idx = favs.indexOf(id); 
-    if (idx === -1) { 
-        favs.push(id); 
-        mostrarToast("❤️", `Salvo nos favoritos!`); 
-    } else { 
-        favs.splice(idx, 1); 
-        mostrarToast("💔", `Removido!`); 
-    } 
-    salvarFavoritos(favs); 
-    
-    document.querySelectorAll(`.btn-favorito[data-id="${id}"]`).forEach(btn => { 
-        btn.innerHTML = isFavorito(id) ? "❤️" : "🤍"; 
-        btn.classList.toggle("ativo", isFavorito(id)); 
-        btn.setAttribute("aria-label", isFavorito(id) ? "Remover dos favoritos" : "Adicionar aos favoritos"); 
-    }); 
-    
-    if (document.getElementById("page-favoritos").classList.contains("active")) {
-        renderFavoritos(); 
+function toggleFavorito(id) {
+    const favs = getFavoritos(), idx = favs.indexOf(id);
+    if (idx === -1) { favs.push(id); mostrarToast("❤️", `Salvo nos favoritos!`); }
+    else { favs.splice(idx, 1); mostrarToast("💔", `Removido!`); }
+    salvarFavoritos(favs);
+    document.querySelectorAll(`.btn-favorito[data-id="${id}"]`).forEach(btn => {
+        btn.innerHTML = isFavorito(id) ? "❤️" : "🤍";
+        btn.classList.toggle("ativo", isFavorito(id));
+        btn.setAttribute("aria-label", isFavorito(id) ? "Remover dos favoritos" : "Adicionar aos favoritos");
+    });
+    if (document.getElementById("page-favoritos").classList.contains("active")) renderFavoritos();
+}
+function compartilharOferta(titulo, link) {
+    if (navigator.share) {
+        navigator.share({ title: 'O Caçador de Ofertas', text: `🔥 Olha essa promoção: ${titulo}`, url: link }).catch(()=>{});
+    } else if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(`${titulo}\n${link}`).then(() => mostrarToast("🔗", "Link copiado!"));
+    } else {
+        const el = document.createElement('textarea'); el.value = `${titulo}\n${link}`; el.style.position = 'fixed'; el.style.opacity = '0'; document.body.appendChild(el); el.select();
+        try { document.execCommand('copy'); mostrarToast("🔗", "Link copiado!"); } catch {}
+        document.body.removeChild(el);
     }
 }
-
-function compartilharOferta(titulo, link) { 
-    if (navigator.share) { 
-        navigator.share({ title: 'O Caçador de Ofertas', text: `🔥 Olha essa promoção: ${titulo}`, url: link }).catch(()=>{}); 
-    } else if (navigator.clipboard && navigator.clipboard.writeText) { 
-        navigator.clipboard.writeText(`${titulo}\n${link}`).then(() => mostrarToast("🔗", "Link copiado!")); 
-    } else { 
-        const el = document.createElement('textarea'); 
-        el.value = `${titulo}\n${link}`; 
-        el.style.position = 'fixed'; 
-        el.style.opacity = '0'; 
-        document.body.appendChild(el); 
-        el.select(); 
-        try { 
-            document.execCommand('copy'); 
-            mostrarToast("🔗", "Link copiado!"); 
-        } catch {} 
-        document.body.removeChild(el); 
-    } 
+function mostrarToast(icon, msg) {
+    const container = document.getElementById("toast-container"), toast = document.createElement("div");
+    toast.className = "toast";
+    toast.innerHTML = `<span class="toast-icon">${icon}</span><span>${esc(msg)}</span>`;
+    container.appendChild(toast);
+    setTimeout(() => { toast.classList.add("saindo"); setTimeout(() => toast.remove(), 350); }, 3000);
 }
-
-function mostrarToast(icon, msg) { 
-    const container = document.getElementById("toast-container"), toast = document.createElement("div"); 
-    toast.className = "toast"; 
-    toast.innerHTML = `<span class="toast-icon">${icon}</span><span>${esc(msg)}</span>`; 
-    container.appendChild(toast); 
-    setTimeout(() => { 
-        toast.classList.add("saindo"); 
-        setTimeout(() => toast.remove(), 350); 
-    }, 3000); 
+function initLazyLoading() {
+    if (observerIntersection) observerIntersection.disconnect();
+    observerIntersection = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && entry.target.dataset.src) {
+                entry.target.src = entry.target.dataset.src;
+                entry.target.onload = () => entry.target.style.opacity = 1;
+                entry.target.removeAttribute('data-src');
+                observerIntersection.unobserve(entry.target);
+            }
+        });
+    });
+    document.querySelectorAll('.lazy-img').forEach(img => observerIntersection.observe(img));
 }
-
-function initLazyLoading() { 
-    if (observerIntersection) observerIntersection.disconnect(); 
-    observerIntersection = new IntersectionObserver(entries => { 
-        entries.forEach(entry => { 
-            if (entry.isIntersecting && entry.target.dataset.src) { 
-                entry.target.src = entry.target.dataset.src; 
-                entry.target.onload = () => entry.target.style.opacity = 1; 
-                entry.target.removeAttribute('data-src'); 
-                observerIntersection.unobserve(entry.target); 
-            } 
-        }); 
-    }); 
-    document.querySelectorAll('.lazy-img').forEach(img => observerIntersection.observe(img)); 
+function getSkeletonsHTML(qtd = 6) {
+    return Array(qtd).fill().map(() => `<div class="oferta-card" style="border:none;box-shadow:none"><div class="skeleton" style="height:180px;width:100%;border-radius:18px 18px 0 0"></div><div class="oferta-body" style="gap:10px"><div class="skeleton" style="height:12px;width:40%"></div><div class="skeleton" style="height:36px;width:100%"></div><div class="skeleton" style="height:24px;width:60%;margin-top:4px"></div><div class="skeleton" style="height:40px;width:100%;border-radius:10px;margin-top:auto"></div></div></div>`).join("");
 }
-
-function getSkeletonsHTML(qtd = 6) { 
-    return Array(qtd).fill().map(() => `<div class="oferta-card" style="border:none;box-shadow:none"><div class="skeleton" style="height:180px;width:100%;border-radius:18px 18px 0 0"></div><div class="oferta-body" style="gap:10px"><div class="skeleton" style="height:12px;width:40%"></div><div class="skeleton" style="height:36px;width:100%"></div><div class="skeleton" style="height:24px;width:60%;margin-top:4px"></div><div class="skeleton" style="height:40px;width:100%;border-radius:10px;margin-top:auto"></div></div></div>`).join(""); 
-}
-
-// ==========================================================================
+// ==========================================
 // INTEGRAÇÕES DE DADOS (PLANILHA E SHOPEE)
-// ==========================================================================
-
+// ==========================================
 async function carregarOfertasShopee() {
     try {
         let historicoShopee = [];
@@ -869,19 +767,16 @@ async function carregarOfertasShopee() {
             const cache = localStorage.getItem("cdf_shopee_history");
             if (cache) historicoShopee = JSON.parse(cache);
         } catch(e) {}
-
         const maxIdadeMs = CONFIG.DIAS_EXPIRACAO * 24 * 60 * 60 * 1000;
         const agora = Date.now();
         historicoShopee = historicoShopee.filter(o => (agora - o.timestamp) <= maxIdadeMs);
-
         const response = await fetch('/api/shopee');
         if (response.ok) {
             const ofertasApi = await response.json();
             if (ofertasApi && ofertasApi.length > 0) {
                 const maxId = todasOfertas.length > 0 ? Math.max(...todasOfertas.map(o => o.id)) : 0;
-                
                 const novasFormatadas = ofertasApi.map((oferta, index) => ({
-                    id: maxId + 1000 + index, 
+                    id: maxId + 1000 + index,
                     loja: "shopee",
                     titulo: oferta.offerName || "Oferta Shopee",
                     precoAntigo: oferta.price || 0,
@@ -894,695 +789,363 @@ async function carregarOfertasShopee() {
                     ativo: true,
                     timestamp: agora
                 }));
-
                 novasFormatadas.forEach(nova => {
                     const existe = historicoShopee.find(h => h.link === nova.link);
-                    if (!existe) historicoShopee.unshift(nova); 
+                    if (!existe) historicoShopee.unshift(nova);
                 });
             }
         }
-
         localStorage.setItem("cdf_shopee_history", JSON.stringify(historicoShopee));
         todasOfertas = [...todasOfertas, ...historicoShopee];
-
     } catch (err) {
         console.warn("Erro ao buscar Shopee:", err);
     }
 }
-
 async function carregarOfertas(silencioso = false) {
     if (!CONFIG.SHEET_ID || CONFIG.SHEET_ID.includes("COLE")) return;
-    
-    if (!silencioso) { 
-        const dest = document.getElementById("destaqueGrid"), oft = document.getElementById("ofertasGrid"); 
-        if(dest) dest.innerHTML = getSkeletonsHTML(4); 
-        if(oft) oft.innerHTML = getSkeletonsHTML(8); 
-        const cached = lerCache(); 
-        if (cached) { todasOfertas = cached; renderizarTudo(); } 
+   
+    if (!silencioso) {
+        const dest = document.getElementById("destaqueGrid"), oft = document.getElementById("ofertasGrid");
+        if(dest) dest.innerHTML = getSkeletonsHTML(4);
+        if(oft) oft.innerHTML = getSkeletonsHTML(8);
+        const cached = lerCache();
+        if (cached) { todasOfertas = cached; renderizarTudo(); }
     }
-    
-    const refreshBar = document.getElementById("refreshBar"); 
+   
+    const refreshBar = document.getElementById("refreshBar");
     if (refreshBar) refreshBar.classList.add("atualizando");
-
     try {
         const controller = new AbortController(), timeout = setTimeout(() => controller.abort(), 10000);
         const resp = await fetch(`https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(CONFIG.SHEET_TAB)}`, { signal: controller.signal });
-        clearTimeout(timeout); 
-        const text = await resp.text();
-        
+        clearTimeout(timeout); const text = await resp.text();
         if (text.includes("Sign in") || text.trim().startsWith("<")) throw new Error("Privada");
-        
+       
         const json = JSON.parse(text.substring(text.indexOf("(") + 1, text.lastIndexOf(")"))), cols = json.table.cols.map(c => (c.label || "").toLowerCase().trim());
         const COL_MAP = { loja: { nomes: ["loja"], idx: 0 }, titulo: { nomes: ["titulo","título","nome"], idx: 1 }, preco_antigo: { nomes: ["preco_antigo","preço_antigo"], idx: 2 }, preco_novo: { nomes: ["preco_novo","preço_novo"], idx: 3 }, link: { nomes: ["link","url"], idx: 4 }, data: { nomes: ["data","date"], idx: 5 }, emoji: { nomes: ["emoji"], idx: 6 }, categoria: { nomes: ["categoria"], idx: 7 }, selo: { nomes: ["selo"], idx: 8 }, ativo: { nomes: ["ativo"], idx: 9 }, imagem: { nomes: ["imagem","img"], idx: 10 } };
-        
-        const colIdx = {}; 
-        for (const [campo, config] of Object.entries(COL_MAP)) { 
-            let enc = -1; 
-            for (const nome of config.nomes) { 
-                const idx = cols.indexOf(nome); 
-                if (idx >= 0) { enc = idx; break; } 
-            } 
-            colIdx[campo] = enc >= 0 ? enc : config.idx; 
-        }
-        
+        const colIdx = {}; for (const [campo, config] of Object.entries(COL_MAP)) { let enc = -1; for (const nome of config.nomes) { const idx = cols.indexOf(nome); if (idx >= 0) { enc = idx; break; } } colIdx[campo] = enc >= 0 ? enc : config.idx; }
         const getCel = (row, campo) => { const idx = colIdx[campo]; return (idx >= 0 && idx < row.c.length && row.c[idx]) ? row.c[idx].v || "" : ""; };
-        
+       
         const novas = json.table.rows.map((row, i) => {
             const pA = parsePreco(getCel(row, "preco_antigo")), pN = parsePreco(getCel(row, "preco_novo"));
-            let ts = getCel(row, "data") ? parseDataCustom(String(getCel(row, "data"))) : (Date.now() - i * 60000); 
-            if (isNaN(ts)) ts = Date.now() - i * 60000;
+            let ts = getCel(row, "data") ? parseDataCustom(String(getCel(row, "data"))) : (Date.now() - i * 60000); if (isNaN(ts)) ts = Date.now() - i * 60000;
             const ativoStr = String(getCel(row, "ativo")).toLowerCase().trim(), ativo = !["nao", "não", "false", "0"].includes(ativoStr);
             const colEmoji = String(getCel(row, "emoji") || ""), colImagem = String(getCel(row, "imagem") || ""), isUrl = s => s && (String(s).startsWith("http") || String(s).startsWith("//"));
-            
-            return { 
-                id: i + 1, 
-                loja: normalizarLoja(String(getCel(row, "loja") || "")), 
-                titulo: getCel(row, "titulo") || "Produto Oferta", 
-                precoAntigo: pA, 
-                precoNovo: pN, 
-                desconto: pA > 0 && pA > pN ? Math.round((1 - pN / pA) * 100) : 0, 
-                link: getCel(row, "link") || "#", 
-                img: isUrl(colImagem) ? colImagem : (isUrl(colEmoji) ? colEmoji : "") || (!isUrl(colEmoji) && colEmoji ? colEmoji : "🛒"), 
-                categoria: getCel(row, "categoria") || "Geral", 
-                selo: getCel(row, "selo") || "", 
-                ativo, 
-                timestamp: ts 
-            };
-        }).filter(o => { 
-            const maxIdadeMs = CONFIG.DIAS_EXPIRACAO * 24 * 60 * 60 * 1000; 
-            return o.ativo && o.precoNovo > 0 && (Date.now() - o.timestamp) <= maxIdadeMs; 
-        });
-
-        if (silencioso && todasOfertas.length > 0) { 
-            const qtdNovos = novas.length - todasOfertas.length; 
-            if (qtdNovos > 0) mostrarToast("🔥", `${qtdNovos} novas ofertas!`); 
-        }
-        
-        todasOfertas = novas; 
-        await carregarOfertasShopee(); 
-        ultimaAtualizacao = Date.now(); 
+            return { id: i + 1, loja: normalizarLoja(String(getCel(row, "loja") || "")), titulo: getCel(row, "titulo") || "Produto Oferta", precoAntigo: pA, precoNovo: pN, desconto: pA > 0 && pA > pN ? Math.round((1 - pN / pA) * 100) : 0, link: getCel(row, "link") || "#", img: isUrl(colImagem) ? colImagem : (isUrl(colEmoji) ? colEmoji : "") || (!isUrl(colEmoji) && colEmoji ? colEmoji : "🛒"), categoria: getCel(row, "categoria") || "Geral", selo: getCel(row, "selo") || "", ativo, timestamp: ts };
+        }).filter(o => { const maxIdadeMs = CONFIG.DIAS_EXPIRACAO * 24 * 60 * 60 * 1000; return o.ativo && o.precoNovo > 0 && (Date.now() - o.timestamp) <= maxIdadeMs; });
+        if (silencioso && todasOfertas.length > 0) { const qtdNovos = novas.length - todasOfertas.length; if (qtdNovos > 0) mostrarToast("🔥", `${qtdNovos} novas ofertas!`); }
+       
+        todasOfertas = novas;
+        await carregarOfertasShopee();
+        ultimaAtualizacao = Date.now();
         salvarCache(todasOfertas);
-
     } catch {}
-    
-    if (refreshBar) refreshBar.classList.remove("atualizando"); 
-    document.getElementById("refreshStatus").textContent = "Atualizado agora"; 
+   
+    if (refreshBar) refreshBar.classList.remove("atualizando");
+    document.getElementById("refreshStatus").textContent = "Atualizado agora";
     renderizarTudo();
 }
-
-function iniciarAutoRefresh() { 
-    if (refreshTimer) clearInterval(refreshTimer); 
-    refreshTimer = setInterval(() => carregarOfertas(true), CONFIG.REFRESH_INTERVAL); 
-    setInterval(() => { 
-        if(ultimaAtualizacao) {
-            document.getElementById("refreshStatus").textContent = `Atualizado há ${Math.round((Date.now()-ultimaAtualizacao)/60000)}m`; 
-        }
-    }, 60000); 
+function iniciarAutoRefresh() {
+    if (refreshTimer) clearInterval(refreshTimer);
+    refreshTimer = setInterval(() => carregarOfertas(true), CONFIG.REFRESH_INTERVAL);
+    setInterval(() => { if(ultimaAtualizacao) document.getElementById("refreshStatus").textContent = `Atualizado há ${Math.round((Date.now()-ultimaAtualizacao)/60000)}m`; }, 60000);
 }
-
-function aplicarOrdem(lista) { 
-    const c = [...lista]; 
-    switch (ordemAtual) { 
-        case "desconto": return c.sort((a, b) => b.desconto - a.desconto); 
-        case "menor": return c.sort((a, b) => a.precoNovo - b.precoNovo); 
-        case "maior": return c.sort((a, b) => b.precoNovo - a.precoNovo); 
-        case "recente": return c.sort((a, b) => b.timestamp - a.timestamp); 
-        default: return c; 
-    } 
+function aplicarOrdem(lista) {
+    const c = [...lista];
+    switch (ordemAtual) {
+        case "desconto": return c.sort((a, b) => b.desconto - a.desconto);
+        case "menor": return c.sort((a, b) => a.precoNovo - b.precoNovo);
+        case "maior": return c.sort((a, b) => b.precoNovo - a.precoNovo);
+        case "recente": return c.sort((a, b) => b.timestamp - a.timestamp);
+        default: return c;
+    }
 }
-
 function criarCardHTML(o, delayIdx) {
     const loja = LOJAS[o.loja] || LOJAS.outras, bgGrad = o.desconto >= 50 ? "linear-gradient(135deg, var(--accent), var(--accent2))" : "linear-gradient(135deg, var(--accent2), #ff9e00)", fav = isFavorito(o.id), novo = ((Date.now() - o.timestamp) / 3600000) <= CONFIG.HORAS_NOVO, expireTime = o.timestamp + (CONFIG.DIAS_EXPIRACAO * 24 * 60 * 60 * 1000);
     const imgContent = (o.img && (o.img.startsWith("http") || o.img.startsWith("//"))) ? `<img data-src="${esc(o.img)}" class="lazy-img" alt="${esc(o.titulo)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div style="display:none;font-size:56px">🛒</div>` : `<div style="font-size:56px">${esc(o.img)}</div>`;
     const parcelaHtml = o.precoNovo >= 50 ? `<span style="color:var(--text3);font-style:italic">Parcela na loja →</span>` : `<strong style="color:var(--green)">Preço acessível</strong>`;
-    
     return `
     <div class="oferta-card fade-up" style="animation-delay:${(delayIdx%10)*0.05}s">
-        <div class="badges-top-left">
-            ${o.desconto > 0 ? `<div class="oferta-desconto" style="background:${bgGrad}">-${o.desconto}%</div>` : ''}
-            ${o.selo ? `<div class="oferta-selo" style="background:${loja.cor};color:#fff">${esc(o.selo)}</div>` : ''}
-        </div>
+        <div class="badges-top-left">${o.desconto > 0 ? `<div class="oferta-desconto" style="background:${bgGrad}">-${o.desconto}%</div>` : ''}${o.selo ? `<div class="oferta-selo" style="background:${loja.cor};color:#fff">${esc(o.selo)}</div>` : ''}</div>
         ${novo ? `<div class="badge-novo">NOVO</div>` : ''}
-        
-        <button class="btn-favorito ${fav ? 'ativo' : ''}" data-id="${o.id}" onclick="window.toggleFavorito(${o.id})">
-            ${fav ? '❤️' : '🤍'}
-        </button>
-        
-        <div class="oferta-img">
-            ${imgContent}
-            <div class="oferta-loja-badge" style="background:${loja.cor}22;color:${loja.cor}">${esc(loja.nome)}</div>
-        </div>
-        
+        <button class="btn-favorito ${fav ? 'ativo' : ''}" data-id="${o.id}" onclick="window.toggleFavorito(${o.id})">${fav ? '❤️' : '🤍'}</button>
+        <div class="oferta-img">${imgContent}<div class="oferta-loja-badge" style="background:${loja.cor}22;color:${loja.cor}">${esc(loja.nome)}</div></div>
         <div class="oferta-body">
-            <div class="oferta-cat">${esc(o.categoria)}</div>
-            <div class="oferta-titulo" title="${esc(o.titulo)}">${esc(o.titulo)}</div>
-            
-            <div>
-                ${o.precoAntigo > o.precoNovo ? `<div class="oferta-preco-antigo">${formatarMoeda(o.precoAntigo)}</div>` : ''}
-                <div class="oferta-preco-novo">${formatarMoeda(o.precoNovo)}</div>
-                <div class="oferta-parcelamento">${parcelaHtml}</div>
-                ${o.desconto > 0 ? `<div class="oferta-economia">Poupa ${formatarMoeda(o.precoAntigo - o.precoNovo)}</div>` : ''}
-                <div class="expire-timer" data-expire="${expireTime}">⏱️ A calcular...</div>
-            </div>
-            
-            <div style="display:flex; gap:6px; margin-top:8px;">
-                <button class="btn-alerta" onclick="window.abrirModalAlerta('${esc(o.titulo)}')">🔔 Alerta</button>
-                <a href="https://t.me/ocacadordeoferta?text=Pode avisar-me se este produto voltar? ${encodeURIComponent(o.titulo)}" target="_blank" class="btn-telegram-push">
-                    <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.94z"/></svg> Telegram
-                </a>
-            </div>
-            
-            <div class="botoes-acao">
-                <button class="ai-btn" onclick="window.analisarOferta(${o.id})">✨</button>
-                <a href="${esc(o.link)}" target="_blank" class="oferta-btn" style="background:${loja.cor}15;color:${loja.cor};border:1px solid ${loja.cor}40" onmouseover="this.style.background='${loja.cor}';this.style.color='#fff'" onmouseout="this.style.background='${loja.cor}15';this.style.color='${loja.cor}'">Pegar Oferta 🛒</a>
-                <button class="btn-partilhar" onclick="window.compartilharOferta('${esc(o.titulo)}', '${esc(o.link)}')">
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-                </button>
-            </div>
+            <div class="oferta-cat">${esc(o.categoria)}</div><div class="oferta-titulo" title="${esc(o.titulo)}">${esc(o.titulo)}</div>
+            <div>${o.precoAntigo > o.precoNovo ? `<div class="oferta-preco-antigo">${formatarMoeda(o.precoAntigo)}</div>` : ''}<div class="oferta-preco-novo">${formatarMoeda(o.precoNovo)}</div><div class="oferta-parcelamento">${parcelaHtml}</div>${o.desconto > 0 ? `<div class="oferta-economia">Poupa ${formatarMoeda(o.precoAntigo - o.precoNovo)}</div>` : ''}<div class="expire-timer" data-expire="${expireTime}">⏱️ A calcular...</div></div>
+            <div style="display:flex; gap:6px; margin-top:8px;"><button class="btn-alerta" onclick="window.abrirModalAlerta('${esc(o.titulo)}')">🔔 Alerta</button><a href="https://t.me/ocacadordeoferta?text=Pode avisar-me se este produto voltar? ${encodeURIComponent(o.titulo)}" target="_blank" class="btn-telegram-push"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.94z"/></svg> Telegram</a></div>
+            <div class="botoes-acao"><button class="ai-btn" onclick="window.analisarOferta(${o.id})">✨</button><a href="${esc(o.link)}" target="_blank" class="oferta-btn" style="background:${loja.cor}15;color:${loja.cor};border:1px solid ${loja.cor}40" onmouseover="this.style.background='${loja.cor}';this.style.color='#fff'" onmouseout="this.style.background='${loja.cor}15';this.style.color='${loja.cor}'">Pegar Oferta 🛒</a><button class="btn-partilhar" onclick="window.compartilharOferta('${esc(o.titulo)}', '${esc(o.link)}')"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg></button></div>
         </div>
     </div>`;
 }
-
 function renderDestaques() {
-    const grid = document.getElementById("destaqueGrid"); 
-    if (!grid || todasOfertas.length === 0) return;
-    
+    const grid = document.getElementById("destaqueGrid"); if (!grid || todasOfertas.length === 0) return;
     let destCandidatos = todasOfertas.filter(o => (o.selo && o.selo.includes("DESTAQUE")) || o.desconto >= 40);
-    
-    destCandidatos.sort((a, b) => { 
-        const aDest = (a.selo && a.selo.includes("DESTAQUE")) ? 1 : 0;
-        const bDest = (b.selo && b.selo.includes("DESTAQUE")) ? 1 : 0; 
-        if (aDest !== bDest) return bDest - aDest; 
-        return b.timestamp - a.timestamp; 
-    });
-    
-    const dest = destCandidatos.slice(0, 4); 
-    grid.innerHTML = dest.length ? dest.map((o, i) => criarCardHTML(o, i)).join("") : `<div class="empty-state">Sem destaques no momento.</div>`; 
+    destCandidatos.sort((a, b) => { const aDest = (a.selo && a.selo.includes("DESTAQUE")) ? 1 : 0, bDest = (b.selo && b.selo.includes("DESTAQUE")) ? 1 : 0; if (aDest !== bDest) return bDest - aDest; return b.timestamp - a.timestamp; });
+    const dest = destCandidatos.slice(0, 4);
+    grid.innerHTML = dest.length ? dest.map((o, i) => criarCardHTML(o, i)).join("") : `<div class="empty-state">Sem destaques no momento.</div>`;
     initLazyLoading();
 }
-
 function getFilteredOfertas() {
     const busca = (document.getElementById("buscaInput")?.value || "").toLowerCase().trim();
     const maxPrice = parseInt(document.getElementById('priceFilter')?.value || 15000);
-    
-    return aplicarOrdem(todasOfertas.filter(o => { 
+   
+    return aplicarOrdem(todasOfertas.filter(o => {
         const passPrice = (maxPrice >= 15000 || o.precoNovo <= maxPrice);
         const passLoja = (lojaAtual === "todas" || o.loja === lojaAtual);
-        
+       
         let passSearch = true;
         if (busca) {
             const palavrasTitulo = o.titulo.toLowerCase().split(/[\s-]+/);
             const palavrasCategoria = o.categoria.toLowerCase().split(/[\s-]+/);
-            
+           
             const matchTitulo = palavrasTitulo.some(p => p.startsWith(busca));
             const matchCategoria = palavrasCategoria.some(p => p.startsWith(busca));
-            
+           
             passSearch = matchTitulo || matchCategoria;
         }
-
-        return passPrice && passLoja && passSearch; 
+        return passPrice && passLoja && passSearch;
     }));
 }
-
 function renderOfertas(resetPage = true) {
-    const grid = document.getElementById("ofertasGrid"), contagem = document.getElementById("contagem"); 
-    if (!grid) return; 
+    const grid = document.getElementById("ofertasGrid"), contagem = document.getElementById("contagem");
+    if (!grid) return;
     if (resetPage) paginaAtual = 1;
-    
-    const filt = getFilteredOfertas(); 
+   
+    const filt = getFilteredOfertas();
     if (contagem) contagem.innerHTML = `<strong>${filt.length}</strong> ofertas ativas`;
-    
+   
     const ofertasPagina = filt.slice(0, paginaAtual * CONFIG.ITEMS_PER_PAGE);
-    
-    if (filt.length === 0) { 
-        grid.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🔍</div><h3>Poxa, não achamos nada!</h3><p>Tente buscar com outras palavras ou peça essa oferta para a nossa equipa.</p></div>`; 
-        document.getElementById("loadMoreTrigger").style.display = "none"; 
-    } else { 
-        grid.innerHTML = ofertasPagina.map((o, i) => criarCardHTML(o, i)).join(""); 
-        document.getElementById("loadMoreTrigger").style.display = (filt.length > ofertasPagina.length) ? "flex" : "none"; 
+   
+    if (filt.length === 0) {
+        grid.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🔍</div><h3>Poxa, não achamos nada!</h3><p>Tente buscar com outras palavras ou peça essa oferta para a nossa equipa.</p></div>`;
+        document.getElementById("loadMoreTrigger").style.display = "none";
+    } else {
+        grid.innerHTML = ofertasPagina.map((o, i) => criarCardHTML(o, i)).join("");
+        document.getElementById("loadMoreTrigger").style.display = (filt.length > ofertasPagina.length) ? "flex" : "none";
     }
-    
-    initLazyLoading(); 
+   
+    initLazyLoading();
     window.atualizarCronometros();
 }
-
-const loadMoreObserver = new IntersectionObserver((entries) => { 
-    if (entries[0].isIntersecting && document.getElementById("page-ofertas").classList.contains("active")) { 
-        const filt = getFilteredOfertas(); 
-        if (filt.length > paginaAtual * CONFIG.ITEMS_PER_PAGE) { 
-            paginaAtual++; 
-            renderOfertas(false); 
-        } 
-    } 
-});
-
-document.addEventListener("DOMContentLoaded", () => { 
-    const trigger = document.getElementById("loadMoreTrigger"); 
-    if(trigger) loadMoreObserver.observe(trigger); 
-});
-
-function renderFavoritos() { 
-    const grid = document.getElementById("favoritosGrid"); 
-    if (!grid) return; 
-    
-    const favIds = getFavoritos();
-    const favs = aplicarOrdem(todasOfertas.filter(o => favIds.includes(o.id))); 
-    
-    grid.innerHTML = favs.length ? favs.map((o, i) => criarCardHTML(o, i)).join("") : `<div class="fav-empty"><div class="emoji">💔</div><h3>Sua lista está vazia</h3><p>Navegue pelas ofertas e clique no coração para salvar os melhores descontos aqui.</p></div>`; 
-    initLazyLoading(); 
-}
-
-function renderSocial() { 
-    document.getElementById("socialGrid").innerHTML = REDES.map(r => `<a class="social-card" href="${r.url}" target="_blank" aria-label="Siga-nos no ${r.nome}"><div class="social-icon" style="color:${r.cor};">${r.svg}</div><span>${r.nome}</span></a>`).join(""); 
-    document.getElementById("footerSocials").innerHTML = REDES.map(r => `<a class="footer-social" href="${r.url}" target="_blank" aria-label="Siga-nos no ${r.nome}">${r.svg}</a>`).join(""); 
-}
-
-function renderFormLojas() { 
-    document.getElementById("formLojas").innerHTML = Object.keys(LOJAS).filter(k => k !== "todas").map(k => `<button class="form-loja-btn" onclick="window.toggleFormLoja(this,'${k}','${LOJAS[k].cor}')">${LOJAS[k].emoji} ${LOJAS[k].nome}</button>`).join(""); 
-}
-
-function atualizarStats() { 
-    const total = todasOfertas.length;
-    const media = total ? Math.round(todasOfertas.reduce((s, o) => s + o.desconto, 0) / total) : 0; 
-    ['stat-total','stat-total-2'].forEach(id => { const e = document.getElementById(id); if(e) e.textContent = total; }); 
-    ['stat-desconto','stat-desconto-2'].forEach(id => { const e = document.getElementById(id); if(e) e.textContent = media + "%"; }); 
-}
-
-function inicializarFiltros() { 
-    document.getElementById("lojasFilter").innerHTML = Object.entries(LOJAS).map(([id, l]) => `<button class="loja-btn ${id==='todas'?'active':''}" onclick="window.filtrarPorLoja('${id}',this)" style="${id==='todas'?`border-color:${l.cor};background:${l.cor}12;color:${l.cor}`:''}">${l.emoji} ${l.nome}</button>`).join(""); 
-}
-
-function filtrarPorLoja(loja, btn) { 
-    lojaAtual = loja; 
-    document.querySelectorAll(".loja-btn").forEach(b => { b.classList.remove("active"); b.style.borderColor = "var(--border2)"; b.style.background = "var(--surface2)"; b.style.color = "var(--text2)"; }); 
-    btn.classList.add("active"); 
-    btn.style.borderColor = LOJAS[loja].cor; 
-    btn.style.background = LOJAS[loja].cor + "15"; 
-    btn.style.color = LOJAS[loja].cor; 
-    renderOfertas(); 
-}
-
-function ordenar(tipo, btn) { 
-    ordemAtual = tipo; 
-    document.querySelectorAll(".ord-btn").forEach(b => b.classList.remove("active")); 
-    btn.classList.add("active"); 
-    renderOfertas(); 
-}
-
-function filtrarOfertas() { 
-    clearTimeout(debounceTimer); 
-    debounceTimer = setTimeout(() => renderOfertas(), 300); 
-}
-
-function renderizarTudo() { 
-    renderDestaques(); 
-    if(document.getElementById("page-ofertas").classList.contains("active")) renderOfertas(); 
-    if(document.getElementById("page-favoritos").classList.contains("active")) renderFavoritos(); 
-    atualizarStats(); 
-    window.atualizarCronometros(); 
-}
-
-function navegar(pagina) { 
-    document.querySelectorAll(".page").forEach(p => p.classList.remove("active")); 
-    document.getElementById("page-" + pagina)?.classList.add("active"); 
-    document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active")); 
-    document.querySelectorAll(`.nav-btn[data-page="${pagina}"]`).forEach(b => b.classList.add("active")); 
-    document.getElementById("mobileMenu").classList.remove("open"); 
-    window.scrollTo(0, 0); 
-    history.pushState({ pagina }, "", `#${pagina}`); 
-    if (pagina === "ofertas") { 
-        if(!document.getElementById("lojasFilter").innerHTML) inicializarFiltros(); 
-        renderOfertas(); 
-    } 
-    else if (pagina === "favoritos") {
-        renderFavoritos(); 
+const loadMoreObserver = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting && document.getElementById("page-ofertas").classList.contains("active")) {
+        const filt = getFilteredOfertas();
+        if (filt.length > paginaAtual * CONFIG.ITEMS_PER_PAGE) { paginaAtual++; renderOfertas(false); }
     }
-}
-
-window.addEventListener("popstate", (e) => { 
-    const pg = (e.state && e.state.pagina) || location.hash.replace("#", "") || "home"; 
-    navegar(pg); 
 });
-
-window.addEventListener("scroll", () => { 
-    document.getElementById("navbar").classList.toggle("scrolled", window.scrollY > 20); 
-    document.getElementById("btnScrollTop").style.display = window.scrollY > 500 ? "flex" : "none"; 
-    const fab = document.getElementById("fabBusca"); 
-    if(window.scrollY > 300 && !document.getElementById("page-ofertas").classList.contains("active")) { 
-        fab.style.opacity = 1; fab.style.pointerEvents = "all"; 
-    } else { 
-        fab.style.opacity = 0; fab.style.pointerEvents = "none"; 
-    } 
-});
-
-function toggleMenu() { 
-    document.getElementById("mobileMenu").classList.toggle("open"); 
+document.addEventListener("DOMContentLoaded", () => { const trigger = document.getElementById("loadMoreTrigger"); if(trigger) loadMoreObserver.observe(trigger); });
+function renderFavoritos() { const grid = document.getElementById("favoritosGrid"); if (!grid) return; const favIds = getFavoritos(), favs = aplicarOrdem(todasOfertas.filter(o => favIds.includes(o.id))); grid.innerHTML = favs.length ? favs.map((o, i) => criarCardHTML(o, i)).join("") : `<div class="fav-empty"><div class="emoji">💔</div><h3>Sua lista está vazia</h3><p>Navegue pelas ofertas e clique no coração para salvar os melhores descontos aqui.</p></div>`; initLazyLoading(); }
+function renderSocial() { document.getElementById("socialGrid").innerHTML = REDES.map(r => `<a class="social-card" href="${r.url}" target="_blank" aria-label="Siga-nos no ${r.nome}"><div class="social-icon" style="color:${r.cor};">${r.svg}</div><span>${r.nome}</span></a>`).join(""); document.getElementById("footerSocials").innerHTML = REDES.map(r => `<a class="footer-social" href="${r.url}" target="_blank" aria-label="Siga-nos no ${r.nome}">${r.svg}</a>`).join(""); }
+function renderFormLojas() { document.getElementById("formLojas").innerHTML = Object.keys(LOJAS).filter(k => k !== "todas").map(k => `<button class="form-loja-btn" onclick="window.toggleFormLoja(this,'${k}','${LOJAS[k].cor}')">${LOJAS[k].emoji} ${LOJAS[k].nome}</button>`).join(""); }
+function atualizarStats() { const total = todasOfertas.length, media = total ? Math.round(todasOfertas.reduce((s, o) => s + o.desconto, 0) / total) : 0; ['stat-total','stat-total-2'].forEach(id => { const e = document.getElementById(id); if(e) e.textContent = total; }); ['stat-desconto','stat-desconto-2'].forEach(id => { const e = document.getElementById(id); if(e) e.textContent = media + "%"; }); }
+function inicializarFiltros() { document.getElementById("lojasFilter").innerHTML = Object.entries(LOJAS).map(([id, l]) => `<button class="loja-btn ${id==='todas'?'active':''}" onclick="window.filtrarPorLoja('${id}',this)" style="${id==='todas'?`border-color:${l.cor};background:${l.cor}12;color:${l.cor}`:''}">${l.emoji} ${l.nome}</button>`).join(""); }
+function filtrarPorLoja(loja, btn) { lojaAtual = loja; document.querySelectorAll(".loja-btn").forEach(b => { b.classList.remove("active"); b.style.borderColor = "var(--border2)"; b.style.background = "var(--surface2)"; b.style.color = "var(--text2)"; }); btn.classList.add("active"); btn.style.borderColor = LOJAS[loja].cor; btn.style.background = LOJAS[loja].cor + "15"; btn.style.color = LOJAS[loja].cor; renderOfertas(); }
+function ordenar(tipo, btn) { ordemAtual = tipo; document.querySelectorAll(".ord-btn").forEach(b => b.classList.remove("active")); btn.classList.add("active"); renderOfertas(); }
+function filtrarOfertas() { clearTimeout(debounceTimer); debounceTimer = setTimeout(() => renderOfertas(), 300); }
+function renderizarTudo() { renderDestaques(); if(document.getElementById("page-ofertas").classList.contains("active")) renderOfertas(); if(document.getElementById("page-favoritos").classList.contains("active")) renderFavoritos(); atualizarStats(); window.atualizarCronometros(); }
+function navegar(pagina) {
+    document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+    document.getElementById("page-" + pagina)?.classList.add("active");
+    document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(`.nav-btn[data-page="${pagina}"]`).forEach(b => b.classList.add("active"));
+    document.getElementById("mobileMenu").classList.remove("open");
+    window.scrollTo(0, 0);
+    history.pushState({ pagina }, "", `#${pagina}`);
+    if (pagina === "ofertas") { if(!document.getElementById("lojasFilter").innerHTML) inicializarFiltros(); renderOfertas(); }
+    else if (pagina === "favoritos") renderFavoritos();
 }
-
-function toggleFormLoja(btn, loja, cor) { 
-    if (formLojaSelecionada === loja) { 
-        formLojaSelecionada = ""; 
-        btn.style.borderColor = "var(--border2)"; 
-        btn.style.background = "var(--surface2)"; 
-        btn.style.color = "var(--text3)"; 
-    } else { 
-        document.querySelectorAll(".form-loja-btn").forEach(b => { 
-            b.style.borderColor = "var(--border2)"; 
-            b.style.background = "var(--surface2)"; 
-            b.style.color = "var(--text3)"; 
-        }); 
-        formLojaSelecionada = loja; 
-        btn.style.borderColor = cor; 
-        btn.style.background = cor + "15"; 
-        btn.style.color = cor; 
-    } 
-}
-
-function enviarPedido() { 
-    const p = document.getElementById("pedidoProduto").value.trim(); 
-    if (!p) return; 
-    const msg = encodeURIComponent(`🎯 *NOVO PEDIDO NO SITE*\n\n📦 *Produto:* ${p}\n${document.getElementById("pedidoOrcamento").value ? `💰 *Orçamento:* ${document.getElementById("pedidoOrcamento").value}\n` : ''}${formLojaSelecionada ? `🏪 *Loja:* ${LOJAS[formLojaSelecionada]?.nome}\n` : ''}${document.getElementById("pedidoDetalhes").value ? `📝 *Detalhes:* ${document.getElementById("pedidoDetalhes").value}\n` : ''}`); 
-    document.getElementById("formBox").innerHTML = `<div class="form-success fade-up"><div class="form-success-icon">✓</div><h3 style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--text);margin-bottom:8px">Pedido Preparado!</h3><p style="color:var(--text2);margin-bottom:24px">O seu pedido foi gerado. Clique abaixo para enviar diretamente para a nossa equipa no Telegram.</p><a href="${CONFIG.TELEGRAM}?text=${msg}" target="_blank" class="btn-primary" style="text-decoration:none">Enviar Pedido no Telegram</a></div>`; 
-}
-
-// ==========================================================================
+window.addEventListener("popstate", (e) => { const pg = (e.state && e.state.pagina) || location.hash.replace("#", "") || "home"; navegar(pg); });
+window.addEventListener("scroll", () => { document.getElementById("navbar").classList.toggle("scrolled", window.scrollY > 20); document.getElementById("btnScrollTop").style.display = window.scrollY > 500 ? "flex" : "none"; const fab = document.getElementById("fabBusca"); if(window.scrollY > 300 && !document.getElementById("page-ofertas").classList.contains("active")) { fab.style.opacity = 1; fab.style.pointerEvents = "all"; } else { fab.style.opacity = 0; fab.style.pointerEvents = "none"; } });
+function toggleMenu() { document.getElementById("mobileMenu").classList.toggle("open"); }
+function toggleFormLoja(btn, loja, cor) { if (formLojaSelecionada === loja) { formLojaSelecionada = ""; btn.style.borderColor = "var(--border2)"; btn.style.background = "var(--surface2)"; btn.style.color = "var(--text3)"; } else { document.querySelectorAll(".form-loja-btn").forEach(b => { b.style.borderColor = "var(--border2)"; b.style.background = "var(--surface2)"; b.style.color = "var(--text3)"; }); formLojaSelecionada = loja; btn.style.borderColor = cor; btn.style.background = cor + "15"; btn.style.color = cor; } }
+function enviarPedido() { const p = document.getElementById("pedidoProduto").value.trim(); if (!p) return; const msg = encodeURIComponent(`🎯 *NOVO PEDIDO NO SITE*\n\n📦 *Produto:* ${p}\n${document.getElementById("pedidoOrcamento").value ? `💰 *Orçamento:* ${document.getElementById("pedidoOrcamento").value}\n` : ''}${formLojaSelecionada ? `🏪 *Loja:* ${LOJAS[formLojaSelecionada]?.nome}\n` : ''}${document.getElementById("pedidoDetalhes").value ? `📝 *Detalhes:* ${document.getElementById("pedidoDetalhes").value}\n` : ''}`); document.getElementById("formBox").innerHTML = `<div class="form-success fade-up"><div class="form-success-icon">✓</div><h3 style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--text);margin-bottom:8px">Pedido Preparado!</h3><p style="color:var(--text2);margin-bottom:24px">O seu pedido foi gerado. Clique abaixo para enviar diretamente para a nossa equipa no Telegram.</p><a href="${CONFIG.TELEGRAM}?text=${msg}" target="_blank" class="btn-primary" style="text-decoration:none">Enviar Pedido no Telegram</a></div>`; }
+// ==========================================
 // FUNÇÕES DE RETENÇÃO E MELHORIAS
-// ==========================================================================
-
-window.updatePriceFilterDisplay = function() { 
-    const val = document.getElementById('priceFilter').value; 
-    document.getElementById('priceValDisplay').textContent = val >= 15000 ? "R$ 15.000+" : `R$ ${val}`; 
+// ==========================================
+window.updatePriceFilterDisplay = function() {
+    const val = document.getElementById('priceFilter').value;
+    document.getElementById('priceValDisplay').textContent = val >= 15000 ? "R$ 15.000+" : `R$ ${val}`;
 };
-
-// BUSCA INTELIGENTE 5.1 (inclui "ip16", "iphone pro max", "s24 ultra")
-window.mostrarAutocomplete = function() { 
+window.mostrarAutocomplete = function() {
     const busca = document.getElementById('buscaInput').value.toLowerCase().trim();
-    const box = document.getElementById('autocompleteResults'); 
-    
-    if (busca.length < 2) { 
-        box.style.display = 'none'; 
-        return; 
-    } 
-    
+    const box = document.getElementById('autocompleteResults');
+   
+    if (busca.length < 2) { box.style.display = 'none'; return; }
+   
     const sugestoes = todasOfertas.filter(o => {
         const titulo = o.titulo.toLowerCase();
-        return titulo.includes(busca) || 
-               titulo.replace(/pro max/gi, "promax").includes(busca) || 
+        return titulo.includes(busca) ||
+               titulo.replace(/pro max/gi, "promax").includes(busca) ||
                titulo.includes(busca.replace(/pro max/gi, "promax"));
-    }).slice(0, 6); 
-    
-    if (sugestoes.length === 0) { 
-        box.style.display = 'none'; 
-        return; 
-    } 
-    
-    box.innerHTML = sugestoes.map(o => 
-        `<div class="autocomplete-item" onclick="window.selecionarAutocomplete('${esc(o.titulo)}')">
-            🔍 ${esc(o.titulo)}
-        </div>`
-    ).join(''); 
-    
-    box.style.display = 'block'; 
+    }).slice(0, 6);
+   
+    if (sugestoes.length === 0) { box.style.display = 'none'; return; }
+   
+    box.innerHTML = sugestoes.map(o => `<div class="autocomplete-item" onclick="window.selecionarAutocomplete('${esc(o.titulo)}')">🔍 ${esc(o.titulo)}</div>`).join('');
+    box.style.display = 'block';
 };
-
-window.selecionarAutocomplete = function(texto) { 
-    document.getElementById('buscaInput').value = texto; 
-    document.getElementById('autocompleteResults').style.display = 'none'; 
-    window.filtrarOfertas(); 
+window.selecionarAutocomplete = function(texto) {
+    document.getElementById('buscaInput').value = texto;
+    document.getElementById('autocompleteResults').style.display = 'none';
+    window.filtrarOfertas();
 };
-
-document.addEventListener('click', (e) => { 
-    if (!e.target.closest('.busca-input-wrap')) { 
-        const box = document.getElementById('autocompleteResults'); 
-        if(box) box.style.display = 'none'; 
-    } 
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('.busca-input-wrap')) {
+        const box = document.getElementById('autocompleteResults');
+        if(box) box.style.display = 'none';
+    }
 });
-
-window.atualizarCronometros = function() { 
-    document.querySelectorAll('.expire-timer').forEach(el => { 
-        const timeStr = el.getAttribute('data-expire'); 
-        if (!timeStr) return; 
-        
-        const diff = parseInt(timeStr) - Date.now(); 
-        if (diff <= 0) { 
-            el.innerHTML = "⏱️ Oferta Expirada"; 
-            return; 
-        } 
-        
+window.atualizarCronometros = function() {
+    document.querySelectorAll('.expire-timer').forEach(el => {
+        const timeStr = el.getAttribute('data-expire');
+        if (!timeStr) return;
+        const diff = parseInt(timeStr) - Date.now();
+       
+        if (diff <= 0) { el.innerHTML = "⏱️ Oferta Expirada"; return; }
+       
         const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)); 
-        el.innerHTML = `⏱️ Expira em ${d > 0 ? d + 'd ' : ''}${h}h`; 
-    }); 
+        const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        el.innerHTML = `⏱️ Expira em ${d > 0 ? d + 'd ' : ''}${h}h`;
+    });
 };
-
 setInterval(window.atualizarCronometros, 60000);
-
-window.copiarCupom = function(codigo, elemento) { 
-    navigator.clipboard.writeText(codigo).then(() => { 
-        const textoAntigo = elemento.innerText; 
-        elemento.innerText = "COPIADO! ✅"; 
-        elemento.style.background = "var(--green)"; 
-        elemento.style.color = "#fff"; 
-        setTimeout(() => { 
-            elemento.innerText = textoAntigo; 
-            elemento.style.background = "var(--bg)"; 
-            elemento.style.color = "var(--accent)"; 
-        }, 2000); 
-        window.mostrarToast('🎟️', 'Cupom copiado com sucesso!'); 
-    }); 
-};
-
-window.abrirModalAlerta = function(produto) { 
-    document.getElementById('alertaModal').classList.add('open'); 
-};
-
-window.salvarAlerta = function() { 
-    const preco = document.getElementById('alertaPreco').value, contacto = document.getElementById('alertaContacto').value; 
-    if(!preco || !contacto) { 
-        window.mostrarToast('⚠️', 'Preencha o preço alvo e o seu contacto!'); 
-        return; 
-    } 
-    document.getElementById('alertaModal').classList.remove('open'); 
-    window.mostrarToast('🔔', 'Alerta configurado com sucesso! O Teteco avisará.'); 
-};
-
-// ==========================================================================
-// CÉREBRO IA: TETECO 5.1 (CASCATA REFORÇADA + BUSCA LOCAL)
-// ==========================================================================
-
-async function analisarOferta(idOferta) { 
-    const oferta = todasOfertas.find(o => o.id === idOferta); 
-    if (!oferta) return; 
-    
-    const modal = document.getElementById('aiModal'), modalBody = document.getElementById('aiModalBody'); 
-    modal.classList.add('open'); 
-    modalBody.innerHTML = '<div class="loader-spinner" style="margin: 20px auto;"></div><p style="text-align:center; margin-top:10px;">O Teteco está a analisar o mercado e os padrões de preço... ✨</p>'; 
-    
-    const promptText = `Analise a seguinte oferta: Produto: ${oferta.titulo} | Loja: ${oferta.loja} | Preço Atual: R$ ${oferta.precoNovo} | Preço Antigo: R$ ${oferta.precoAntigo} | Desconto reportado: ${oferta.desconto}%`; 
-    const systemInstruction = `Você é um especialista em compras e inteligência de mercado brasileiro. Seu objetivo é analisar a oferta e dizer se "Vale a pena?" de forma direta, simpática e profissional. Sempre justifique se o desconto parece real ou se é "metade do dobro" baseado no seu conhecimento geral sobre a categoria do produto. Use emojis para tornar o texto mais leve. Forneça sua resposta em, no máximo, 2 ou 3 parágrafos curtos. Finalize sempre atribuindo uma "Nota do Teteco" de 1 a 10.`; 
-    
-    const resposta = await chamarGemini(promptText, systemInstruction); 
-    modalBody.innerHTML = safeHTML(_formatarRespostaIA(resposta)); 
-}
-
-function fecharAiModal() { 
-    document.getElementById('aiModal').classList.remove('open'); 
-}
-
-function toggleChat() { 
-    chatOpen = !chatOpen; 
-    document.getElementById("chatWindow").classList.toggle("open", chatOpen); 
-    
-    const fab = document.getElementById("chatFab"), fabIcon = document.getElementById("chatFabIcon"), fabClose = document.getElementById("chatFabClose"); 
-    
-    if(chatOpen) { 
-        fab.classList.add("active"); 
-        fabIcon.style.display = "none"; 
-        fabClose.style.display = "flex"; 
-        document.getElementById("chatBadge").style.display="none"; 
-        if(chatHistorico.length===0) setTimeout(()=> document.getElementById("chatSuggestions").style.display="flex", 1500); 
-    } else { 
-        fab.classList.remove("active"); 
-        fabIcon.style.display = "flex"; 
-        fabClose.style.display = "none"; 
-    } 
-}
-
-function _addMsgChat(html, tipo) { 
-    const msgs = document.getElementById("chatMessages"), div = document.createElement("div"); 
-    div.className = `chat-msg ${tipo}`; 
-    // Como a variável 'html' já vem tratada (ex: safeHTML(esc(texto))), usamos innerHTML direto
-    div.innerHTML = html; 
-    msgs.appendChild(div); 
-    msgs.scrollTop = msgs.scrollHeight; 
-}
-
+window.copiarCupom = function(codigo, elemento) { navigator.clipboard.writeText(codigo).then(() => { const textoAntigo = elemento.innerText; elemento.innerText = "COPIADO! ✅"; elemento.style.background = "var(--green)"; elemento.style.color = "#fff"; setTimeout(() => { elemento.innerText = textoAntigo; elemento.style.background = "var(--bg)"; elemento.style.color = "var(--accent)"; }, 2000); window.mostrarToast('🎟️', 'Cupom copiado com sucesso!'); }); };
+window.abrirModalAlerta = function(produto) { document.getElementById('alertaModal').classList.add('open'); };
+window.salvarAlerta = function() { const preco = document.getElementById('alertaPreco').value, contacto = document.getElementById('alertaContacto').value; if(!preco || !contacto) { window.mostrarToast('⚠️', 'Preencha o preço alvo e o seu contacto!'); return; } document.getElementById('alertaModal').classList.remove('open'); window.mostrarToast('🔔', 'Alerta configurado com sucesso! O Teteco avisará.'); };
+// ==========================================
+// TETECO AI 5.2 – CASCATA EXTREMA
+// ==========================================
+async function analisarOferta(idOferta) { const oferta = todasOfertas.find(o => o.id === idOferta); if (!oferta) return; const modal = document.getElementById('aiModal'), modalBody = document.getElementById('aiModalBody'); modal.classList.add('open'); modalBody.innerHTML = '<div class="loader-spinner" style="margin: 20px auto;"></div><p style="text-align:center; margin-top:10px;">O Teteco está a analisar o mercado e os padrões de preço... ✨</p>'; const promptText = `Analise a seguinte oferta: Produto: ${oferta.titulo} | Loja: ${oferta.loja} | Preço Atual: R$ ${oferta.precoNovo} | Preço Antigo: R$ ${oferta.precoAntigo} | Desconto reportado: ${oferta.desconto}%`; const systemInstruction = `Você é um especialista em compras e inteligência de mercado brasileiro. Seu objetivo é analisar a oferta e dizer se "Vale a pena?" de forma direta, simpática e profissional. Sempre justifique se o desconto parece real ou se é "metade do dobro" baseado no seu conhecimento geral sobre a categoria do produto. Use emojis para tornar o texto mais leve. Forneça sua resposta em, no máximo, 2 ou 3 parágrafos curtos. Finalize sempre atribuindo uma "Nota do Teteco" de 1 a 10.`; const resposta = await chamarGemini(promptText, systemInstruction); modalBody.innerHTML = safeHTML(_formatarRespostaIA(resposta)); }
+function fecharAiModal() { document.getElementById('aiModal').classList.remove('open'); }
+function toggleChat() { chatOpen = !chatOpen; document.getElementById("chatWindow").classList.toggle("open", chatOpen); const fab = document.getElementById("chatFab"), fabIcon = document.getElementById("chatFabIcon"), fabClose = document.getElementById("chatFabClose"); if(chatOpen) { fab.classList.add("active"); fabIcon.style.display = "none"; fabClose.style.display = "flex"; document.getElementById("chatBadge").style.display="none"; if(chatHistorico.length===0) setTimeout(()=> document.getElementById("chatSuggestions").style.display="flex", 1500); } else { fab.classList.remove("active"); fabIcon.style.display = "flex"; fabClose.style.display = "none"; } }
+function _addMsgChat(html, tipo) { const msgs = document.getElementById("chatMessages"), div = document.createElement("div"); div.className = `chat-msg ${tipo}`; div.innerHTML = html; msgs.appendChild(div); msgs.scrollTop = msgs.scrollHeight; }
 async function executarBuscasParalelas(termos, configIA) {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 9000);
-    
+    setTimeout(() => controller.abort(), 8500);
     const promessas = termos.filter(t => t).map(termo => 
         fetch('/api/shopee?q=' + encodeURIComponent(termo), { signal: controller.signal })
             .then(r => r.ok ? r.json() : [])
             .catch(() => [])
     );
-    
     const resultados = await Promise.all(promessas);
-    clearTimeout(timeout);
-    
     let unicas = [];
     const links = new Set();
-    
     resultados.flat().forEach(o => {
         if (!links.has(o.offerLink) && o.discountPrice) {
             const titulo = (o.offerName || "").toLowerCase();
-            
-            // CORREÇÃO CRÍTICA: Utilizar o preço final com desconto ativado ou o preço base.
-            const precoReal = (o.discountPrice && o.discountPrice > 0) ? o.discountPrice : (o.price || 0);
-
-            if (precoReal >= configIA.preco_minimo_dinamico &&
-                !configIA.palavras_excluir.some(p => titulo.includes(p.toLowerCase())) &&
-                !titulo.includes("vitrine") && !titulo.includes("/")) {
+            const precoReal = o.discountPrice || o.price || 0;
+            if (precoReal >= (configIA.preco_minimo_dinamico || 650) &&
+                !configIA.palavras_excluir.some(p => titulo.includes(p)) &&
+                !titulo.includes("vitrine") && !titulo.includes("/") && !titulo.includes("réplica")) {
                 links.add(o.offerLink);
                 unicas.push(o);
             }
         }
     });
-    
     return unicas.sort((a,b) => (a.discountPrice || a.price) - (b.discountPrice || b.price));
 }
-
-// TETECO AI 5.1 – Cascata Extrema (70-85% menos “não encontrei”)
 async function enviarMsg(sugestao = null) {
     const input = document.getElementById("chatInput");
-    const texto = sugestao || input.value.trim(); 
-    if(!texto) return; 
-    
-    input.value = ""; 
-    document.getElementById("chatSuggestions").style.display = "none"; 
-    
-    _addMsgChat(safeHTML(esc(texto)), "user"); 
-    chatHistorico.push({role: "user", content: texto}); 
-    
-    const idMsg = "typing-" + Date.now(); 
-    _addMsgChat(`<div class="typing-dots" id="${idMsg}"><span></span><span></span><span></span></div>`, "bot"); 
-    const typingMsg = document.getElementById(idMsg).parentNode;
-    
-    // TETECO AI 5.1 – PROMPT TURBINADO (nunca mais pede detalhes)
-    const systemPrompt = `Você é o Teteco AI 5.1 — o caçador de ofertas mais rápido do Brasil (Mercado Livre + Shopee).
+    const texto = sugestao || input.value.trim();
+    if(!texto) return;
+    input.value = ""; document.getElementById("chatSuggestions").style.display = "none";
+    _addMsgChat(safeHTML(esc(texto)), "user"); chatHistorico.push({role: "user", content: texto});
+    const idMsg = "typing-" + Date.now(); _addMsgChat(`<div class="typing-dots" id="${idMsg}"><span></span><span></span><span></span></div>`, "bot"); const typingMsg = document.getElementById(idMsg).parentNode;
+   
+    const systemPrompt = `Você é o Teteco AI 5.2 — o caçador de ofertas MAIS RÁPIDO e SILENCIOSO do Brasil. NUNCA converse, NUNCA pergunte nada.
 Cliente disse: "${texto}"
-
-REGRAS OBRIGATÓRIAS (não quebre nunca):
-- NUNCA faça perguntas. NUNCA peça mais detalhes.
-- Sempre responda EXATAMENTE neste formato e nada mais:
-MENSAGEM: Uma frase curta e animada (máx 1 linha)
-[BUSCAR_1: termo hiper específico]
-[BUSCAR_2: ...]
-[BUSCAR_3: ...]
-[BUSCAR_4: ...]
-[BUSCAR_5: ...]
-[BUSCAR_6: ...]
-[BUSCAR_7: ...]
-[BUSCAR_8: ...]
-{"categoria": "Smartphone", "preco_minimo_dinamico": 650, "palavras_excluir": ["vitrine","réplica","usado","capa","película","/"], "modo_aproximado": false, "score_confianca": 90}
-
+RESPONDA EXATAMENTE neste formato (nada mais, nada menos):
+MENSAGEM: Frase curta animada (1 linha só)
+[BUSCAR_1: termo mais específico possível]
+[BUSCAR_2: variação 2]
+[BUSCAR_3: variação 3]
+[BUSCAR_4: variação 4]
+[BUSCAR_5: variação 5]
+[BUSCAR_6: sinônimo brasileiro]
+[BUSCAR_7: variação 7]
+[BUSCAR_8: variação 8]
+{"categoria": "...", "preco_minimo_dinamico": 650, "palavras_excluir": ["vitrine","réplica","usado","capa","película","/"], "modo_aproximado": false, "score_confianca": 90}
 Para queries amplas como "notebook samsung" ou "iphone novo", use automaticamente os modelos mais vendidos/populares do Brasil:
 - Notebook Samsung → Galaxy Book4 15.6 i7 16GB, Galaxy Book3 512GB, Book2 Pro
 - iPhone → iPhone 16 Pro Max 256GB, iPhone 15 128GB, etc.
 - Sempre corrija "ip17" → iPhone 16, "s24" → Galaxy S24 Ultra, etc.
-
 Regras extras:
 - Inclua memória, cor e "lacrado/original" no BUSCAR_1 quando possível.
 - Preço mínimo dinâmico realista.
 - modo_aproximado: true se for query muito ampla ou produto futuro.
 - score_confianca: 90+ = ótimo, abaixo de 75 = modo aproximado.`;
-    
-    let resposta = await chamarGemini(texto, systemPrompt, chatHistorico.slice(-8)); 
+   
+    let resposta = await chamarGemini(texto, systemPrompt, chatHistorico.slice(-8));
     typingMsg.remove();
-    
-    // Parse ultra-robusto
+   
     let msgCliente = "Deixa comigo! Já estou caçando as melhores ofertas... 🔥";
     const msgMatch = resposta.match(/MENSAGEM:\s*(.+?)(?=\[BUSCAR_|\{)/is);
     if (msgMatch) msgCliente = msgMatch[1].trim();
-    
     _addMsgChat(safeHTML(_formatarRespostaIA(msgCliente)), "bot");
-    
+   
     const buscas = [];
     for (let i = 1; i <= 8; i++) {
         const match = resposta.match(new RegExp(`\\[BUSCAR_${i}:\\s*(.+?)\\]`, 'i'));
         if (match) buscas.push(match[1].trim());
     }
-    
+   
     let configIA = { preco_minimo_dinamico: 650, palavras_excluir: ["vitrine","réplica","usado","capa","película","/"], modo_aproximado: false, score_confianca: 70 };
     try {
         const jsonMatch = resposta.match(/\{[\s\S]*?\}/);
         if (jsonMatch) configIA = { ...configIA, ...JSON.parse(jsonMatch[0]) };
     } catch(e) {}
-
     if (buscas.length < 3) {
         _addMsgChat(safeHTML("Vou tentar de novo com termos mais populares..."), "bot");
         return;
     }
-
-    // NOVA BUSCA LOCAL PRIMEIRO (melhora muito!)
-    const buscaLocal = todasOfertas.filter(o => 
+   
+    const buscaLocal = todasOfertas.filter(o =>
         buscas.some(b => o.titulo.toLowerCase().includes(b.toLowerCase())) &&
         o.precoNovo >= configIA.preco_minimo_dinamico
     );
-    
+   
     if (buscaLocal.length > 0) {
         let html = `<p>Encontrei na nossa base de ofertas:</p>`;
         buscaLocal.slice(0,3).forEach(o => {
             html += `<a href="${esc(o.link)}" target="_blank" style="display:flex;gap:12px;background:var(--bg2);padding:12px;border-radius:14px;margin-bottom:8px;text-decoration:none;color:var(--text);">
-                <div style="flex:1"><strong style="line-height:1.3; display:block; margin-bottom:4px;">${esc(o.titulo)}</strong><span style="color:var(--accent);font-weight:800">${formatarMoeda(o.precoNovo)}</span></div>
+                <div style="flex:1"><strong>${esc(o.titulo)}</strong><br><span style="color:var(--accent);font-weight:800">${formatarMoeda(o.precoNovo)}</span></div>
             </a>`;
         });
         _addMsgChat(html, "bot");
-        chatHistorico.push({role: "assistant", content: `Mostrei resultados locais.`});
         return;
     }
-
-    // Cascata Shopee (só se não achou local)
-    chatHistorico.push({role: "assistant", content: msgCliente + ` (Iniciou cascata de busca)`});
-    const typingId2 = "typing-busca-" + Date.now(); 
-    _addMsgChat(`<div class="typing-dots" id="${typingId2}"><span></span><span></span><span></span></div>`, "bot"); 
+   
+    const typingId2 = "typing-busca-" + Date.now();
+    _addMsgChat(`<div class="typing-dots" id="${typingId2}"><span></span><span></span><span></span></div>`, "bot");
     const typingBusca = document.getElementById(typingId2).parentNode;
-
+   
     try {
         const ofertasFinais = await executarBuscasParalelas(buscas, configIA);
         typingBusca.remove();
-
         if (ofertasFinais.length > 0) {
             const isAproximado = configIA.modo_aproximado || configIA.score_confianca < 75;
             const intro = isAproximado ? `Não achei **exato**, mas esses são os melhores similares que encontrei:` : `Aqui estão as melhores ofertas que achei:`;
-            
-            let html = `<p style="margin-bottom:10px">${safeHTML(_formatarRespostaIA(intro))}</p><div style="display:flex;flex-direction:column;gap:10px;">`;
-            
+            let html = `<p>${intro}</p><div style="display:flex;flex-direction:column;gap:10px;">`;
             ofertasFinais.slice(0,4).forEach(o => {
-                const precoReal = (o.discountPrice && o.discountPrice > 0) ? o.discountPrice : o.price;
                 html += `<a href="${esc(o.offerLink)}" target="_blank" style="display:flex;gap:12px;background:var(--bg2);padding:12px;border-radius:14px;text-decoration:none;color:var(--text);">
                     <img src="${esc(o.imageUrl||'https://placehold.co/60x60')}" style="width:60px;height:60px;object-fit:cover;border-radius:8px;" onerror="this.style.display='none'">
-                    <div style="flex:1"><div style="font-weight:600;line-height:1.3">${esc(o.offerName)}</div>
-                    <div style="color:var(--accent);font-weight:800;margin-top:4px">${formatarMoeda(precoReal)}</div></div>
+                    <div style="flex:1"><div style="font-weight:600">${esc(o.offerName)}</div>
+                    <div style="color:var(--accent);font-weight:800">${formatarMoeda(o.discountPrice||o.price)}</div></div>
                 </a>`;
             });
-            
             html += `</div>`;
             _addMsgChat(html, "bot");
-            chatHistorico.push({role: "assistant", content: `Mostrei resultados.`});
         } else {
-            _addMsgChat(safeHTML(`Não encontrei em estoque agora, mas posso pedir pro time no grupo VIP do Telegram em tempo real. Quer que eu envie o pedido?`), "bot");
-            chatHistorico.push({role: "assistant", content: `A busca não encontrou resultados satisfatórios.`});
+            _addMsgChat(`Não encontrei em estoque agora, mas posso pedir pro time no grupo VIP do Telegram em tempo real. Quer que eu envie o pedido?`, "bot");
         }
-    } catch (err) {
+    } catch {
         typingBusca.remove();
-        _addMsgChat(safeHTML("As lojas estão lentas agora. Tenta de novo em 10s ou me fala outro produto! 🔄"), "bot");
+        _addMsgChat(`As lojas estão lentas agora. Tenta de novo em 10s ou me fala outro produto! 🔄`, "bot");
     }
 }
-
-// ==========================================================================
+// ==========================================
 // BOOT
-// ==========================================================================
+// ==========================================
 window.navegar = navegar; window.toggleTema = toggleTema; window.toggleMenu = toggleMenu; window.filtrarOfertas = filtrarOfertas; window.ordenar = ordenar; window.filtrarPorLoja = filtrarPorLoja; window.toggleFavorito = toggleFavorito; window.compartilharOferta = compartilharOferta; window.mostrarToast = mostrarToast; window.toggleFormLoja = toggleFormLoja; window.enviarPedido = enviarPedido; window.toggleChat = toggleChat; window.enviarMsg = enviarMsg; window.analisarOferta = analisarOferta; window.fecharAiModal = fecharAiModal;
 initTema(); renderSocial(); renderFormLojas(); inicializarFiltros(); carregarOfertas(); iniciarAutoRefresh();
 setTimeout(() => { if(!chatOpen) document.getElementById("chatBadge").style.display="block"; }, 5000);
