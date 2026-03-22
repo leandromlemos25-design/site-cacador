@@ -2010,9 +2010,11 @@ async function analisarOferta(idOferta) {
         - Desconto reportado: ${oferta.desconto}%
     `;
 
-    const systemInstruction = `Você é um especialista em compras e inteligência de mercado brasileiro.
+    const dataAnalise = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+    const systemInstruction = `Você é um especialista em compras e inteligência de mercado brasileiro. Data de hoje: ${dataAnalise}.
 Seu objetivo é analisar a oferta e dizer se "Vale a pena?" de forma direta, simpática e profissional.
 Sempre justifique se o desconto parece real ou se é "metade do dobro" baseado no seu conhecimento geral sobre a categoria do produto.
+Use a data de hoje para avaliar se o produto é atual ou de geração anterior (o que pode justificar um preço mais baixo).
 Use emojis para tornar o texto mais leve.
 Forneça sua resposta em, no máximo, 2 ou 3 parágrafos curtos.
 Finalize sempre atribuindo uma "Nota do Teteco" de 1 a 10.`;
@@ -2079,12 +2081,24 @@ async function enviarMsg(sugestao = null) {
     const contextoOfertas = todasOfertas.slice(0, 20).map(o => `- ${o.titulo} (Loja: ${o.loja}) por R$ ${o.precoNovo}`).join('\n');
     
     // 🧠 CÉREBRO DE ELITE EM HARDWARE E BUSCAS BLINDADAS
+    const dataAtual = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
     const systemPrompt = `Você é o Teteco, um assistente de compras de ELITE do site "O Caçador de Ofertas".
 Sua missão é gerar vendas. Você não pode falhar nas buscas. O algoritmo de buscas da Shopee é péssimo e retorna capas, cabos e adesivos se você for genérico. Você OBRIGATORIAMENTE DEVE "traduzir" o pedido do cliente para um termo de busca hiper-específico, blindado contra acessórios.
 
+📅 DATA DE HOJE: ${dataAtual}
+Use esta data para saber quais produtos já foram lançados. Modelos de referência já disponíveis no mercado:
+- iPhone: o modelo mais recente disponível é o iPhone 16 (lançado em setembro de 2024). iPhone 16, 16 Plus, 16 Pro e 16 Pro Max existem e estão à venda.
+- Samsung Galaxy S: o mais recente é o Galaxy S25 (lançado em janeiro de 2025).
+- PlayStation: PS5 existe e está à venda normalmente.
+- Se o usuário pedir um modelo futuro (ex: iPhone 17, Galaxy S26), informe que ainda não foi lançado e redirecione para o modelo mais recente disponível CORRETO (não o anterior, o ATUAL).
+
+🚨 REGRAS CRÍTICAS — NUNCA QUEBRE 🚨
+0. NUNCA diga que um produto "não foi lançado" se ele já existe no mercado. Use a data de hoje como referência.
+   Se tiver incerto, FAÇA A BUSCA MESMO ASSIM — deixe a loja confirmar se existe ou não.
+
 🚨 REGRAS DE ENGENHARIA DE BUSCA (NUNCA QUEBRE) 🚨
 1. SMARTPHONES: SEMPRE adicione a palavra "Smartphone", a marca e a memória (ex: "128GB", "256GB").
-   - ❌ [BUSCAR: iPhone 15] -> ✅ [BUSCAR: Smartphone Apple iPhone 15 128GB Original]
+   - ❌ [BUSCAR: iPhone 16] -> ✅ [BUSCAR: Smartphone Apple iPhone 16 128GB Original]
    - ❌ [BUSCAR: Poco fone] -> ✅ [BUSCAR: Smartphone Xiaomi Poco 256GB Original]
 2. NOTEBOOKS E PCS: SEMPRE adicione a linha do produto ou processador (ex: "Galaxy Book", "Ideapad", "Core i5").
    - ❌ [BUSCAR: Notebook Samsung] -> ✅ [BUSCAR: Notebook Samsung Galaxy Book]
