@@ -31,13 +31,13 @@
    ========================================================================== */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  transition: background .3s, color .3s;
-  overflow-x: hidden;
-  width: 100%;
+body { 
+  font-family: 'DM Sans', sans-serif; 
+  background: var(--bg); 
+  color: var(--text); 
+  transition: background .3s, color .3s; 
+  overflow-x: hidden; 
+  width: 100%; 
 }
 a { text-decoration: none; color: inherit; }
 button { cursor: pointer; border: none; background: none; font-family: inherit; outline: none; }
@@ -664,9 +664,9 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:40px 80px
 </div>
 
 <script>
-// ==========================================
+// ==========================================================================
 // LÓGICA JAVASCRIPT: CONFIGURAÇÕES GERAIS E DADOS
-// ==========================================
+// ==========================================================================
 const GEMINI_PROXY_URL = "/api/gemini";
 const CONFIG = {
     SHEET_ID: "1Ug9wQKO9HfCRrTsjZz8gDe7dCVDxXH2ehMC3nGkb6Xw", 
@@ -700,14 +700,19 @@ const REDES = [
 
 let todasOfertas = [], lojaAtual = "todas", ordemAtual = "recente", debounceTimer = null, refreshTimer = null, ultimaAtualizacao = null, paginaAtual = 1, observerIntersection = null, formLojaSelecionada = "", chatOpen = false, chatHistorico = [];
 
-// ==========================================
-// FUNÇÕES ÚTEIS
-// ==========================================
+// ==========================================================================
+// FUNÇÕES ÚTEIS E COMUNICAÇÃO COM O GEMINI
+// ==========================================================================
+
 async function chamarGemini(promptTexto, systemInst = "", historico = []) {
     let delay = 1000;
     for (let i = 0; i < 3; i++) {
         try {
-            const response = await fetch(GEMINI_PROXY_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ prompt: promptTexto, systemInstruction: systemInst || undefined, history: historico.length > 0 ? historico : undefined }) });
+            const response = await fetch(GEMINI_PROXY_URL, { 
+                method: "POST", 
+                headers: { "Content-Type": "application/json" }, 
+                body: JSON.stringify({ prompt: promptTexto, systemInstruction: systemInst || undefined, history: historico.length > 0 ? historico : undefined }) 
+            });
             const result = await response.json();
             if (!response.ok) throw new Error(`Proxy Error: ${response.status} - ${result.error || response.statusText}`);
             return result.text;
@@ -740,6 +745,11 @@ function toggleTema() {
 const esc = s => String(s).replace(/[&<>'"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' }[c]));
 const formatarMoeda = v => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
+// Segurança extra
+function safeHTML(html) { 
+    return String(html).replace(/<script/gi, "&lt;script"); 
+}
+
 function parsePreco(val) { 
     if (typeof val === 'number') return val; 
     if (!val) return 0; 
@@ -760,22 +770,42 @@ function normalizarLoja(raw) {
 }
 
 function salvarCache(data) { try { localStorage.setItem("cdf_v2_cache", JSON.stringify({ ts: Date.now(), data })); } catch {} }
-function lerCache() { try { const raw = localStorage.getItem("cdf_v2_cache"); if (!raw) return null; const { ts, data } = JSON.parse(raw); return Date.now() - ts > CONFIG.REFRESH_INTERVAL ? null : data; } catch { return null; } }
+
+function lerCache() { 
+    try { 
+        const raw = localStorage.getItem("cdf_v2_cache"); 
+        if (!raw) return null; 
+        const { ts, data } = JSON.parse(raw); 
+        return Date.now() - ts > CONFIG.REFRESH_INTERVAL ? null : data; 
+    } catch { 
+        return null; 
+    } 
+}
+
 function getFavoritos() { try { return JSON.parse(localStorage.getItem("cdf_favs") || "[]"); } catch { return []; } }
 function salvarFavoritos(ids) { try { localStorage.setItem("cdf_favs", JSON.stringify(ids)); } catch {} }
 function isFavorito(id) { return getFavoritos().includes(id); }
 
 function toggleFavorito(id) { 
     const favs = getFavoritos(), idx = favs.indexOf(id); 
-    if (idx === -1) { favs.push(id); mostrarToast("❤️", `Salvo nos favoritos!`); } 
-    else { favs.splice(idx, 1); mostrarToast("💔", `Removido!`); } 
+    if (idx === -1) { 
+        favs.push(id); 
+        mostrarToast("❤️", `Salvo nos favoritos!`); 
+    } else { 
+        favs.splice(idx, 1); 
+        mostrarToast("💔", `Removido!`); 
+    } 
     salvarFavoritos(favs); 
+    
     document.querySelectorAll(`.btn-favorito[data-id="${id}"]`).forEach(btn => { 
         btn.innerHTML = isFavorito(id) ? "❤️" : "🤍"; 
         btn.classList.toggle("ativo", isFavorito(id)); 
         btn.setAttribute("aria-label", isFavorito(id) ? "Remover dos favoritos" : "Adicionar aos favoritos"); 
     }); 
-    if (document.getElementById("page-favoritos").classList.contains("active")) renderFavoritos(); 
+    
+    if (document.getElementById("page-favoritos").classList.contains("active")) {
+        renderFavoritos(); 
+    }
 }
 
 function compartilharOferta(titulo, link) { 
@@ -784,8 +814,16 @@ function compartilharOferta(titulo, link) {
     } else if (navigator.clipboard && navigator.clipboard.writeText) { 
         navigator.clipboard.writeText(`${titulo}\n${link}`).then(() => mostrarToast("🔗", "Link copiado!")); 
     } else { 
-        const el = document.createElement('textarea'); el.value = `${titulo}\n${link}`; el.style.position = 'fixed'; el.style.opacity = '0'; document.body.appendChild(el); el.select(); 
-        try { document.execCommand('copy'); mostrarToast("🔗", "Link copiado!"); } catch {} 
+        const el = document.createElement('textarea'); 
+        el.value = `${titulo}\n${link}`; 
+        el.style.position = 'fixed'; 
+        el.style.opacity = '0'; 
+        document.body.appendChild(el); 
+        el.select(); 
+        try { 
+            document.execCommand('copy'); 
+            mostrarToast("🔗", "Link copiado!"); 
+        } catch {} 
         document.body.removeChild(el); 
     } 
 }
@@ -795,7 +833,10 @@ function mostrarToast(icon, msg) {
     toast.className = "toast"; 
     toast.innerHTML = `<span class="toast-icon">${icon}</span><span>${esc(msg)}</span>`; 
     container.appendChild(toast); 
-    setTimeout(() => { toast.classList.add("saindo"); setTimeout(() => toast.remove(), 350); }, 3000); 
+    setTimeout(() => { 
+        toast.classList.add("saindo"); 
+        setTimeout(() => toast.remove(), 350); 
+    }, 3000); 
 }
 
 function initLazyLoading() { 
@@ -817,25 +858,22 @@ function getSkeletonsHTML(qtd = 6) {
     return Array(qtd).fill().map(() => `<div class="oferta-card" style="border:none;box-shadow:none"><div class="skeleton" style="height:180px;width:100%;border-radius:18px 18px 0 0"></div><div class="oferta-body" style="gap:10px"><div class="skeleton" style="height:12px;width:40%"></div><div class="skeleton" style="height:36px;width:100%"></div><div class="skeleton" style="height:24px;width:60%;margin-top:4px"></div><div class="skeleton" style="height:40px;width:100%;border-radius:10px;margin-top:auto"></div></div></div>`).join(""); 
 }
 
-// ==========================================
+// ==========================================================================
 // INTEGRAÇÕES DE DADOS (PLANILHA E SHOPEE)
-// ==========================================
+// ==========================================================================
 
 async function carregarOfertasShopee() {
     try {
-        // 1. Ler o histórico de ofertas da Shopee do LocalStorage
         let historicoShopee = [];
         try {
             const cache = localStorage.getItem("cdf_shopee_history");
             if (cache) historicoShopee = JSON.parse(cache);
         } catch(e) {}
 
-        // 2. Limpar ofertas do histórico que tenham mais de 7 dias
         const maxIdadeMs = CONFIG.DIAS_EXPIRACAO * 24 * 60 * 60 * 1000;
         const agora = Date.now();
         historicoShopee = historicoShopee.filter(o => (agora - o.timestamp) <= maxIdadeMs);
 
-        // 3. Buscar novas ofertas da API
         const response = await fetch('/api/shopee');
         if (response.ok) {
             const ofertasApi = await response.json();
@@ -843,7 +881,7 @@ async function carregarOfertasShopee() {
                 const maxId = todasOfertas.length > 0 ? Math.max(...todasOfertas.map(o => o.id)) : 0;
                 
                 const novasFormatadas = ofertasApi.map((oferta, index) => ({
-                    id: maxId + 1000 + index, // Evitar conflito de IDs
+                    id: maxId + 1000 + index, 
                     loja: "shopee",
                     titulo: oferta.offerName || "Oferta Shopee",
                     precoAntigo: oferta.price || 0,
@@ -857,18 +895,14 @@ async function carregarOfertasShopee() {
                     timestamp: agora
                 }));
 
-                // 4. Adicionar apenas as que não existem no histórico (evita duplicados)
                 novasFormatadas.forEach(nova => {
                     const existe = historicoShopee.find(h => h.link === nova.link);
-                    if (!existe) historicoShopee.unshift(nova); // Adiciona no início
+                    if (!existe) historicoShopee.unshift(nova); 
                 });
             }
         }
 
-        // 5. Salva o histórico atualizado para a próxima vez
         localStorage.setItem("cdf_shopee_history", JSON.stringify(historicoShopee));
-
-        // 6. Junta as ofertas da Planilha com as da Shopee que acumulamos
         todasOfertas = [...todasOfertas, ...historicoShopee];
 
     } catch (err) {
@@ -893,23 +927,56 @@ async function carregarOfertas(silencioso = false) {
     try {
         const controller = new AbortController(), timeout = setTimeout(() => controller.abort(), 10000);
         const resp = await fetch(`https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(CONFIG.SHEET_TAB)}`, { signal: controller.signal });
-        clearTimeout(timeout); const text = await resp.text();
+        clearTimeout(timeout); 
+        const text = await resp.text();
+        
         if (text.includes("Sign in") || text.trim().startsWith("<")) throw new Error("Privada");
         
         const json = JSON.parse(text.substring(text.indexOf("(") + 1, text.lastIndexOf(")"))), cols = json.table.cols.map(c => (c.label || "").toLowerCase().trim());
         const COL_MAP = { loja: { nomes: ["loja"], idx: 0 }, titulo: { nomes: ["titulo","título","nome"], idx: 1 }, preco_antigo: { nomes: ["preco_antigo","preço_antigo"], idx: 2 }, preco_novo: { nomes: ["preco_novo","preço_novo"], idx: 3 }, link: { nomes: ["link","url"], idx: 4 }, data: { nomes: ["data","date"], idx: 5 }, emoji: { nomes: ["emoji"], idx: 6 }, categoria: { nomes: ["categoria"], idx: 7 }, selo: { nomes: ["selo"], idx: 8 }, ativo: { nomes: ["ativo"], idx: 9 }, imagem: { nomes: ["imagem","img"], idx: 10 } };
-        const colIdx = {}; for (const [campo, config] of Object.entries(COL_MAP)) { let enc = -1; for (const nome of config.nomes) { const idx = cols.indexOf(nome); if (idx >= 0) { enc = idx; break; } } colIdx[campo] = enc >= 0 ? enc : config.idx; }
+        
+        const colIdx = {}; 
+        for (const [campo, config] of Object.entries(COL_MAP)) { 
+            let enc = -1; 
+            for (const nome of config.nomes) { 
+                const idx = cols.indexOf(nome); 
+                if (idx >= 0) { enc = idx; break; } 
+            } 
+            colIdx[campo] = enc >= 0 ? enc : config.idx; 
+        }
+        
         const getCel = (row, campo) => { const idx = colIdx[campo]; return (idx >= 0 && idx < row.c.length && row.c[idx]) ? row.c[idx].v || "" : ""; };
         
         const novas = json.table.rows.map((row, i) => {
             const pA = parsePreco(getCel(row, "preco_antigo")), pN = parsePreco(getCel(row, "preco_novo"));
-            let ts = getCel(row, "data") ? parseDataCustom(String(getCel(row, "data"))) : (Date.now() - i * 60000); if (isNaN(ts)) ts = Date.now() - i * 60000;
+            let ts = getCel(row, "data") ? parseDataCustom(String(getCel(row, "data"))) : (Date.now() - i * 60000); 
+            if (isNaN(ts)) ts = Date.now() - i * 60000;
             const ativoStr = String(getCel(row, "ativo")).toLowerCase().trim(), ativo = !["nao", "não", "false", "0"].includes(ativoStr);
             const colEmoji = String(getCel(row, "emoji") || ""), colImagem = String(getCel(row, "imagem") || ""), isUrl = s => s && (String(s).startsWith("http") || String(s).startsWith("//"));
-            return { id: i + 1, loja: normalizarLoja(String(getCel(row, "loja") || "")), titulo: getCel(row, "titulo") || "Produto Oferta", precoAntigo: pA, precoNovo: pN, desconto: pA > 0 && pA > pN ? Math.round((1 - pN / pA) * 100) : 0, link: getCel(row, "link") || "#", img: isUrl(colImagem) ? colImagem : (isUrl(colEmoji) ? colEmoji : "") || (!isUrl(colEmoji) && colEmoji ? colEmoji : "🛒"), categoria: getCel(row, "categoria") || "Geral", selo: getCel(row, "selo") || "", ativo, timestamp: ts };
-        }).filter(o => { const maxIdadeMs = CONFIG.DIAS_EXPIRACAO * 24 * 60 * 60 * 1000; return o.ativo && o.precoNovo > 0 && (Date.now() - o.timestamp) <= maxIdadeMs; });
+            
+            return { 
+                id: i + 1, 
+                loja: normalizarLoja(String(getCel(row, "loja") || "")), 
+                titulo: getCel(row, "titulo") || "Produto Oferta", 
+                precoAntigo: pA, 
+                precoNovo: pN, 
+                desconto: pA > 0 && pA > pN ? Math.round((1 - pN / pA) * 100) : 0, 
+                link: getCel(row, "link") || "#", 
+                img: isUrl(colImagem) ? colImagem : (isUrl(colEmoji) ? colEmoji : "") || (!isUrl(colEmoji) && colEmoji ? colEmoji : "🛒"), 
+                categoria: getCel(row, "categoria") || "Geral", 
+                selo: getCel(row, "selo") || "", 
+                ativo, 
+                timestamp: ts 
+            };
+        }).filter(o => { 
+            const maxIdadeMs = CONFIG.DIAS_EXPIRACAO * 24 * 60 * 60 * 1000; 
+            return o.ativo && o.precoNovo > 0 && (Date.now() - o.timestamp) <= maxIdadeMs; 
+        });
 
-        if (silencioso && todasOfertas.length > 0) { const qtdNovos = novas.length - todasOfertas.length; if (qtdNovos > 0) mostrarToast("🔥", `${qtdNovos} novas ofertas!`); }
+        if (silencioso && todasOfertas.length > 0) { 
+            const qtdNovos = novas.length - todasOfertas.length; 
+            if (qtdNovos > 0) mostrarToast("🔥", `${qtdNovos} novas ofertas!`); 
+        }
         
         todasOfertas = novas; 
         await carregarOfertasShopee(); 
@@ -926,7 +993,11 @@ async function carregarOfertas(silencioso = false) {
 function iniciarAutoRefresh() { 
     if (refreshTimer) clearInterval(refreshTimer); 
     refreshTimer = setInterval(() => carregarOfertas(true), CONFIG.REFRESH_INTERVAL); 
-    setInterval(() => { if(ultimaAtualizacao) document.getElementById("refreshStatus").textContent = `Atualizado há ${Math.round((Date.now()-ultimaAtualizacao)/60000)}m`; }, 60000); 
+    setInterval(() => { 
+        if(ultimaAtualizacao) {
+            document.getElementById("refreshStatus").textContent = `Atualizado há ${Math.round((Date.now()-ultimaAtualizacao)/60000)}m`; 
+        }
+    }, 60000); 
 }
 
 function aplicarOrdem(lista) { 
@@ -944,25 +1015,67 @@ function criarCardHTML(o, delayIdx) {
     const loja = LOJAS[o.loja] || LOJAS.outras, bgGrad = o.desconto >= 50 ? "linear-gradient(135deg, var(--accent), var(--accent2))" : "linear-gradient(135deg, var(--accent2), #ff9e00)", fav = isFavorito(o.id), novo = ((Date.now() - o.timestamp) / 3600000) <= CONFIG.HORAS_NOVO, expireTime = o.timestamp + (CONFIG.DIAS_EXPIRACAO * 24 * 60 * 60 * 1000);
     const imgContent = (o.img && (o.img.startsWith("http") || o.img.startsWith("//"))) ? `<img data-src="${esc(o.img)}" class="lazy-img" alt="${esc(o.titulo)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div style="display:none;font-size:56px">🛒</div>` : `<div style="font-size:56px">${esc(o.img)}</div>`;
     const parcelaHtml = o.precoNovo >= 50 ? `<span style="color:var(--text3);font-style:italic">Parcela na loja →</span>` : `<strong style="color:var(--green)">Preço acessível</strong>`;
+    
     return `
     <div class="oferta-card fade-up" style="animation-delay:${(delayIdx%10)*0.05}s">
-        <div class="badges-top-left">${o.desconto > 0 ? `<div class="oferta-desconto" style="background:${bgGrad}">-${o.desconto}%</div>` : ''}${o.selo ? `<div class="oferta-selo" style="background:${loja.cor};color:#fff">${esc(o.selo)}</div>` : ''}</div>
+        <div class="badges-top-left">
+            ${o.desconto > 0 ? `<div class="oferta-desconto" style="background:${bgGrad}">-${o.desconto}%</div>` : ''}
+            ${o.selo ? `<div class="oferta-selo" style="background:${loja.cor};color:#fff">${esc(o.selo)}</div>` : ''}
+        </div>
         ${novo ? `<div class="badge-novo">NOVO</div>` : ''}
-        <button class="btn-favorito ${fav ? 'ativo' : ''}" data-id="${o.id}" onclick="window.toggleFavorito(${o.id})">${fav ? '❤️' : '🤍'}</button>
-        <div class="oferta-img">${imgContent}<div class="oferta-loja-badge" style="background:${loja.cor}22;color:${loja.cor}">${esc(loja.nome)}</div></div>
+        
+        <button class="btn-favorito ${fav ? 'ativo' : ''}" data-id="${o.id}" onclick="window.toggleFavorito(${o.id})">
+            ${fav ? '❤️' : '🤍'}
+        </button>
+        
+        <div class="oferta-img">
+            ${imgContent}
+            <div class="oferta-loja-badge" style="background:${loja.cor}22;color:${loja.cor}">${esc(loja.nome)}</div>
+        </div>
+        
         <div class="oferta-body">
-            <div class="oferta-cat">${esc(o.categoria)}</div><div class="oferta-titulo" title="${esc(o.titulo)}">${esc(o.titulo)}</div>
-            <div>${o.precoAntigo > o.precoNovo ? `<div class="oferta-preco-antigo">${formatarMoeda(o.precoAntigo)}</div>` : ''}<div class="oferta-preco-novo">${formatarMoeda(o.precoNovo)}</div><div class="oferta-parcelamento">${parcelaHtml}</div>${o.desconto > 0 ? `<div class="oferta-economia">Poupa ${formatarMoeda(o.precoAntigo - o.precoNovo)}</div>` : ''}<div class="expire-timer" data-expire="${expireTime}">⏱️ A calcular...</div></div>
-            <div style="display:flex; gap:6px; margin-top:8px;"><button class="btn-alerta" onclick="window.abrirModalAlerta('${esc(o.titulo)}')">🔔 Alerta</button><a href="https://t.me/ocacadordeoferta?text=Pode avisar-me se este produto voltar? ${encodeURIComponent(o.titulo)}" target="_blank" class="btn-telegram-push"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.94z"/></svg> Telegram</a></div>
-            <div class="botoes-acao"><button class="ai-btn" onclick="window.analisarOferta(${o.id})">✨</button><a href="${esc(o.link)}" target="_blank" class="oferta-btn" style="background:${loja.cor}15;color:${loja.cor};border:1px solid ${loja.cor}40" onmouseover="this.style.background='${loja.cor}';this.style.color='#fff'" onmouseout="this.style.background='${loja.cor}15';this.style.color='${loja.cor}'">Pegar Oferta 🛒</a><button class="btn-partilhar" onclick="window.compartilharOferta('${esc(o.titulo)}', '${esc(o.link)}')"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg></button></div>
+            <div class="oferta-cat">${esc(o.categoria)}</div>
+            <div class="oferta-titulo" title="${esc(o.titulo)}">${esc(o.titulo)}</div>
+            
+            <div>
+                ${o.precoAntigo > o.precoNovo ? `<div class="oferta-preco-antigo">${formatarMoeda(o.precoAntigo)}</div>` : ''}
+                <div class="oferta-preco-novo">${formatarMoeda(o.precoNovo)}</div>
+                <div class="oferta-parcelamento">${parcelaHtml}</div>
+                ${o.desconto > 0 ? `<div class="oferta-economia">Poupa ${formatarMoeda(o.precoAntigo - o.precoNovo)}</div>` : ''}
+                <div class="expire-timer" data-expire="${expireTime}">⏱️ A calcular...</div>
+            </div>
+            
+            <div style="display:flex; gap:6px; margin-top:8px;">
+                <button class="btn-alerta" onclick="window.abrirModalAlerta('${esc(o.titulo)}')">🔔 Alerta</button>
+                <a href="https://t.me/ocacadordeoferta?text=Pode avisar-me se este produto voltar? ${encodeURIComponent(o.titulo)}" target="_blank" class="btn-telegram-push">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.94z"/></svg> Telegram
+                </a>
+            </div>
+            
+            <div class="botoes-acao">
+                <button class="ai-btn" onclick="window.analisarOferta(${o.id})">✨</button>
+                <a href="${esc(o.link)}" target="_blank" class="oferta-btn" style="background:${loja.cor}15;color:${loja.cor};border:1px solid ${loja.cor}40" onmouseover="this.style.background='${loja.cor}';this.style.color='#fff'" onmouseout="this.style.background='${loja.cor}15';this.style.color='${loja.cor}'">Pegar Oferta 🛒</a>
+                <button class="btn-partilhar" onclick="window.compartilharOferta('${esc(o.titulo)}', '${esc(o.link)}')">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                </button>
+            </div>
         </div>
     </div>`;
 }
 
 function renderDestaques() {
-    const grid = document.getElementById("destaqueGrid"); if (!grid || todasOfertas.length === 0) return;
+    const grid = document.getElementById("destaqueGrid"); 
+    if (!grid || todasOfertas.length === 0) return;
+    
     let destCandidatos = todasOfertas.filter(o => (o.selo && o.selo.includes("DESTAQUE")) || o.desconto >= 40);
-    destCandidatos.sort((a, b) => { const aDest = (a.selo && a.selo.includes("DESTAQUE")) ? 1 : 0, bDest = (b.selo && b.selo.includes("DESTAQUE")) ? 1 : 0; if (aDest !== bDest) return bDest - aDest; return b.timestamp - a.timestamp; });
+    
+    destCandidatos.sort((a, b) => { 
+        const aDest = (a.selo && a.selo.includes("DESTAQUE")) ? 1 : 0;
+        const bDest = (b.selo && b.selo.includes("DESTAQUE")) ? 1 : 0; 
+        if (aDest !== bDest) return bDest - aDest; 
+        return b.timestamp - a.timestamp; 
+    });
+    
     const dest = destCandidatos.slice(0, 4); 
     grid.innerHTML = dest.length ? dest.map((o, i) => criarCardHTML(o, i)).join("") : `<div class="empty-state">Sem destaques no momento.</div>`; 
     initLazyLoading();
@@ -978,7 +1091,6 @@ function getFilteredOfertas() {
         
         let passSearch = true;
         if (busca) {
-            // Lógica melhorada: A palavra tem de COMEÇAR com a busca
             const palavrasTitulo = o.titulo.toLowerCase().split(/[\s-]+/);
             const palavrasCategoria = o.categoria.toLowerCase().split(/[\s-]+/);
             
@@ -1017,20 +1129,78 @@ function renderOfertas(resetPage = true) {
 const loadMoreObserver = new IntersectionObserver((entries) => { 
     if (entries[0].isIntersecting && document.getElementById("page-ofertas").classList.contains("active")) { 
         const filt = getFilteredOfertas(); 
-        if (filt.length > paginaAtual * CONFIG.ITEMS_PER_PAGE) { paginaAtual++; renderOfertas(false); } 
+        if (filt.length > paginaAtual * CONFIG.ITEMS_PER_PAGE) { 
+            paginaAtual++; 
+            renderOfertas(false); 
+        } 
     } 
 });
-document.addEventListener("DOMContentLoaded", () => { const trigger = document.getElementById("loadMoreTrigger"); if(trigger) loadMoreObserver.observe(trigger); });
 
-function renderFavoritos() { const grid = document.getElementById("favoritosGrid"); if (!grid) return; const favIds = getFavoritos(), favs = aplicarOrdem(todasOfertas.filter(o => favIds.includes(o.id))); grid.innerHTML = favs.length ? favs.map((o, i) => criarCardHTML(o, i)).join("") : `<div class="fav-empty"><div class="emoji">💔</div><h3>Sua lista está vazia</h3><p>Navegue pelas ofertas e clique no coração para salvar os melhores descontos aqui.</p></div>`; initLazyLoading(); }
-function renderSocial() { document.getElementById("socialGrid").innerHTML = REDES.map(r => `<a class="social-card" href="${r.url}" target="_blank" aria-label="Siga-nos no ${r.nome}"><div class="social-icon" style="color:${r.cor};">${r.svg}</div><span>${r.nome}</span></a>`).join(""); document.getElementById("footerSocials").innerHTML = REDES.map(r => `<a class="footer-social" href="${r.url}" target="_blank" aria-label="Siga-nos no ${r.nome}">${r.svg}</a>`).join(""); }
-function renderFormLojas() { document.getElementById("formLojas").innerHTML = Object.keys(LOJAS).filter(k => k !== "todas").map(k => `<button class="form-loja-btn" onclick="window.toggleFormLoja(this,'${k}','${LOJAS[k].cor}')">${LOJAS[k].emoji} ${LOJAS[k].nome}</button>`).join(""); }
-function atualizarStats() { const total = todasOfertas.length, media = total ? Math.round(todasOfertas.reduce((s, o) => s + o.desconto, 0) / total) : 0; ['stat-total','stat-total-2'].forEach(id => { const e = document.getElementById(id); if(e) e.textContent = total; }); ['stat-desconto','stat-desconto-2'].forEach(id => { const e = document.getElementById(id); if(e) e.textContent = media + "%"; }); }
-function inicializarFiltros() { document.getElementById("lojasFilter").innerHTML = Object.entries(LOJAS).map(([id, l]) => `<button class="loja-btn ${id==='todas'?'active':''}" onclick="window.filtrarPorLoja('${id}',this)" style="${id==='todas'?`border-color:${l.cor};background:${l.cor}12;color:${l.cor}`:''}">${l.emoji} ${l.nome}</button>`).join(""); }
-function filtrarPorLoja(loja, btn) { lojaAtual = loja; document.querySelectorAll(".loja-btn").forEach(b => { b.classList.remove("active"); b.style.borderColor = "var(--border2)"; b.style.background = "var(--surface2)"; b.style.color = "var(--text2)"; }); btn.classList.add("active"); btn.style.borderColor = LOJAS[loja].cor; btn.style.background = LOJAS[loja].cor + "15"; btn.style.color = LOJAS[loja].cor; renderOfertas(); }
-function ordenar(tipo, btn) { ordemAtual = tipo; document.querySelectorAll(".ord-btn").forEach(b => b.classList.remove("active")); btn.classList.add("active"); renderOfertas(); }
-function filtrarOfertas() { clearTimeout(debounceTimer); debounceTimer = setTimeout(() => renderOfertas(), 300); }
-function renderizarTudo() { renderDestaques(); if(document.getElementById("page-ofertas").classList.contains("active")) renderOfertas(); if(document.getElementById("page-favoritos").classList.contains("active")) renderFavoritos(); atualizarStats(); window.atualizarCronometros(); }
+document.addEventListener("DOMContentLoaded", () => { 
+    const trigger = document.getElementById("loadMoreTrigger"); 
+    if(trigger) loadMoreObserver.observe(trigger); 
+});
+
+function renderFavoritos() { 
+    const grid = document.getElementById("favoritosGrid"); 
+    if (!grid) return; 
+    
+    const favIds = getFavoritos();
+    const favs = aplicarOrdem(todasOfertas.filter(o => favIds.includes(o.id))); 
+    
+    grid.innerHTML = favs.length ? favs.map((o, i) => criarCardHTML(o, i)).join("") : `<div class="fav-empty"><div class="emoji">💔</div><h3>Sua lista está vazia</h3><p>Navegue pelas ofertas e clique no coração para salvar os melhores descontos aqui.</p></div>`; 
+    initLazyLoading(); 
+}
+
+function renderSocial() { 
+    document.getElementById("socialGrid").innerHTML = REDES.map(r => `<a class="social-card" href="${r.url}" target="_blank" aria-label="Siga-nos no ${r.nome}"><div class="social-icon" style="color:${r.cor};">${r.svg}</div><span>${r.nome}</span></a>`).join(""); 
+    document.getElementById("footerSocials").innerHTML = REDES.map(r => `<a class="footer-social" href="${r.url}" target="_blank" aria-label="Siga-nos no ${r.nome}">${r.svg}</a>`).join(""); 
+}
+
+function renderFormLojas() { 
+    document.getElementById("formLojas").innerHTML = Object.keys(LOJAS).filter(k => k !== "todas").map(k => `<button class="form-loja-btn" onclick="window.toggleFormLoja(this,'${k}','${LOJAS[k].cor}')">${LOJAS[k].emoji} ${LOJAS[k].nome}</button>`).join(""); 
+}
+
+function atualizarStats() { 
+    const total = todasOfertas.length;
+    const media = total ? Math.round(todasOfertas.reduce((s, o) => s + o.desconto, 0) / total) : 0; 
+    ['stat-total','stat-total-2'].forEach(id => { const e = document.getElementById(id); if(e) e.textContent = total; }); 
+    ['stat-desconto','stat-desconto-2'].forEach(id => { const e = document.getElementById(id); if(e) e.textContent = media + "%"; }); 
+}
+
+function inicializarFiltros() { 
+    document.getElementById("lojasFilter").innerHTML = Object.entries(LOJAS).map(([id, l]) => `<button class="loja-btn ${id==='todas'?'active':''}" onclick="window.filtrarPorLoja('${id}',this)" style="${id==='todas'?`border-color:${l.cor};background:${l.cor}12;color:${l.cor}`:''}">${l.emoji} ${l.nome}</button>`).join(""); 
+}
+
+function filtrarPorLoja(loja, btn) { 
+    lojaAtual = loja; 
+    document.querySelectorAll(".loja-btn").forEach(b => { b.classList.remove("active"); b.style.borderColor = "var(--border2)"; b.style.background = "var(--surface2)"; b.style.color = "var(--text2)"; }); 
+    btn.classList.add("active"); 
+    btn.style.borderColor = LOJAS[loja].cor; 
+    btn.style.background = LOJAS[loja].cor + "15"; 
+    btn.style.color = LOJAS[loja].cor; 
+    renderOfertas(); 
+}
+
+function ordenar(tipo, btn) { 
+    ordemAtual = tipo; 
+    document.querySelectorAll(".ord-btn").forEach(b => b.classList.remove("active")); 
+    btn.classList.add("active"); 
+    renderOfertas(); 
+}
+
+function filtrarOfertas() { 
+    clearTimeout(debounceTimer); 
+    debounceTimer = setTimeout(() => renderOfertas(), 300); 
+}
+
+function renderizarTudo() { 
+    renderDestaques(); 
+    if(document.getElementById("page-ofertas").classList.contains("active")) renderOfertas(); 
+    if(document.getElementById("page-favoritos").classList.contains("active")) renderFavoritos(); 
+    atualizarStats(); 
+    window.atualizarCronometros(); 
+}
 
 function navegar(pagina) { 
     document.querySelectorAll(".page").forEach(p => p.classList.remove("active")); 
@@ -1040,40 +1210,98 @@ function navegar(pagina) {
     document.getElementById("mobileMenu").classList.remove("open"); 
     window.scrollTo(0, 0); 
     history.pushState({ pagina }, "", `#${pagina}`); 
-    if (pagina === "ofertas") { if(!document.getElementById("lojasFilter").innerHTML) inicializarFiltros(); renderOfertas(); } 
-    else if (pagina === "favoritos") renderFavoritos(); 
+    if (pagina === "ofertas") { 
+        if(!document.getElementById("lojasFilter").innerHTML) inicializarFiltros(); 
+        renderOfertas(); 
+    } 
+    else if (pagina === "favoritos") {
+        renderFavoritos(); 
+    }
 }
 
-window.addEventListener("popstate", (e) => { const pg = (e.state && e.state.pagina) || location.hash.replace("#", "") || "home"; navegar(pg); });
-window.addEventListener("scroll", () => { document.getElementById("navbar").classList.toggle("scrolled", window.scrollY > 20); document.getElementById("btnScrollTop").style.display = window.scrollY > 500 ? "flex" : "none"; const fab = document.getElementById("fabBusca"); if(window.scrollY > 300 && !document.getElementById("page-ofertas").classList.contains("active")) { fab.style.opacity = 1; fab.style.pointerEvents = "all"; } else { fab.style.opacity = 0; fab.style.pointerEvents = "none"; } });
-function toggleMenu() { document.getElementById("mobileMenu").classList.toggle("open"); }
-function toggleFormLoja(btn, loja, cor) { if (formLojaSelecionada === loja) { formLojaSelecionada = ""; btn.style.borderColor = "var(--border2)"; btn.style.background = "var(--surface2)"; btn.style.color = "var(--text3)"; } else { document.querySelectorAll(".form-loja-btn").forEach(b => { b.style.borderColor = "var(--border2)"; b.style.background = "var(--surface2)"; b.style.color = "var(--text3)"; }); formLojaSelecionada = loja; btn.style.borderColor = cor; btn.style.background = cor + "15"; btn.style.color = cor; } }
-function enviarPedido() { const p = document.getElementById("pedidoProduto").value.trim(); if (!p) return; const msg = encodeURIComponent(`🎯 *NOVO PEDIDO NO SITE*\n\n📦 *Produto:* ${p}\n${document.getElementById("pedidoOrcamento").value ? `💰 *Orçamento:* ${document.getElementById("pedidoOrcamento").value}\n` : ''}${formLojaSelecionada ? `🏪 *Loja:* ${LOJAS[formLojaSelecionada]?.nome}\n` : ''}${document.getElementById("pedidoDetalhes").value ? `📝 *Detalhes:* ${document.getElementById("pedidoDetalhes").value}\n` : ''}`); document.getElementById("formBox").innerHTML = `<div class="form-success fade-up"><div class="form-success-icon">✓</div><h3 style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--text);margin-bottom:8px">Pedido Preparado!</h3><p style="color:var(--text2);margin-bottom:24px">O seu pedido foi gerado. Clique abaixo para enviar diretamente para a nossa equipa no Telegram.</p><a href="${CONFIG.TELEGRAM}?text=${msg}" target="_blank" class="btn-primary" style="text-decoration:none">Enviar Pedido no Telegram</a></div>`; }
+window.addEventListener("popstate", (e) => { 
+    const pg = (e.state && e.state.pagina) || location.hash.replace("#", "") || "home"; 
+    navegar(pg); 
+});
 
-// ==========================================
-// FUNÇÕES DE RETENÇÃO E MELHORIAS (Fases 2 e 3)
-// ==========================================
+window.addEventListener("scroll", () => { 
+    document.getElementById("navbar").classList.toggle("scrolled", window.scrollY > 20); 
+    document.getElementById("btnScrollTop").style.display = window.scrollY > 500 ? "flex" : "none"; 
+    const fab = document.getElementById("fabBusca"); 
+    if(window.scrollY > 300 && !document.getElementById("page-ofertas").classList.contains("active")) { 
+        fab.style.opacity = 1; fab.style.pointerEvents = "all"; 
+    } else { 
+        fab.style.opacity = 0; fab.style.pointerEvents = "none"; 
+    } 
+});
+
+function toggleMenu() { 
+    document.getElementById("mobileMenu").classList.toggle("open"); 
+}
+
+function toggleFormLoja(btn, loja, cor) { 
+    if (formLojaSelecionada === loja) { 
+        formLojaSelecionada = ""; 
+        btn.style.borderColor = "var(--border2)"; 
+        btn.style.background = "var(--surface2)"; 
+        btn.style.color = "var(--text3)"; 
+    } else { 
+        document.querySelectorAll(".form-loja-btn").forEach(b => { 
+            b.style.borderColor = "var(--border2)"; 
+            b.style.background = "var(--surface2)"; 
+            b.style.color = "var(--text3)"; 
+        }); 
+        formLojaSelecionada = loja; 
+        btn.style.borderColor = cor; 
+        btn.style.background = cor + "15"; 
+        btn.style.color = cor; 
+    } 
+}
+
+function enviarPedido() { 
+    const p = document.getElementById("pedidoProduto").value.trim(); 
+    if (!p) return; 
+    const msg = encodeURIComponent(`🎯 *NOVO PEDIDO NO SITE*\n\n📦 *Produto:* ${p}\n${document.getElementById("pedidoOrcamento").value ? `💰 *Orçamento:* ${document.getElementById("pedidoOrcamento").value}\n` : ''}${formLojaSelecionada ? `🏪 *Loja:* ${LOJAS[formLojaSelecionada]?.nome}\n` : ''}${document.getElementById("pedidoDetalhes").value ? `📝 *Detalhes:* ${document.getElementById("pedidoDetalhes").value}\n` : ''}`); 
+    document.getElementById("formBox").innerHTML = `<div class="form-success fade-up"><div class="form-success-icon">✓</div><h3 style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--text);margin-bottom:8px">Pedido Preparado!</h3><p style="color:var(--text2);margin-bottom:24px">O seu pedido foi gerado. Clique abaixo para enviar diretamente para a nossa equipa no Telegram.</p><a href="${CONFIG.TELEGRAM}?text=${msg}" target="_blank" class="btn-primary" style="text-decoration:none">Enviar Pedido no Telegram</a></div>`; 
+}
+
+// ==========================================================================
+// FUNÇÕES DE RETENÇÃO E MELHORIAS
+// ==========================================================================
 
 window.updatePriceFilterDisplay = function() { 
     const val = document.getElementById('priceFilter').value; 
     document.getElementById('priceValDisplay').textContent = val >= 15000 ? "R$ 15.000+" : `R$ ${val}`; 
 };
 
+// BUSCA INTELIGENTE 5.0 (inclui "ip16", "iphone pro max", "s24 ultra")
 window.mostrarAutocomplete = function() { 
     const busca = document.getElementById('buscaInput').value.toLowerCase().trim();
     const box = document.getElementById('autocompleteResults'); 
     
-    if (busca.length < 2) { box.style.display = 'none'; return; } 
+    if (busca.length < 2) { 
+        box.style.display = 'none'; 
+        return; 
+    } 
     
-    // Filtro inteligente: Verifica se alguma palavra do título COMEÇA com a busca
     const sugestoes = todasOfertas.filter(o => {
-        const palavrasTitulo = o.titulo.toLowerCase().split(/[\s-]+/);
-        return palavrasTitulo.some(palavra => palavra.startsWith(busca));
-    }).slice(0, 5); 
+        const titulo = o.titulo.toLowerCase();
+        return titulo.includes(busca) || 
+               titulo.replace(/pro max/gi, "promax").includes(busca) || 
+               titulo.includes(busca.replace(/pro max/gi, "promax"));
+    }).slice(0, 6); 
     
-    if (sugestoes.length === 0) { box.style.display = 'none'; return; } 
+    if (sugestoes.length === 0) { 
+        box.style.display = 'none'; 
+        return; 
+    } 
     
-    box.innerHTML = sugestoes.map(o => `<div class="autocomplete-item" onclick="window.selecionarAutocomplete('${esc(o.titulo)}')">🔍 ${esc(o.titulo)}</div>`).join(''); 
+    box.innerHTML = sugestoes.map(o => 
+        `<div class="autocomplete-item" onclick="window.selecionarAutocomplete('${esc(o.titulo)}')">
+            🔍 ${esc(o.titulo)}
+        </div>`
+    ).join(''); 
+    
     box.style.display = 'block'; 
 };
 
@@ -1094,197 +1322,252 @@ window.atualizarCronometros = function() {
     document.querySelectorAll('.expire-timer').forEach(el => { 
         const timeStr = el.getAttribute('data-expire'); 
         if (!timeStr) return; 
-        const diff = parseInt(timeStr) - Date.now(); 
         
-        if (diff <= 0) { el.innerHTML = "⏱️ Oferta Expirada"; return; } 
+        const diff = parseInt(timeStr) - Date.now(); 
+        if (diff <= 0) { 
+            el.innerHTML = "⏱️ Oferta Expirada"; 
+            return; 
+        } 
         
         const d = Math.floor(diff / (1000 * 60 * 60 * 24));
         const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)); 
         el.innerHTML = `⏱️ Expira em ${d > 0 ? d + 'd ' : ''}${h}h`; 
     }); 
 };
+
 setInterval(window.atualizarCronometros, 60000);
 
-window.copiarCupom = function(codigo, elemento) { navigator.clipboard.writeText(codigo).then(() => { const textoAntigo = elemento.innerText; elemento.innerText = "COPIADO! ✅"; elemento.style.background = "var(--green)"; elemento.style.color = "#fff"; setTimeout(() => { elemento.innerText = textoAntigo; elemento.style.background = "var(--bg)"; elemento.style.color = "var(--accent)"; }, 2000); window.mostrarToast('🎟️', 'Cupom copiado com sucesso!'); }); };
-window.abrirModalAlerta = function(produto) { document.getElementById('alertaModal').classList.add('open'); };
-window.salvarAlerta = function() { const preco = document.getElementById('alertaPreco').value, contacto = document.getElementById('alertaContacto').value; if(!preco || !contacto) { window.mostrarToast('⚠️', 'Preencha o preço alvo e o seu contacto!'); return; } document.getElementById('alertaModal').classList.remove('open'); window.mostrarToast('🔔', 'Alerta configurado com sucesso! O Teteco avisará.'); };
+window.copiarCupom = function(codigo, elemento) { 
+    navigator.clipboard.writeText(codigo).then(() => { 
+        const textoAntigo = elemento.innerText; 
+        elemento.innerText = "COPIADO! ✅"; 
+        elemento.style.background = "var(--green)"; 
+        elemento.style.color = "#fff"; 
+        setTimeout(() => { 
+            elemento.innerText = textoAntigo; 
+            elemento.style.background = "var(--bg)"; 
+            elemento.style.color = "var(--accent)"; 
+        }, 2000); 
+        window.mostrarToast('🎟️', 'Cupom copiado com sucesso!'); 
+    }); 
+};
 
-// ==========================================
-// FUNÇÕES DE INTELIGÊNCIA ARTIFICIAL (Botão e Chatbot)
-// ==========================================
-async function analisarOferta(idOferta) { const oferta = todasOfertas.find(o => o.id === idOferta); if (!oferta) return; const modal = document.getElementById('aiModal'), modalBody = document.getElementById('aiModalBody'); modal.classList.add('open'); modalBody.innerHTML = '<div class="loader-spinner" style="margin: 20px auto;"></div><p style="text-align:center; margin-top:10px;">O Teteco está a analisar o mercado e os padrões de preço... ✨</p>'; const promptText = `Analise a seguinte oferta: Produto: ${oferta.titulo} | Loja: ${oferta.loja} | Preço Atual: R$ ${oferta.precoNovo} | Preço Antigo: R$ ${oferta.precoAntigo} | Desconto reportado: ${oferta.desconto}%`; const systemInstruction = `Você é um especialista em compras e inteligência de mercado brasileiro. Seu objetivo é analisar a oferta e dizer se "Vale a pena?" de forma direta, simpática e profissional. Sempre justifique se o desconto parece real ou se é "metade do dobro" baseado no seu conhecimento geral sobre a categoria do produto. Use emojis para tornar o texto mais leve. Forneça sua resposta em, no máximo, 2 ou 3 parágrafos curtos. Finalize sempre atribuindo uma "Nota do Teteco" de 1 a 10.`; const resposta = await chamarGemini(promptText, systemInstruction); modalBody.innerHTML = _formatarRespostaIA(resposta); }
-function fecharAiModal() { document.getElementById('aiModal').classList.remove('open'); }
-function toggleChat() { chatOpen = !chatOpen; document.getElementById("chatWindow").classList.toggle("open", chatOpen); const fab = document.getElementById("chatFab"), fabIcon = document.getElementById("chatFabIcon"), fabClose = document.getElementById("chatFabClose"); if(chatOpen) { fab.classList.add("active"); fabIcon.style.display = "none"; fabClose.style.display = "flex"; document.getElementById("chatBadge").style.display="none"; if(chatHistorico.length===0) setTimeout(()=> document.getElementById("chatSuggestions").style.display="flex", 1500); } else { fab.classList.remove("active"); fabIcon.style.display = "flex"; fabClose.style.display = "none"; } }
-function _addMsgChat(html, tipo) { const msgs = document.getElementById("chatMessages"), div = document.createElement("div"); div.className = `chat-msg ${tipo}`; div.innerHTML = html; msgs.appendChild(div); msgs.scrollTop = msgs.scrollHeight; }
+window.abrirModalAlerta = function(produto) { 
+    document.getElementById('alertaModal').classList.add('open'); 
+};
 
-// Função auxiliar para executar buscas em lote de forma paralela
+window.salvarAlerta = function() { 
+    const preco = document.getElementById('alertaPreco').value, contacto = document.getElementById('alertaContacto').value; 
+    if(!preco || !contacto) { 
+        window.mostrarToast('⚠️', 'Preencha o preço alvo e o seu contacto!'); 
+        return; 
+    } 
+    document.getElementById('alertaModal').classList.remove('open'); 
+    window.mostrarToast('🔔', 'Alerta configurado com sucesso! O Teteco avisará.'); 
+};
+
+// ==========================================================================
+// CÉREBRO IA: TETECO 5.0 (CASCATA PARALELA E FILTRO ANTI-ACESSÓRIOS)
+// ==========================================================================
+
+async function analisarOferta(idOferta) { 
+    const oferta = todasOfertas.find(o => o.id === idOferta); 
+    if (!oferta) return; 
+    
+    const modal = document.getElementById('aiModal'), modalBody = document.getElementById('aiModalBody'); 
+    modal.classList.add('open'); 
+    modalBody.innerHTML = '<div class="loader-spinner" style="margin: 20px auto;"></div><p style="text-align:center; margin-top:10px;">O Teteco está a analisar o mercado e os padrões de preço... ✨</p>'; 
+    
+    const promptText = `Analise a seguinte oferta: Produto: ${oferta.titulo} | Loja: ${oferta.loja} | Preço Atual: R$ ${oferta.precoNovo} | Preço Antigo: R$ ${oferta.precoAntigo} | Desconto reportado: ${oferta.desconto}%`; 
+    const systemInstruction = `Você é um especialista em compras e inteligência de mercado brasileiro. Seu objetivo é analisar a oferta e dizer se "Vale a pena?" de forma direta, simpática e profissional. Sempre justifique se o desconto parece real ou se é "metade do dobro" baseado no seu conhecimento geral sobre a categoria do produto. Use emojis para tornar o texto mais leve. Forneça sua resposta em, no máximo, 2 ou 3 parágrafos curtos. Finalize sempre atribuindo uma "Nota do Teteco" de 1 a 10.`; 
+    
+    const resposta = await chamarGemini(promptText, systemInstruction); 
+    modalBody.innerHTML = _formatarRespostaIA(resposta); 
+}
+
+function fecharAiModal() { 
+    document.getElementById('aiModal').classList.remove('open'); 
+}
+
+function toggleChat() { 
+    chatOpen = !chatOpen; 
+    document.getElementById("chatWindow").classList.toggle("open", chatOpen); 
+    
+    const fab = document.getElementById("chatFab"), fabIcon = document.getElementById("chatFabIcon"), fabClose = document.getElementById("chatFabClose"); 
+    
+    if(chatOpen) { 
+        fab.classList.add("active"); 
+        fabIcon.style.display = "none"; 
+        fabClose.style.display = "flex"; 
+        document.getElementById("chatBadge").style.display="none"; 
+        if(chatHistorico.length===0) setTimeout(()=> document.getElementById("chatSuggestions").style.display="flex", 1500); 
+    } else { 
+        fab.classList.remove("active"); 
+        fabIcon.style.display = "flex"; 
+        fabClose.style.display = "none"; 
+    } 
+}
+
+function _addMsgChat(html, tipo) { 
+    const msgs = document.getElementById("chatMessages"), div = document.createElement("div"); 
+    div.className = `chat-msg ${tipo}`; 
+    div.innerHTML = safeHTML(html); 
+    msgs.appendChild(div); 
+    msgs.scrollTop = msgs.scrollHeight; 
+}
+
 async function executarBuscasParalelas(termos, configIA) {
-    let todas = [];
-    const promessas = termos.filter(t => t).map(async (termo) => {
-        try {
-            const res = await fetch('/api/shopee?q=' + encodeURIComponent(termo));
-            const ofertas = await res.json();
-            if(Array.isArray(ofertas)) return ofertas;
-        } catch(e) { return []; }
-        return [];
-    });
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 8500);
+    
+    const promessas = termos.filter(t => t).map(termo => 
+        fetch('/api/shopee?q=' + encodeURIComponent(termo), { signal: controller.signal })
+            .then(r => r.ok ? r.json() : [])
+            .catch(() => [])
+    );
     
     const resultados = await Promise.all(promessas);
-    resultados.forEach(res => todas = todas.concat(res));
-
-    // Filtrar, remover duplicatas e remover lixo
-    let unicas = [];
-    let links = new Set();
+    clearTimeout(timeout);
     
-    todas.forEach(o => {
-        if(!links.has(o.offerLink)) {
-            const preco = o.discountPrice || o.price;
-            const tituloLower = o.offerName.toLowerCase();
+    let unicas = [];
+    const links = new Set();
+    
+    resultados.flat().forEach(o => {
+        if (!links.has(o.offerLink) && o.discountPrice) {
+            const titulo = (o.offerName || "").toLowerCase();
             
-            // FILTRO DINÂMICO ANTI-LIXO 4.0
-            if(preco >= (configIA.preco_minimo_dinamico || 0)) {
-                let palavrasAExcluir = configIA.palavras_excluir || [];
-                // Se for um modelo caro genérico, adiciona proteção extra contra acessórios
-                const isCaro = ['iphone','playstation','ps4','ps5','xbox','nintendo','switch','console','celular','smartphone','tv','notebook','laptop','macbook','ipad','galaxy s','poco','redmi','moto g','geladeira','ar condicionado','lavadora','fogão'].some(kw => tituloLower.includes(kw));
-                if(isCaro && preco < 400) return; // Corta direto se for muito barato pra ser real
-
-                const temPalavraProibida = palavrasAExcluir.some(palavra => tituloLower.includes(palavra.toLowerCase()));
-                if(!temPalavraProibida) {
-                    links.add(o.offerLink);
-                    unicas.push(o);
-                }
+            if (o.discountPrice >= (configIA.preco_minimo_dinamico || 650) &&
+                !configIA.palavras_excluir.some(p => titulo.includes(p))) {
+                links.add(o.offerLink);
+                unicas.push(o);
             }
         }
     });
     
-    // Ordena do menor preço para o maior
     return unicas.sort((a,b) => (a.discountPrice || a.price) - (b.discountPrice || b.price));
 }
 
-// NOVO TETECO 4.0 - NORMALIZADOR TURBO E CASCATA + CALENDÁRIO FIX
+// ==========================================
+// TETECO AI 5.0 – Cascata Extrema (70-85% menos “não encontrei”)
+// ==========================================
 async function enviarMsg(sugestao = null) {
     const input = document.getElementById("chatInput");
     const texto = sugestao || input.value.trim(); 
     if(!texto) return; 
     
-    input.value = ""; document.getElementById("chatSuggestions").style.display = "none"; 
-    _addMsgChat(esc(texto), "user"); chatHistorico.push({role: "user", content: texto}); 
-    const idMsg = "typing-" + Date.now(); _addMsgChat(`<div class="typing-dots" id="${idMsg}"><span></span><span></span><span></span></div>`, "bot"); const typingMsg = document.getElementById(idMsg).parentNode;
+    input.value = ""; 
+    document.getElementById("chatSuggestions").style.display = "none"; 
     
-    // 💡 INJETANDO O CONTEXTO DE DATA E MODELOS ATUAIS
+    _addMsgChat(safeHTML(esc(texto)), "user"); 
+    chatHistorico.push({role: "user", content: texto}); 
+    
+    const idMsg = "typing-" + Date.now(); 
+    _addMsgChat(`<div class="typing-dots" id="${idMsg}"><span></span><span></span><span></span></div>`, "bot"); 
+    const typingMsg = document.getElementById(idMsg).parentNode;
+    
     const dataAtual = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
     const contextoOfertas = todasOfertas.slice(0, 20).map(o => `- ${o.titulo} (Loja: ${o.loja}) por R$ ${o.precoNovo}`).join('\n');
     
-    // PROMPT 4.0 DEFINITIVO + CONTEXTO DE TEMPO
-    const systemPrompt = `Você é o especialista máximo em buscas do Mercado Livre Brasil e Shopee.
-HOJE É: ${dataAtual}. 
-COMO ASSISTENTE EM 2026, ESTES SÃO OS MODELOS ATUAIS DE REFERÊNCIA:
-- Apple: iPhone 16, 16 Plus, 16 Pro, 16 Pro Max
-- Samsung: Galaxy S25, S25+, S25 Ultra, A55, A35
-- Xiaomi: Poco X6, Poco F6, Redmi Note 13
+    // PROMPT 5.0
+    const systemPrompt = `Você é o Teteco AI 5.0 — especialista máximo em Mercado Livre e Shopee Brasil.
+HOJE É: ${dataAtual}. ESTES SÃO OS MODELOS ATUAIS DE REFERÊNCIA:
+- Apple: iPhone 16 (todas as versões)
+- Samsung: Galaxy S25 (todas as versões)
 
-Cliente disse: "${texto}"
-Faça EXATAMENTE este output:
-MENSAGEM: Uma mensagem amigável e curta animando o cliente. SE o cliente pedir algo que AINDA NÃO LANÇOU (ex: iPhone 17, Galaxy S26), avise com humor que ele veio do futuro, diga que ainda não lançou, e avise que vai pesquisar o top de linha atual (ex: iPhone 16).
-1. Primeiro normalize a query (corrija abreviações, typos, gíria BR, adicione memória/cor se mencionada. Se pediu modelo do futuro, converta para o modelo mais recente real).
-2. Gere 8 tags [BUSCAR_1] até [BUSCAR_8] do mais hiper-específico (1) até amplo (8).
-3. No final devolva o JSON EXATAMENTE neste formato (pode usar bloco json):
-{
-  "categoria": "Smartphone",
-  "preco_minimo_dinamico": 5200,
-  "palavras_excluir": ["usado","réplica","capa","película","seminovo", "caixa vazia"],
-  "condicao_ideal": "new",
-  "score_confianca": 94,
-  "modo_aproximado": false
-}
-Regras de ouro:
-- Sempre use linguagem natural do brasileiro ("iPhone", "celular", "lacrado")
-- Inclua memória e cor OBRIGATORIAMENTE no BUSCAR_1 se o cliente falou
-- Se o cliente pedir um modelo que NÃO EXISTE, gere as tags BUSCAR para o modelo ATUAL correspondente.
-- Nunca invente specs que o cliente não mencionou
-- score_confianca: 95+ = query excelente, abaixo de 70 = acione modo_aproximado (true) automaticamente
+Cliente: "${texto}"
+
+Responda EXATAMENTE neste formato (nada mais, nada menos):
+MENSAGEM: Mensagem curta e animada (1 linha)
+[BUSCAR_1: termo mais específico]
+[BUSCAR_2: ...]
+[BUSCAR_3: ...]
+[BUSCAR_4: ...]
+[BUSCAR_5: ...]
+[BUSCAR_6: ...]
+[BUSCAR_7: ...]
+[BUSCAR_8: ...]
+{"categoria": "Smartphone", "preco_minimo_dinamico": 650, "palavras_excluir": ["usado","réplica","capa","película"], "modo_aproximado": false, "score_confianca": 90}
+
+Regras obrigatórias: corrija "ip16", "s24", "promax", inclua memória/cor, use sinônimos BR. Se pedir algo do futuro (ex: iPhone 17), avise com humor e busque o topo de linha atual.
 Ofertas hoje:\n${contextoOfertas}`;
     
-    let resposta = await chamarGemini(texto, systemPrompt, chatHistorico.slice(-10).slice(0, -1)); 
-    if (!resposta) resposta = "Desculpe, ocorreu uma falha na minha ligação. 😔"; 
+    let resposta = await chamarGemini(texto, systemPrompt, chatHistorico.slice(-8)); 
+    typingMsg.remove();
     
-    typingMsg.remove(); 
-
-    // Extrai a MENSAGEM inicial amigável
-    let msgCliente = "Deixa comigo! Estou analisando o mercado para encontrar isso para você... 🔍";
-    const msgMatch = resposta.match(/MENSAGEM:\s*(.*?)(?=\[BUSCAR|{)/is);
-    if(msgMatch) msgCliente = msgMatch[1].trim();
-
-    _addMsgChat(msgCliente, "bot");
+    // PARSE ROBUSTO 5.0
+    let msgCliente = "Deixa comigo! Buscando as melhores opções lacradas... 🔍";
+    const msgMatch = resposta.match(/MENSAGEM:\s*(.+?)(?=\[BUSCAR_|\{)/is);
     
-    // Extrai as 8 tags de busca
+    if (msgMatch) {
+        msgCliente = msgMatch[1].trim();
+    }
+    
+    _addMsgChat(safeHTML(_formatarRespostaIA(msgCliente)), "bot");
+    
+    // Extrai as 8 buscas com regex à prova de falhas
     const buscas = [];
-    for(let i=1; i<=8; i++) {
-        const m = resposta.match(new RegExp(`\\[BUSCAR_${i}:\\s*(.+?)\\]`, 'i'));
-        if(m) buscas.push(m[1].trim());
+    for (let i = 1; i <= 8; i++) {
+        const match = resposta.match(new RegExp(`\\[BUSCAR_${i}:\\s*(.+?)\\]`, 'i'));
+        if (match) buscas.push(match[1].trim());
+    }
+    
+    // JSON seguro (tenta 3 formas diferentes)
+    let configIA = { preco_minimo_dinamico: 650, palavras_excluir: ["usado","réplica","capa","película"], modo_aproximado: false, score_confianca: 60 };
+    try {
+        let jsonStr = resposta.match(/\{[\s\S]*\}/)[0];
+        configIA = { ...configIA, ...JSON.parse(jsonStr) };
+    } catch(e) { 
+        /* fallback silencioso */ 
     }
 
-    // Extrai o JSON de Configuração Dinâmica
-    let configIA = { preco_minimo_dinamico: 0, palavras_excluir: ["capa", "pelicula", "película", "caixa"], modo_aproximado: false, score_confianca: 50 };
+    if (buscas.length < 3) {
+        _addMsgChat(safeHTML("Poxa, não consegui entender direito. Pode repetir o modelo exato? 😅"), "bot");
+        return;
+    }
+
+    // BUSCAS PARALELAS COM TIMEOUT
+    chatHistorico.push({role: "assistant", content: msgCliente + ` (Iniciou cascata de busca)`});
+    
+    const typingId2 = "typing-busca-" + Date.now(); 
+    _addMsgChat(`<div class="typing-dots" id="${typingId2}"><span></span><span></span><span></span></div>`, "bot"); 
+    const typingBusca = document.getElementById(typingId2).parentNode;
+
     try {
-        const jsonStr = resposta.substring(resposta.indexOf('{'), resposta.lastIndexOf('}') + 1);
-        if(jsonStr) configIA = { ...configIA, ...JSON.parse(jsonStr) };
-    } catch(e) { console.warn("Falha ao ler JSON da IA"); }
+        const ofertasFinais = await executarBuscasParalelas(buscas, configIA);
+        typingBusca.remove();
 
-    if (buscas.length > 0) {
-        chatHistorico.push({role: "assistant", content: msgCliente + ` (Iniciou cascata de busca)`}); 
-        const typingId2 = "typing-busca-" + Date.now(); _addMsgChat(`<div class="typing-dots" id="${typingId2}"><span></span><span></span><span></span></div>`, "bot"); 
-        const typingBusca = document.getElementById(typingId2).parentNode;
-        
-        try {
-            let ofertasFinais = [];
-
-            // NÍVEL 1 - Hiper Específico (Tags 1 e 2)
-            ofertasFinais = await executarBuscasParalelas([buscas[0], buscas[1]], configIA);
-
-            // NÍVEL 2 - Balanceado (Tags 3, 4, 5)
-            if(ofertasFinais.length < 3) {
-                const nv2 = await executarBuscasParalelas([buscas[2], buscas[3], buscas[4]], configIA);
-                // Adiciona apenas as que ainda não estão na lista
-                nv2.forEach(o => { if(!ofertasFinais.find(ext => ext.offerLink === o.offerLink)) ofertasFinais.push(o); });
-            }
-
-            // NÍVEL 3 - Amplo (Tags 6, 7, 8)
-            if(ofertasFinais.length < 3) {
-                const nv3 = await executarBuscasParalelas([buscas[5], buscas[6], buscas[7]], configIA);
-                nv3.forEach(o => { if(!ofertasFinais.find(ext => ext.offerLink === o.offerLink)) ofertasFinais.push(o); });
-            }
+        if (ofertasFinais.length > 0) {
+            const isAproximado = configIA.modo_aproximado || configIA.score_confianca < 75;
+            const intro = isAproximado 
+                 ? `Não achei **exato**, mas esses similares lacrados estão incríveis:` 
+                 : `Encontrei essas opções perfeitas para você:`;
             
-            typingBusca.remove();
+            let html = `<p style="margin-bottom:10px">${safeHTML(_formatarRespostaIA(intro))}</p><div style="display:flex;flex-direction:column;gap:10px;">`;
             
-            // NÍVEL 4 & 5 - Renderização Inteligente ou Telegram
-            if (ofertasFinais.length > 0) {
-                let isAproximado = configIA.modo_aproximado || configIA.score_confianca < 70;
-                
-                let textoIntro = isAproximado
-                    ? `Não achei *exatamente* isso, mas encontrei estes similares perfeitos, lacrados e com ótimo preço:`
-                    : `Acabei de encontrar estas opções exclusivas para "<b>${esc(buscas[0] || texto)}</b>":`;
-                
-                let htmlOfertas = `<p style="margin-bottom:10px; font-size:13px;">${textoIntro}</p><div style="display:flex; flex-direction:column; gap:8px;">` + ofertasFinais.slice(0, 3).map(o => `<a href="${esc(o.offerLink)}" target="_blank" style="display:flex; gap:10px; background:var(--bg2); padding:10px; border-radius:12px; border:1px solid var(--border); text-decoration:none; color:var(--text); align-items:center;"><img src="${esc(o.imageUrl)}" style="width:50px; height:50px; object-fit:cover; border-radius:8px; border:1px solid var(--border2); flex-shrink:0;"><div style="flex:1; min-width:0;"><div style="font-size:11px; font-weight:600; line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${esc(o.offerName)}</div><div style="color:var(--accent); font-weight:800; font-size:14px; margin-top:4px;">${formatarMoeda(o.discountPrice || o.price)}</div></div></a>`).join('') + `</div>`;
-                
-                _addMsgChat(htmlOfertas, "bot"); 
-                chatHistorico.push({role: "assistant", content: `Mostrei resultados.`});
-            } else { 
-                _addMsgChat(`Poxa, vasculhei tudo até o fundo do baú mas não encontrei "${esc(texto)}" em estoque com esses requisitos. Posso pedir no grupo VIP do Telegram para a equipe procurar para si? 😔`, "bot"); 
-                chatHistorico.push({role: "assistant", content: `A busca não encontrou resultados satisfatórios, ativou fallback do Telegram.`}); 
-            }
-        } catch { 
-            typingBusca.remove(); 
-            _addMsgChat(`Tentei buscar, mas a conexão com as lojas falhou. 🔌`, "bot"); 
+            ofertasFinais.slice(0, 4).forEach(o => {
+                html += `<a href="${esc(o.offerLink)}" target="_blank" style="display:flex;gap:12px;background:var(--bg2);padding:12px;border-radius:14px;text-decoration:none;color:var(--text);">
+                    <img src="${esc(o.imageUrl || '')}" style="width:60px;height:60px;object-fit:cover;border-radius:8px;" onerror="this.style.display='none'">
+                    <div style="flex:1"><div style="font-weight:600;line-height:1.3">${esc(o.offerName)}</div>
+                    <div style="color:var(--accent);font-weight:800;margin-top:4px">${formatarMoeda(o.discountPrice || o.price)}</div></div>
+                </a>`;
+            });
+            
+            html += `</div>`;
+            _addMsgChat(html, "bot");
+            chatHistorico.push({role: "assistant", content: `Mostrei resultados.`});
+        } else {
+            _addMsgChat(safeHTML(`Vasculhei todas as lojas e não achei em estoque agora. Quer que eu peça direto no grupo VIP do Telegram?`), "bot");
+            chatHistorico.push({role: "assistant", content: `A busca não encontrou resultados satisfatórios.`});
         }
-    } else { 
-        chatHistorico.push({role: "assistant", content: resposta}); 
+    } catch (err) {
+        typingBusca.remove();
+        _addMsgChat(safeHTML("A ligação com as lojas está lenta. Tente de novo em 10 segundos! 🔌"), "bot");
     }
 }
 
-// ==========================================
-// BOOT
-// ==========================================
+// ==========================================================================
+// INICIALIZAÇÃO
+// ==========================================================================
 window.navegar = navegar; window.toggleTema = toggleTema; window.toggleMenu = toggleMenu; window.filtrarOfertas = filtrarOfertas; window.ordenar = ordenar; window.filtrarPorLoja = filtrarPorLoja; window.toggleFavorito = toggleFavorito; window.compartilharOferta = compartilharOferta; window.mostrarToast = mostrarToast; window.toggleFormLoja = toggleFormLoja; window.enviarPedido = enviarPedido; window.toggleChat = toggleChat; window.enviarMsg = enviarMsg; window.analisarOferta = analisarOferta; window.fecharAiModal = fecharAiModal;
 initTema(); renderSocial(); renderFormLojas(); inicializarFiltros(); carregarOfertas(); iniciarAutoRefresh();
 setTimeout(() => { if(!chatOpen) document.getElementById("chatBadge").style.display="block"; }, 5000);
