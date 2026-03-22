@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Painel Admin - O Caçador de Ofertas</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚙️</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 
 <style>
@@ -75,6 +75,7 @@ body{
   box-shadow: 0 4px 20px rgba(255, 122, 0, 0.3); margin-top: 10px;
 }
 .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(255, 122, 0, 0.4); }
+.btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
 /* ══ PREVIEW CARD (Réplica exata do site) ══ */
 .preview-panel { position: sticky; top: 40px; }
@@ -102,15 +103,14 @@ body{
 .oferta-economia { font-size: 11px; color: var(--green); font-weight: 600; }
 .oferta-btn { padding: 10px; border-radius: 10px; font-size: 13px; font-weight: 700; text-align: center; margin-top: 10px; }
 
-/* MODAL DE SUCESSO */
+/* MODAL DE SUCESSO (Agora só avisa que foi pro site!) */
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 9999; display: none; align-items: center; justify-content: center; }
 .modal-overlay.active { display: flex; }
-.modal-content { background: var(--surface); padding: 32px; border-radius: 20px; border: 1px solid var(--border); max-width: 500px; width: 90%; text-align: center; }
-.modal-content h3 { font-family: 'Syne', sans-serif; font-size: 24px; margin-bottom: 12px; color: var(--green); }
-.modal-content p { color: var(--text2); margin-bottom: 24px; font-size: 15px; }
-.code-block { background: var(--bg); padding: 16px; border-radius: 12px; border: 1px solid var(--border2); font-family: monospace; color: #fff; text-align: left; overflow-x: auto; margin-bottom: 24px; white-space: nowrap; }
-.btn-open-sheet { display: inline-block; padding: 12px 24px; background: var(--brand-blue); color: #fff; font-weight: 700; border-radius: 10px; text-decoration: none; margin-right: 10px; }
-.btn-close { padding: 12px 24px; background: var(--surface3); color: var(--text); font-weight: 700; border-radius: 10px; border: none; cursor: pointer; }
+.modal-content { background: var(--surface); padding: 40px; border-radius: 20px; border: 1px solid var(--border); max-width: 400px; width: 90%; text-align: center; }
+.modal-content h3 { font-family: 'Syne', sans-serif; font-size: 28px; margin-bottom: 12px; color: var(--green); }
+.modal-content p { color: var(--text2); margin-bottom: 30px; font-size: 16px; }
+.btn-close { width: 100%; padding: 14px 24px; background: var(--surface3); color: var(--text); font-weight: 700; border-radius: 10px; border: none; cursor: pointer; transition: 0.2s; }
+.btn-close:hover { background: var(--border); }
 </style>
 </head>
 <body>
@@ -125,20 +125,20 @@ body{
         <g transform="translate(72, 52) rotate(45)"><line x1="0" y1="0" x2="18" y2="0" stroke="var(--accent)" stroke-width="6.5" stroke-linecap="round"></line><polygon points="14,-7 26,0 14,7" fill="var(--accent)"></polygon></g>
         <path d="M 30 18 Q 33 18 33 15 Q 33 18 36 18 Q 33 18 33 21 Q 33 18 30 18 Z" fill="var(--accent)"></path><circle cx="42" cy="16" r="1.5" fill="var(--accent)"></circle>
       </svg>
-      Admin
+      Admin Automático
     </div>
     <div class="menu">
-      <button class="menu-item active">✨ Postar Oferta</button>
+      <button class="menu-item active">⚡ Publicar Direto</button>
       <a href="https://docs.google.com/spreadsheets/d/1Ug9wQKO9HfCRrTsjZz8gDe7dCVDxXH2ehMC3nGkb6Xw/edit" target="_blank" class="menu-item">📊 Abrir Planilha</a>
-      <a href="/" class="menu-item">🌐 Ver Site</a>
+      <a href="/" target="_blank" class="menu-item">🌐 Ver Site Oficial</a>
     </div>
   </aside>
 
   <!-- MAIN CONTENT -->
   <main class="main-content">
     <div class="header">
-      <h1>Painel de Controle</h1>
-      <p>Crie novas promoções manualmente. O preview atualiza em tempo real.</p>
+      <h1>Painel de Publicação</h1>
+      <p>Crie novas promoções manualmente. Elas serão publicadas diretamente no site.</p>
     </div>
 
     <div class="dashboard-grid">
@@ -198,9 +198,9 @@ body{
             </div>
           </div>
 
-          <button type="button" class="btn-submit" onclick="gerarOferta()">
+          <button type="button" id="btnSubmit" class="btn-submit" onclick="enviarParaSite()">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-            Gerar Linha da Planilha
+            <span id="btnSubmitTxt">Publicar Direto no Site</span>
           </button>
         </form>
       </div>
@@ -244,20 +244,20 @@ body{
   <!-- MODAL DE SUCESSO -->
   <div class="modal-overlay" id="successModal">
     <div class="modal-content">
-      <h3>Pronto! 🎉</h3>
-      <p>Copie a linha abaixo e cole diretamente na primeira célula vazia da sua Planilha (no final da lista).</p>
+      <h3>Publicado! 🎉</h3>
+      <p>A sua oferta foi enviada diretamente para as costas do site. Dentro de 1 a 2 minutos, ela aparecerá automaticamente na vitrine para todos os clientes.</p>
       
-      <div class="code-block" id="copyText"></div>
-      
-      <div style="display:flex; justify-content:center; gap:10px;">
-        <a href="https://docs.google.com/spreadsheets/d/1Ug9wQKO9HfCRrTsjZz8gDe7dCVDxXH2ehMC3nGkb6Xw/edit" target="_blank" class="btn-open-sheet">Abrir Planilha</a>
-        <button class="btn-close" onclick="fecharModal()">Fechar</button>
-      </div>
+      <button class="btn-close" onclick="fecharModal()">Criar Nova Oferta</button>
     </div>
   </div>
 
 <script>
-// Dicionário de Lojas igual ao do Site
+// ==========================================
+// COLE AQUI O SEU LINK DO APPS SCRIPT (PASSO 1)
+// ==========================================
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxcgbh_3Tc-amPFl36RIoYZSex8Eo0qWhRSwf-vJxROJfV0k992YGTHVSyatk7GDxmz/exec";
+
+
 const LOJAS = {
     amazon: { nome: "Amazon", cor: "#FF9900" },
     shopee: { nome: "Shopee", cor: "#EE4D2D" },
@@ -285,23 +285,19 @@ function updatePreview() {
 
     const loja = LOJAS[lojaID];
 
-    // Atualiza Textos Básicos
     document.getElementById('prev_titulo').textContent = titulo;
     document.getElementById('prev_cat').textContent = categoria;
     
-    // Atualiza Loja Badge
     const badgeLoja = document.getElementById('prev_loja_badge');
     badgeLoja.textContent = loja.nome;
     badgeLoja.style.background = loja.cor + '22';
     badgeLoja.style.color = loja.cor;
 
-    // Atualiza Botão
     const btn = document.getElementById('prev_btn');
     btn.style.background = loja.cor + '15';
     btn.style.color = loja.cor;
     btn.style.border = `1px solid ${loja.cor}40`;
 
-    // Preços e Economia
     document.getElementById('prev_p_novo').textContent = formatMoney(pNovo);
     
     const elPAntigo = document.getElementById('prev_p_antigo');
@@ -311,10 +307,8 @@ function updatePreview() {
     if (pAntigo > pNovo) {
         elPAntigo.style.display = 'block';
         elPAntigo.textContent = formatMoney(pAntigo);
-        
         elEconomia.style.display = 'block';
         elEconomia.textContent = `Poupa ${formatMoney(pAntigo - pNovo)}`;
-
         const descPct = Math.round((1 - pNovo / pAntigo) * 100);
         elDesconto.style.display = 'block';
         elDesconto.textContent = `-${descPct}%`;
@@ -324,7 +318,6 @@ function updatePreview() {
         elDesconto.style.display = 'none';
     }
 
-    // Selo
     const elSelo = document.getElementById('prev_badge_selo');
     if (selo) {
         elSelo.style.display = 'block';
@@ -334,7 +327,6 @@ function updatePreview() {
         elSelo.style.display = 'none';
     }
 
-    // Imagem / Emoji
     const elImg = document.getElementById('prev_img');
     const elEmoji = document.getElementById('prev_emoji');
     const isUrl = imagem.startsWith('http') || imagem.startsWith('//');
@@ -351,16 +343,26 @@ function updatePreview() {
     }
 }
 
-function gerarOferta() {
-    // Validar form
+function enviarParaSite() {
+    if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes("COLE_O_SEU_LINK")) {
+        alert("Erro: Você esqueceu de colar o Link do Apps Script na linha 182 do código!");
+        return;
+    }
+
     const titulo = document.getElementById('f_titulo').value;
     const pNovo = document.getElementById('f_preco_novo').value;
     const link = document.getElementById('f_link').value;
 
     if(!titulo || !pNovo || !link) {
-        alert("Preencha pelo menos o Título, Preço e Link!");
+        alert("Preencha pelo menos o Título, Preço Novo e Link!");
         return;
     }
+
+    const btnSubmit = document.getElementById('btnSubmit');
+    const btnSubmitTxt = document.getElementById('btnSubmitTxt');
+    
+    btnSubmit.disabled = true;
+    btnSubmitTxt.textContent = "A publicar no site...";
 
     const loja = document.getElementById('f_loja').value;
     const pAntigo = document.getElementById('f_preco_antigo').value || "";
@@ -368,26 +370,38 @@ function gerarOferta() {
     const categoria = document.getElementById('f_cat').value || "Geral";
     const selo = document.getElementById('f_selo').value || "";
 
-    // Data de hoje no formato dd/mm/yyyy hh:mm
     const hoje = new Date();
     const dataFormatada = `${String(hoje.getDate()).padStart(2, '0')}/${String(hoje.getMonth()+1).padStart(2, '0')}/${hoje.getFullYear()} ${String(hoje.getHours()).padStart(2, '0')}:${String(hoje.getMinutes()).padStart(2, '0')}`;
 
-    // A MÁGICA: Gera a string formatada em TSV (Tab-Separated Values)
-    // A ordem EXATA das colunas da sua planilha (A B C D E F G H I J K)
-    // Loja | Titulo | Preco_Antigo | Preco_Novo | Link | Data | Emoji | Categoria | Selo | Ativo | Imagem
-    
     let isEmoji = ""; let isImgUrl = "";
     if (imagem.startsWith("http")) { isImgUrl = imagem; } else { isEmoji = imagem; }
 
-    // Cria a linha separada por TABS (\t). Quando cola no Google Sheets, ele divide nas colunas certas!
-    const rowData = `${loja}\t${titulo}\t${pAntigo}\t${pNovo}\t${link}\t${dataFormatada}\t${isEmoji}\t${categoria}\t${selo}\tSIM\t${isImgUrl}`;
+    // Prepara os dados para envio silencioso
+    const formData = new URLSearchParams();
+    formData.append('loja', loja);
+    formData.append('titulo', titulo);
+    formData.append('precoAntigo', pAntigo);
+    formData.append('precoNovo', pNovo);
+    formData.append('link', link);
+    formData.append('data', dataFormatada);
+    formData.append('emoji', isEmoji);
+    formData.append('categoria', categoria);
+    formData.append('selo', selo);
+    formData.append('imagem', isImgUrl);
 
-    // Copia para a área de transferência
-    navigator.clipboard.writeText(rowData).then(() => {
-        document.getElementById('copyText').textContent = rowData;
+    // Dispara para a Planilha em background
+    fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors', // Permite envio direto sem bloqueios de segurança do navegador
+        body: formData
+    }).then(() => {
         document.getElementById('successModal').classList.add('active');
+        btnSubmit.disabled = false;
+        btnSubmitTxt.textContent = "Publicar Direto no Site";
     }).catch(err => {
-        alert("Erro ao copiar! Autorize a cópia ou copie manualmente.");
+        alert("Ocorreu um erro de conexão. Tente novamente.");
+        btnSubmit.disabled = false;
+        btnSubmitTxt.textContent = "Publicar Direto no Site";
     });
 }
 
@@ -397,7 +411,6 @@ function fecharModal() {
     updatePreview();
 }
 
-// Inicializa preview
 updatePreview();
 </script>
 </body>
