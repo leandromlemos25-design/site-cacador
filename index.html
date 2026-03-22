@@ -1203,7 +1203,7 @@ footer{
   </div>
   <div class="chat-suggestions" id="chatSuggestions">
     <button class="chat-suggestion" onclick="window.enviarMsg('Tem algum iPhone em promoção?')">iPhones em promoção</button>
-    <button class="chat-suggestion" onclick="window.enviarMsg('Preciso de um presente até R$ 200')">Presentes até R$ 200</button>
+    <button class="chat-suggestion" onclick="window.enviarMsg('Procuro um Notebook bom')">Notebooks bons e baratos</button>
     <button class="chat-suggestion" onclick="window.enviarMsg('Como faço um pedido especial?')">Como pedir uma oferta?</button>
   </div>
   <div class="chat-input-bar">
@@ -1928,25 +1928,33 @@ async function enviarMsg(sugestao = null) {
     // Constrói o contexto atualizado das ofertas (top 20)
     const contextoOfertas = todasOfertas.slice(0, 20).map(o => `- ${o.titulo} (Loja: ${o.loja}) por R$ ${o.precoNovo}`).join('\n');
     
-    const systemPrompt = `Você é o Teteco, um assistente de compras do site "O Caçador de Oferta".
-Ajude os clientes a encontrar os melhores produtos e descontos.
-Use o português do Brasil. Seja amigável, entusiasmado, direto e use emojis (✨, 🎯, 🛒, 📉).
-Ofertas ativas no catálogo agora:
-${contextoOfertas}
+    // 🧠 CÉREBRO DE ELITE EM HARDWARE E BUSCAS BLINDADAS
+    const systemPrompt = `Você é o Teteco, um assistente de compras de ELITE do site "O Caçador de Oferta".
+Sua missão é gerar vendas. Você não pode falhar nas buscas. O algoritmo de buscas da Shopee é péssimo e retorna capas, cabos e adesivos se você for genérico. Você OBRIGATORIAMENTE DEVE "traduzir" o pedido do cliente para um termo de busca hiper-específico, blindado contra acessórios.
+
+🚨 REGRAS DE ENGENHARIA DE BUSCA (NUNCA QUEBRE) 🚨
+1. SMARTPHONES: SEMPRE adicione a palavra "Smartphone", a marca e a memória (ex: "128GB", "256GB").
+   - ❌ [BUSCAR: iPhone 15] -> ✅ [BUSCAR: Smartphone Apple iPhone 15 128GB Original]
+   - ❌ [BUSCAR: Poco fone] -> ✅ [BUSCAR: Smartphone Xiaomi Poco 256GB Original]
+2. NOTEBOOKS E PCS: SEMPRE adicione a linha do produto ou processador (ex: "Galaxy Book", "Ideapad", "Core i5").
+   - ❌ [BUSCAR: Notebook Samsung] -> ✅ [BUSCAR: Notebook Samsung Galaxy Book]
+   - ❌ [BUSCAR: Notebook Dell] -> ✅ [BUSCAR: Notebook Dell Inspiron]
+3. TVS E ELETRODOMÉSTICOS: Adicione "Smart TV 4K", ou a capacidade/modelo específico.
+   - ❌ [BUSCAR: TV LG] -> ✅ [BUSCAR: Smart TV LG 4K]
+   - ❌ [BUSCAR: Geladeira Brastemp] -> ✅ [BUSCAR: Geladeira Brastemp Frost Free]
+4. CONSOLES: Use a palavra "Console" e "Original".
+   - ❌ [BUSCAR: PS5] -> ✅ [BUSCAR: Console PlayStation 5 Original]
+5. OUTROS (Perfumes, fones, relógios): Adicione "Original" e especificações técnicas (ml, modelo completo).
+   - ❌ [BUSCAR: 212 vip] -> ✅ [BUSCAR: Perfume 212 VIP Original 100ml]
+   - ❌ [BUSCAR: fone samsung] -> ✅ [BUSCAR: Fone de Ouvido Bluetooth Samsung Galaxy Buds]
 
 MUITO IMPORTANTE:
-Se o usuário pedir um produto específico que NÃO ESTÁ na lista acima, você DEVE dizer que vai procurar na Shopee para ele e, OBRIGATORIAMENTE, adicionar no final exato da sua resposta a tag mágica: [BUSCAR: Termo Otimizado]
+Se o usuário pedir um produto, você OBRIGATORIAMENTE deve responder conversando com ele e adicionar no final EXATO da sua resposta a tag mágica: [BUSCAR: Termo Otimizado]
+Exemplo de resposta: "Deixa comigo! Vou buscar as melhores ofertas de Notebook Samsung para você agora mesmo! 🔍 [BUSCAR: Notebook Samsung Galaxy Book]"
 
-🚨 ENGENHARIA DE BUSCA (CRÍTICA) 🚨
-O usuário costuma usar "meias palavras", gírias ou ser vago (ex: "poco fone", "ps5", "um iphone"). Você atua como um tradutor inteligente para o algoritmo da loja:
-1. TRADUZA PARA O NOME COMERCIAL: "poco fone" vira "Xiaomi Poco". "pleisteixo" vira "PlayStation 5".
-2. FUJA DAS CAPINHAS (BURLANDO A LOJA): A Shopee retorna 90% de capinhas se você pesquisar só "iPhone 15" ou "Poco". Para forçar o algoritmo a trazer APARELHOS REAIS, SEMPRE adicione a capacidade de memória (ex: "128GB" ou "256GB") no termo de busca de smartphones.
-- ❌ [BUSCAR: iPhone 15] (Traz capinhas)
-- ✅ [BUSCAR: Apple iPhone 15 128GB] (Traz o aparelho)
-- ✅ [BUSCAR: Xiaomi Poco 256GB]
-- ✅ [BUSCAR: Console PlayStation 5]
-
-NUNCA invente preços ou produtos que não estão na lista. Deixe o sistema buscar por você usando a tag.`;
+Ofertas no catálogo agora:
+${contextoOfertas}
+(Não limite sua busca ao catálogo, se o cliente pedir algo diferente, use a tag [BUSCAR: ...])`;
 
     const historicoRecente = chatHistorico.slice(-10);
     let resposta = await chamarGemini(texto, systemPrompt, historicoRecente.slice(0, -1));
@@ -1974,27 +1982,29 @@ NUNCA invente preços ou produtos que não estão na lista. Deixe o sistema busc
         const typingBusca = document.getElementById(typingId2).parentNode;
 
         try {
-            // Chama a API da Shopee com o termo de busca (agora mais específico)
+            // Chama a API da Shopee com o termo de busca traduzido e hiper-específico da IA
             const resShopee = await fetch('/api/shopee?q=' + encodeURIComponent(termoBusca));
             let ofertasEncontradas = await resShopee.json();
             typingBusca.remove();
 
             if (ofertasEncontradas && Array.isArray(ofertasEncontradas)) {
                 
-                // 🛡️ FILTRO ANTI-ACESSÓRIOS REFORÇADO (FRONTEND) 🛡️
+                // 🛡️ FILTRO ANTI-ACESSÓRIOS 2.0 (FRONTEND) 🛡️
                 const termoLower = termoBusca.toLowerCase();
-                const keywordsCaros = ['iphone', 'xiaomi', 'poco', 'samsung', 'motorola', 'playstation', 'ps4', 'ps5', 'xbox', 'nintendo', 'switch', 'console', 'celular', 'smartphone', 'tv', 'notebook', 'macbook', 'ipad', 'apple watch'];
+                // A lista de aparelhos caros foi expandida.
+                const keywordsCaros = ['iphone', 'playstation', 'ps4', 'ps5', 'xbox', 'nintendo', 'switch', 'console', 'celular', 'smartphone', 'tv', 'notebook', 'laptop', 'macbook', 'ipad', 'galaxy s', 'poco', 'redmi', 'moto g', 'geladeira', 'ar condicionado', 'lavadora', 'fogão'];
                 const isAparelhoCaro = keywordsCaros.some(kw => termoLower.includes(kw));
                 
                 if (isAparelhoCaro) {
                     ofertasEncontradas = ofertasEncontradas.filter(o => {
                         const preco = o.discountPrice || o.price;
-                        return preco >= 400; // Elimina capinhas, cabos e películas
+                        // Elimina capinhas, adesivos de notebook e películas
+                        return preco >= 400; 
                     });
                 }
 
                 if (ofertasEncontradas.length > 0) {
-                    // Monta mini-cards HTML das ofertas encontradas
+                    // Monta mini-cards HTML das ofertas encontradas (Pega os 3 primeiros)
                     let htmlOfertas = `<p style="margin-bottom:10px; font-size:13px;">Acabei de encontrar estas opções exclusivas para "<b>${esc(termoBusca)}</b>":</p><div style="display:flex; flex-direction:column; gap:8px;">`;
                     
                     ofertasEncontradas.slice(0, 3).forEach(o => {
@@ -2012,9 +2022,8 @@ NUNCA invente preços ou produtos que não estão na lista. Deixe o sistema busc
                     _addMsgChat(htmlOfertas, "bot");
                     chatHistorico.push({role: "assistant", content: `Mostrei os resultados da Shopee para ${termoBusca}.`});
                 } else {
-                    // Se não encontrou nada (ou se o filtro de R$ 400 bloqueou as capinhas)
-                    _addMsgChat(`Poxa, vasculhei a Shopee inteira mas não encontrei ofertas de aparelhos originais para "<b>${termoBusca}</b>" no momento. Quer que eu peça no grupo do Telegram? 😔`, "bot");
-                    chatHistorico.push({role: "assistant", content: `Não encontrei resultados na Shopee para ${termoBusca}.`});
+                    _addMsgChat(`Poxa, vasculhei a Shopee inteira mas só encontrei acessórios ou itens esgotados para "<b>${termoBusca}</b>" no momento. Quer que eu peça no grupo do Telegram para a equipe procurar em outras lojas? 😔`, "bot");
+                    chatHistorico.push({role: "assistant", content: `A busca só retornou acessórios baratos na Shopee para ${termoBusca}.`});
                 }
             } else {
                 _addMsgChat(`Poxa, vasculhei a Shopee inteira mas não encontrei ofertas para "<b>${termoBusca}</b>" no momento.`, "bot");
