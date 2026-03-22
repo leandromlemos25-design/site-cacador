@@ -3,19 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>O Caçador de Oferta — Melhores Promoções da Internet</title>
+<title>O Caçador de Ofertas — Melhores Promoções da Internet</title>
 <meta name="description" content="Promoções imperdíveis de Amazon, Shopee, Magalu, Mercado Livre e mais. Ofertas verificadas e atualizadas diariamente.">
-<meta property="og:title" content="O Caçador de Oferta">
+<meta property="og:title" content="O Caçador de Ofertas">
 <meta property="og:description" content="As melhores promoções da internet, verificadas e atualizadas diariamente.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://ocacadordeofertas.com">
-<meta property="og:image" content="https://ocacadordeofertas.com/banner.png">
+<meta property="og:image" content="https://ocacadordeofertas.com/logo.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
-<meta name="theme-color" content="#0d0d0d" id="themeColor">
+<meta name="theme-color" content="#09101a" id="themeColor">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎯</text></svg>">
+<!-- O ícone do site (Favicon) agora é a sua logo -->
+<link rel="icon" href="logo.png" type="image/png">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <!-- ═══ SEO SCHEMA.ORG ═══ -->
@@ -23,7 +24,7 @@
 {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  "name": "O Caçador de Oferta",
+  "name": "O Caçador de Ofertas",
   "url": "https://ocacadordeofertas.com/"
 }
 </script>
@@ -31,7 +32,7 @@
 {
   "@context": "https://schema.org",
   "@type": "Organization",
-  "name": "O Caçador de Oferta",
+  "name": "O Caçador de Ofertas",
   "url": "https://ocacadordeofertas.com/",
   "logo": "https://ocacadordeofertas.com/logo.png",
   "sameAs": [
@@ -59,44 +60,54 @@ a{text-decoration:none;color:inherit}
 button{cursor:pointer;border:none;background:none;font-family:inherit;outline:none;}
 img, video{max-width:100%;display:block}
 
-/* ══ TOKENS (Contraste Aprimorado) ══ */
+/* ══ TOKENS (PALETA ATUALIZADA COM AS CORES DA LOGO) ══ */
 :root{
-  --bg:#0d0d0d;
-  --bg2:#111;
-  --surface:#161616;
-  --surface2:#1c1c1c;
-  --surface3:#222;
-  --border:#2a2a2a;
-  --border2:#333;
-  --text:#f0f0f0;
-  --text2:#aaa;
-  --text3:#888;
-  --accent:#ff4d00;
-  --accent2:#ff7a3d;
-  --accent-glow:rgba(255,77,0,0.35);
-  --gold:#f5c518;
-  --green:#22c55e;
-  --shadow:rgba(0,0,0,0.5);
-  --card-bg:#161616;
-  --navbar-bg:rgba(13,13,13,0.92);
+  /* Modo Escuro: Tons de Azul Marinho Profundo */
+  --bg: #09101a;
+  --bg2: #0f1724;
+  --surface: #131d2c;
+  --surface2: #1a2639;
+  --surface3: #22324a;
+  --border: #2a3b55;
+  --border2: #3b5275;
+  --text: #f0f4f8;
+  --text2: #a2b3c7;
+  --text3: #758ca6;
+  
+  /* Cores da Marca */
+  --accent: #ff7a00; /* Laranja da Logo */
+  --accent2: #ffa040;
+  --accent-glow: rgba(255, 122, 0, 0.35);
+  --brand-blue: #103b70; /* Azul da Logo */
+  
+  --gold: #f5c518;
+  --green: #22c55e;
+  --shadow: rgba(0,0,0,0.5);
+  --card-bg: #131d2c;
+  --navbar-bg: rgba(9, 16, 26, 0.92);
 }
 [data-theme="light"]{
-  --bg:#f5f5f0;
-  --bg2:#eeede8;
-  --surface:#fff;
-  --surface2:#f8f7f2;
-  --surface3:#f0efe9;
-  --border:#e0ddd6;
-  --border2:#d0cdc6;
-  --text:#111;
-  --text2:#444;
-  --text3:#666;
-  --accent:#ff4d00;
-  --accent2:#ff7a3d;
-  --accent-glow:rgba(255,77,0,0.2);
-  --shadow:rgba(0,0,0,0.08);
-  --card-bg:#fff;
-  --navbar-bg:rgba(245,245,240,0.94);
+  /* Modo Claro */
+  --bg: #f4f7fb;
+  --bg2: #e9eef5;
+  --surface: #ffffff;
+  --surface2: #f0f4f8;
+  --surface3: #e1e8f0;
+  --border: #d1dce8;
+  --border2: #b0c4d9;
+  --text: #0d1b2a;
+  --text2: #33475b;
+  --text3: #5c738a;
+  
+  /* Cores da Marca */
+  --accent: #ff7a00;
+  --accent2: #e66e00;
+  --accent-glow: rgba(255, 122, 0, 0.2);
+  --brand-blue: #103b70;
+  
+  --shadow: rgba(0,0,0,0.08);
+  --card-bg: #ffffff;
+  --navbar-bg: rgba(244, 247, 251, 0.94);
 }
 
 .syne{font-family:'Syne',sans-serif}
@@ -112,15 +123,21 @@ img, video{max-width:100%;display:block}
   transition:all .3s;
 }
 #navbar.scrolled{box-shadow:0 4px 40px rgba(0,0,0,.4)}
-.nav-logo{display:flex;align-items:center;gap:12px;font-family:'Syne',sans-serif;font-weight:800;font-size:18px;letter-spacing:-0.5px}
-.nav-logo-icon{
-  width:38px;height:38px;border-radius:10px;
-  background:var(--accent);
-  display:flex;align-items:center;justify-content:center;
-  font-size:18px;
-  box-shadow:0 0 20px var(--accent-glow);
+.nav-logo{display:flex;align-items:center;}
+/* Estilo da Logo Oficial */
+.brand-logo-img {
+  height: 42px;
+  width: auto;
+  border-radius: 8px;
+  background: #ffffff; /* Fundo branco para a logo ficar sempre legível no modo escuro */
+  padding: 4px 10px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  transition: transform 0.2s;
 }
-.nav-logo span{color:var(--accent)}
+.brand-logo-img:hover {
+  transform: scale(1.05);
+}
+
 .nav-links{display:flex;align-items:center;gap:4px}
 .nav-btn{
   padding:8px 16px;border-radius:8px;
@@ -174,18 +191,19 @@ img, video{max-width:100%;display:block}
   position:relative;
   overflow:hidden;
   max-width: 100vw;
-  background:linear-gradient(135deg,#060d1a 0%,#0a1628 40%,#071020 100%);
+  /* Fundo sutil usando as cores da marca */
+  background:linear-gradient(135deg, var(--bg) 0%, var(--surface) 50%, var(--bg) 100%);
 }
 #hero::before{
   content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse 60% 70% at 75% 50%, rgba(255,77,0,0.12) 0%, transparent 70%);
+  background:radial-gradient(ellipse 60% 70% at 75% 50%, var(--accent-glow) 0%, transparent 70%);
   pointer-events:none;
 }
 #hero::after{
   content:'';position:absolute;
   top:-200px;right:-200px;
   width:600px;height:600px;
-  background:radial-gradient(circle, rgba(255,77,0,0.06) 0%, transparent 70%);
+  background:radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
   border-radius:50%;
   animation:float 8s ease-in-out infinite;
   pointer-events:none;
@@ -196,8 +214,8 @@ img, video{max-width:100%;display:block}
 .hero-badge{
   display:inline-flex;align-items:center;gap:8px;
   padding:6px 14px;border-radius:100px;
-  background:rgba(255,77,0,0.1);
-  border:1px solid rgba(255,77,0,0.3);
+  background:rgba(255,122,0,0.1);
+  border:1px solid rgba(255,122,0,0.3);
   color:var(--accent2);font-size:12px;font-weight:600;
   letter-spacing:0.5px;text-transform:uppercase;
   margin-bottom:24px;
@@ -260,8 +278,8 @@ img, video{max-width:100%;display:block}
 .phone-mockup {
   width: 280px;
   height: 560px;
-  background: #0d0d0d;
-  border: 12px solid #1f1f1f;
+  background: var(--bg2);
+  border: 12px solid var(--surface3);
   border-radius: 44px;
   position: relative;
   z-index: 10;
@@ -280,7 +298,7 @@ img, video{max-width:100%;display:block}
   transform: translateX(-50%);
   width: 110px;
   height: 26px;
-  background: #1f1f1f;
+  background: var(--surface3);
   border-bottom-left-radius: 16px;
   border-bottom-right-radius: 16px;
   z-index: 20;
@@ -291,7 +309,7 @@ img, video{max-width:100%;display:block}
   flex-direction: column;
   gap: 14px;
   height: 100%;
-  background: radial-gradient(circle at top, rgba(255,77,0,0.15) 0%, transparent 60%);
+  background: radial-gradient(circle at top, var(--accent-glow) 0%, transparent 60%);
 }
 .mock-header {
   display: flex;
@@ -313,16 +331,16 @@ img, video{max-width:100%;display:block}
 .mock-header-text strong {
   display: block;
   font-size: 13px;
-  color: #fff;
+  color: var(--text);
   font-family: 'Syne', sans-serif;
 }
 .mock-header-text span {
   font-size: 10px;
-  color: #888;
+  color: var(--text3);
 }
 .mock-msg {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: var(--surface);
+  border: 1px solid var(--border);
   padding: 14px;
   border-radius: 16px;
   border-top-left-radius: 4px;
@@ -339,7 +357,7 @@ img, video{max-width:100%;display:block}
 }
 .mock-badge {
   display: inline-block;
-  background: rgba(255,77,0,0.15);
+  background: rgba(255,122,0,0.15);
   color: var(--accent);
   font-size: 9px;
   font-weight: 800;
@@ -352,12 +370,12 @@ img, video{max-width:100%;display:block}
   display: block;
   font-size: 13px;
   margin-bottom: 6px;
-  color: #fff;
+  color: var(--text);
   line-height: 1.3;
 }
 .mock-msg p {
   font-size: 11px;
-  color: #aaa;
+  color: var(--text2);
   line-height: 1.5;
   margin-bottom: 0;
 }
@@ -371,7 +389,7 @@ img, video{max-width:100%;display:block}
 .teteco-glow-bg{
   position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);
   width:340px;height:340px;
-  background:radial-gradient(circle, rgba(255,77,0,0.2) 0%, transparent 70%);
+  background:radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
   border-radius:50%;
   filter:blur(12px);
   animation:glow-pulse 4s ease-in-out infinite;
@@ -529,7 +547,7 @@ img, video{max-width:100%;display:block}
   display:flex;align-items:center;justify-content:center;
   font-size:14px;transition:all .2s;
 }
-.btn-favorito:hover,.btn-favorito.ativo{background:rgba(255,77,0,0.1);border-color:var(--accent)}
+.btn-favorito:hover,.btn-favorito.ativo{background:rgba(255,122,0,0.1);border-color:var(--accent)}
 .oferta-body{
   padding:14px;display:flex;flex-direction:column;gap:6px;flex:1;
 }
@@ -557,15 +575,16 @@ img, video{max-width:100%;display:block}
 }
 .btn-partilhar:hover{background:var(--surface3)}
 
-/* ══ BOTÃO IA E AVATAR (ESTILO OTIMIZADO) ══ */
+/* ══ BOTÃO IA E AVATAR (NOVO ESTILO MATCHING LOGO) ══ */
 .ai-btn{
   width:38px;flex-shrink:0;border-radius:10px;
   display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(135deg, #8B5CF6, #E81CFF);
+  /* Degradê utilizando as cores da sua logo! */
+  background:linear-gradient(135deg, var(--brand-blue), var(--accent));
   border:none; color:#fff; font-size:16px;
-  transition:all .2s; box-shadow:0 0 15px rgba(232, 28, 255, 0.3);
+  transition:all .2s; box-shadow:0 0 15px rgba(255, 122, 0, 0.2);
 }
-.ai-btn:hover{transform:scale(1.08); box-shadow:0 4px 20px rgba(232, 28, 255, 0.5);}
+.ai-btn:hover{transform:scale(1.08); box-shadow:0 4px 20px rgba(255, 122, 0, 0.4);}
 
 /* NOVO CÉREBRO VISUAL DO TETECO - Renderização perfeita sem usar img scale */
 .teteco-avatar-bg {
@@ -622,7 +641,7 @@ img, video{max-width:100%;display:block}
 .stat-card:hover{border-color:var(--border2);transform:translateY(-2px)}
 .stat-icon{
   width:48px;height:48px;border-radius:12px;
-  background:rgba(255,77,0,0.1);
+  background:rgba(255,122,0,0.1);
   display:flex;align-items:center;justify-content:center;
   font-size:22px;flex-shrink:0;
 }
@@ -717,7 +736,7 @@ img, video{max-width:100%;display:block}
 .chat-window.open{display:flex}
 .chat-header{
   padding:14px 16px;display:flex;align-items:center;gap:12px;
-  background:var(--accent);
+  background:var(--brand-blue); /* Cabeçalho azul corporativo da marca */
 }
 .chat-avatar{
   width:38px;height:38px;border-radius:50%;overflow:hidden;
@@ -774,8 +793,8 @@ img, video{max-width:100%;display:block}
 .ai-modal.open { display: flex; animation: fadeIn .3s ease; }
 .ai-modal-content {
   background: var(--surface); padding: 24px; border-radius: 20px;
-  max-width: 500px; width: 100%; border: 1px solid rgba(232, 28, 255, 0.4);
-  box-shadow: 0 0 40px rgba(232, 28, 255, 0.15); position: relative;
+  max-width: 500px; width: 100%; border: 1px solid rgba(255, 122, 0, 0.4);
+  box-shadow: 0 0 40px rgba(255, 122, 0, 0.15); position: relative;
 }
 @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 .ai-modal-header {
@@ -833,7 +852,7 @@ img, video{max-width:100%;display:block}
 
 /* ══ FOOTER ══ */
 footer{
-  background:#080808;border-top:1px solid var(--border);
+  background:var(--bg);border-top:1px solid var(--border);
   padding:40px 80px;
 }
 .footer-inner{
@@ -841,7 +860,7 @@ footer{
   flex-wrap:wrap;gap:20px;max-width:1400px;margin:0 auto;
 }
 .footer-brand{display:flex;align-items:center;gap:12px}
-.footer-brand-name{font-family:'Syne',sans-serif;font-weight:800;font-size:15px;color:#fff;}
+.footer-brand-name{font-family:'Syne',sans-serif;font-weight:800;font-size:15px;color:var(--text);}
 .footer-brand-tag{font-size:12px;color:var(--text3);margin-top:2px}
 .footer-socials{display:flex;gap:8px}
 .footer-social{
@@ -930,11 +949,10 @@ footer{
 </head>
 <body>
 
-<!-- NAVBAR -->
+<!-- NAVBAR COM A LOGO OFICIAL -->
 <nav id="navbar">
   <div class="nav-logo">
-    <div class="nav-logo-icon" aria-hidden="true">🎯</div>
-    <span>O CAÇADOR DE OFERTA</span>
+    <img src="logo.png" alt="O Caçador de Ofertas" class="brand-logo-img">
   </div>
   <div class="nav-links">
     <button class="nav-btn active" data-page="home" onclick="window.navegar('home')" aria-label="Página Inicial">Início</button>
@@ -1008,7 +1026,7 @@ footer{
            <div class="mock-header">
              <div class="mock-avatar">🎯</div>
              <div class="mock-header-text">
-               <strong>O Caçador de Oferta</strong>
+               <strong>O Caçador de Ofertas</strong>
                <span>Agora mesmo</span>
              </div>
            </div>
@@ -1168,15 +1186,14 @@ footer{
   <div class="footer-inner">
     <div>
       <div class="footer-brand">
-        <div class="nav-logo-icon" aria-hidden="true" style="width:32px;height:32px;font-size:14px">🎯</div>
-        <span class="footer-brand-name">O CAÇADOR DE OFERTA</span>
+        <img src="logo.png" alt="O Caçador de Ofertas" style="height: 32px; background: #ffffff; padding: 4px 8px; border-radius: 6px;">
       </div>
-      <p class="footer-brand-tag">A sua plataforma de inteligência em descontos.</p>
+      <p class="footer-brand-tag" style="margin-top: 8px;">A sua plataforma de inteligência em descontos.</p>
     </div>
     <div class="footer-socials" id="footerSocials"></div>
   </div>
   <div class="footer-copy">
-    © 2026 O Caçador de Oferta. Powered by Teteco Bot AI 🤖.<br>
+    © 2026 O Caçador de Ofertas. Powered by Teteco Bot AI 🤖.<br>
     Nós recebemos uma comissão por compras feitas através dos nossos links, sem custo adicional para si.
   </div>
 </footer>
@@ -1434,7 +1451,7 @@ function toggleFavorito(id) {
 
 function compartilharOferta(titulo, link) {
     if (navigator.share) {
-        navigator.share({ title: 'O Caçador de Oferta', text: `🔥 Olha essa promoção: ${titulo}`, url: link }).catch(console.error);
+        navigator.share({ title: 'O Caçador de Ofertas', text: `🔥 Olha essa promoção: ${titulo}`, url: link }).catch(console.error);
     } else if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(`${titulo}\n${link}`)
             .then(() => mostrarToast("🔗", "Link copiado!"))
@@ -1658,7 +1675,7 @@ function aplicarOrdem(lista) {
 
 function criarCardHTML(o, delayIdx) {
     const loja = LOJAS[o.loja] || LOJAS.outras;
-    const bgGrad = o.desconto >= 50 ? "linear-gradient(135deg, #ff4d00, #ff1a1a)" : "linear-gradient(135deg, #ff7a3d, #ff9e00)";
+    const bgGrad = o.desconto >= 50 ? "linear-gradient(135deg, var(--accent), var(--accent2))" : "linear-gradient(135deg, var(--accent2), #ff9e00)";
     const fav = isFavorito(o.id);
     const novo = ((Date.now() - o.timestamp) / 3600000) <= CONFIG.HORAS_NOVO;
     
@@ -1965,7 +1982,7 @@ async function enviarMsg(sugestao = null) {
     const contextoOfertas = todasOfertas.slice(0, 20).map(o => `- ${o.titulo} (Loja: ${o.loja}) por R$ ${o.precoNovo}`).join('\n');
     
     // 🧠 CÉREBRO DE ELITE EM HARDWARE E BUSCAS BLINDADAS
-    const systemPrompt = `Você é o Teteco, um assistente de compras de ELITE do site "O Caçador de Oferta".
+    const systemPrompt = `Você é o Teteco, um assistente de compras de ELITE do site "O Caçador de Ofertas".
 Sua missão é gerar vendas. Você não pode falhar nas buscas. O algoritmo de buscas da Shopee é péssimo e retorna capas, cabos e adesivos se você for genérico. Você OBRIGATORIAMENTE DEVE "traduzir" o pedido do cliente para um termo de busca hiper-específico, blindado contra acessórios.
 
 🚨 REGRAS DE ENGENHARIA DE BUSCA (NUNCA QUEBRE) 🚨
