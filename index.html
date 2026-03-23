@@ -960,7 +960,7 @@ footer{
   .fab-busca{bottom:96px;right:24px;padding:10px 16px}
   .chat-window{bottom:0;right:0;max-width:100%;border-radius:20px 20px 0 0;max-height:75vh}
   .chat-fab{bottom:16px;right:16px}
-  .chat-fab.active{display:none}
+  .chat-fab.active{display:none !important}
   .stats-row{grid-template-columns:repeat(2,1fr);gap:12px}
   .hero-stats{gap:20px}
 }
@@ -2315,6 +2315,42 @@ window.toggleChat = toggleChat;
 window.enviarMsg = enviarMsg;
 window.analisarOferta = analisarOferta;
 window.fecharAiModal = fecharAiModal;
+
+// ==========================================
+// AUTOCOMPLETE E FILTRO DE PREÇO (novas features)
+// ==========================================
+window.updatePriceFilterDisplay = function() {
+    const el = document.getElementById('priceFilter');
+    const disp = document.getElementById('priceValDisplay');
+    if (!el || !disp) return;
+    disp.textContent = el.value >= 15000 ? "R$ 15.000+" : `R$ ${el.value}`;
+};
+window.mostrarAutocomplete = function() {
+    const busca = (document.getElementById('buscaInput')?.value || '').toLowerCase().trim();
+    const box = document.getElementById('autocompleteResults');
+    if (!box) return;
+    if (busca.length < 2) { box.style.display = 'none'; return; }
+    const sugestoes = todasOfertas.filter(o => {
+        const t = o.titulo.toLowerCase();
+        return t.includes(busca) || t.replace(/pro max/gi,"promax").includes(busca);
+    }).slice(0, 6);
+    if (sugestoes.length === 0) { box.style.display = 'none'; return; }
+    box.innerHTML = sugestoes.map(o => `<div class="autocomplete-item" onclick="window.selecionarAutocomplete('${esc(o.titulo)}')">🔍 ${esc(o.titulo)}</div>`).join('');
+    box.style.display = 'block';
+};
+window.selecionarAutocomplete = function(texto) {
+    const inp = document.getElementById('buscaInput');
+    if (inp) inp.value = texto;
+    const box = document.getElementById('autocompleteResults');
+    if (box) box.style.display = 'none';
+    window.filtrarOfertas();
+};
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('.busca-input-wrap')) {
+        const box = document.getElementById('autocompleteResults');
+        if (box) box.style.display = 'none';
+    }
+});
 
 // ==========================================
 // INICIALIZAÇÃO
