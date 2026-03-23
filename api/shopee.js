@@ -2,8 +2,12 @@ const crypto = require('crypto');
 const https = require('https');
 
 export default async function handler(req, res) {
-  const appId = '18349310952';
-  const appSecret = 'OVT5GSP5CARZR74TXZ2L3J4RRQACTAG2'; 
+  const appId = process.env.SHOPEE_APP_ID;
+  const appSecret = process.env.SHOPEE_APP_SECRET; 
+
+  if (!appId || !appSecret) {
+      return res.status(500).json({ erro_identificado: 'Credenciais da Shopee não configuradas nas variáveis de ambiente da Vercel.' });
+  }
 
   // MUDANÇA: Aumentamos o limite para 20. Assim o filtro do site (index.html) terá munição de sobra para jogar as capinhas fora e exibir os celulares.
   const searchQuery = req.query?.q || "";
