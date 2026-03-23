@@ -33,9 +33,9 @@ export default async function handler(req, res) {
         // ARRAY "MÁGICO" DE MODELOS
         // Vai testar do mais estável ao mais recente até a Google aprovar a chave
         const modelosParaTestar = [
-            "gemini-1.5-flash", 
-            "gemini-2.0-flash", 
-            "gemini-2.5-flash"
+            "gemini-2.5-flash",
+            "gemini-2.0-flash",
+            "gemini-1.5-flash"
         ];
         
         let response;
