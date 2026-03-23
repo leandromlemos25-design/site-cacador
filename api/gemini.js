@@ -43,7 +43,8 @@ export default async function handler(req, res) {
     const data = await response.json();
     
     if (!response.ok) {
-        throw new Error(data.error?.message || 'Erro na API Gemini');
+        const errMsg = data.error?.message || JSON.stringify(data.error) || 'Erro na API Gemini';
+        return res.status(response.status).json({ error: `[${response.status}] ${errMsg}` });
     }
 
     const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "Sem resposta";

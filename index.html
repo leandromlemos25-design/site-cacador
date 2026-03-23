@@ -1429,7 +1429,7 @@ async function chamarGemini(promptTexto, systemInst = "", historico = []) {
         } catch (error) {
             console.error(`Tentativa ${i + 1} falhou:`, error);
             if (i === 2) {
-                return `Desculpe, a IA está indisponível no momento. (${ultimoErro || error.message}) 😔`;
+                return `ERRO: ${ultimoErro || error.message || 'desconhecido'}`;
             }
             await new Promise((r) => setTimeout(r, delay));
             delay *= 2;
