@@ -2197,7 +2197,11 @@ ${contextoOfertas}
 (Se o cliente pedir algo diferente do catálogo, use as 3 tags para buscar mesmo assim)`;
 
     const historicoRecente = chatHistorico.slice(-10);
-    let resposta = await chamarGemini(texto, systemPrompt, historicoRecente.slice(0, -1));
+    const historicoGemini = historicoRecente.slice(0, -1).map(h => ({
+        role: h.role === "assistant" ? "model" : "user",
+        parts: [{ text: h.content }]
+    }));
+    let resposta = await chamarGemini(texto, systemPrompt, historicoGemini);
 
     if (!resposta) resposta = "Desculpe, ocorreu uma falha na minha ligação. 😔";
 
