@@ -2197,10 +2197,18 @@ ${contextoOfertas}
 (Se o cliente pedir algo diferente do catálogo, use as 3 tags para buscar mesmo assim)`;
 
     const historicoRecente = chatHistorico.slice(-10);
-    const historicoGemini = historicoRecente.slice(0, -1).map(h => ({
-        role: h.role === "assistant" ? "model" : "user",
-        parts: [{ text: h.content }]
-    }));
+    // Converte para formato Gemini e mescla entradas consecutivas do mesmo role
+    // (Gemini exige alternância estrita user → model → user → model)
+    const historicoGemini = [];
+    for (const h of historicoRecente.slice(0, -1)) {
+        const role = h.role === "assistant" ? "model" : "user";
+        const last = historicoGemini[historicoGemini.length - 1];
+        if (last && last.role === role) {
+            last.parts[0].text += "\n" + h.content;
+        } else {
+            historicoGemini.push({ role, parts: [{ text: h.content }] });
+        }
+    }
     let resposta = await chamarGemini(texto, systemPrompt, historicoGemini);
 
     if (!resposta) resposta = "Desculpe, ocorreu uma falha na minha ligação. 😔";
