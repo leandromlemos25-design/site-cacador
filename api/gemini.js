@@ -1,9 +1,8 @@
 export default async function handler(req, res) {
-  // FASE 1: Proteção CORS - Apenas o seu site pode usar esta API
-  const allowedOrigin = 'https://ocacadordeofertas.com';
+  // FASE 1: Proteção CORS
   const origin = req.headers.origin;
-  
-  if (origin && origin !== allowedOrigin && !origin.includes('localhost')) {
+  const allowed = !origin || origin.includes('ocacadordeofertas.com') || origin.includes('vercel.app') || origin.includes('localhost');
+  if (!allowed) {
       return res.status(403).json({ error: 'Acesso negado. Domínio não autorizado.' });
   }
 
@@ -35,7 +34,7 @@ export default async function handler(req, res) {
         payload.systemInstruction = { parts: [{ text: systemInstruction }] };
     }
 
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
