@@ -1304,7 +1304,7 @@ footer{
       
       <div class="form-group">
         <label class="form-label" for="pedidoProduto">O que você procura? *</label>
-        <input class="form-input" id="pedidoProduto" placeholder='Ex: "PlayStation 5 256GB"' aria-label="Nome do produto procurado" oninput="document.getElementById('formSubmit').disabled = !this.value.trim()">
+        <input class="form-input" id="pedidoProduto" placeholder='Ex: "PlayStation 5 256GB"' aria-label="Nome do produto procurado">
       </div>
       <div class="form-group">
         <label class="form-label" for="pedidoOrcamento">Orçamento Máximo (Opcional)</label>
@@ -1319,7 +1319,7 @@ footer{
         <textarea class="form-textarea" id="pedidoDetalhes" placeholder='Ex: "Pode ser recondicionado, cor branca..."' aria-label="Detalhes adicionais"></textarea>
       </div>
       
-      <button class="form-submit" id="formSubmit" onclick="window.enviarPedido()" disabled aria-label="Enviar pedido de oferta">
+      <button class="form-submit" id="formSubmit" onclick="window.enviarPedido()" aria-label="Enviar pedido de oferta">
         ✉️ Enviar Pedido
       </button>
     </div>
@@ -2117,7 +2117,7 @@ function toggleFormLoja(btn, loja, cor) {
 
 async function enviarPedido() {
     const p = document.getElementById("pedidoProduto").value.trim();
-    if (!p) return;
+    if (!p) { mostrarToast("⚠️", "Escreva o nome do produto primeiro."); return; }
     const btn = document.getElementById("formSubmit");
     btn.disabled = true;
     btn.textContent = "A enviar...";
