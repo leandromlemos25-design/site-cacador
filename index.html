@@ -1502,7 +1502,7 @@ const CONFIG = {
     HORAS_NOVO: 24,
     DIAS_EXPIRACAO: 7, // Deleta ofertas do site após 1 semana
     ITEMS_PER_PAGE: 12,
-    EMAILJS_TEMPLATE_RESPOSTA: "" // sem template disponível no plano free
+    EMAILJS_TEMPLATE_RESPOSTA: "template_ihnjh4j"
 };
 
 const LOJAS = {
@@ -2141,9 +2141,28 @@ async function enviarPedido() {
     btn.innerHTML = '<span style="display:inline-flex;align-items:center;gap:8px"><span class="loader-spinner" style="width:16px;height:16px;border-width:2px"></span> A IA está buscando...</span>';
 
     try {
-        // 1. Gemini busca o produto
-        const promptIA = `Você é um especialista em compras no Brasil. Um cliente pediu ajuda para encontrar o melhor preço de um produto.\n\nProduto: ${produto}${orcamento ? `\nOrçamento máximo: ${orcamento}` : ''}${detalhes ? `\nDetalhes: ${detalhes}` : ''}\n\nResponda em formato de e-mail amigável com:\n1. Onde encontrar este produto no Brasil (Amazon, Shopee, Magalu, Mercado Livre, etc.)\n2. Faixa de preço típica atual\n3. O que observar ao comprar (versão, garantia, etc.)\n4. Dica para economizar\n\nSeja direto, útil e use emojis. Máximo 3 parágrafos curtos.`;
-        const respostaIA = await chamarGemini(promptIA, "Você é um assistente de compras brasileiro. Responda sempre em português do Brasil de forma amigável e objetiva.");
+        // 1. Gemini busca o produto e retorna JSON estruturado
+        const promptIA = `Você é um especialista em compras no Brasil. Um cliente quer encontrar a melhor oferta de um produto.
+
+Produto: ${produto}${orcamento ? `\nOrçamento máximo: ${orcamento}` : ''}${detalhes ? `\nDetalhes: ${detalhes}` : ''}
+
+Responda APENAS com um JSON válido, sem texto antes ou depois, neste formato exato:
+{
+  "produto_nome": "nome completo do produto com modelo e especificações",
+  "preco_antigo": "R$ X.XXX,XX",
+  "preco_novo": "R$ X.XXX,XX",
+  "link_produto": "https://www.amazon.com.br/s?k=PRODUTO+AQUI"
+}
+
+Regras:
+- produto_nome: nome completo e específico do produto
+- preco_antigo: preço típico de tabela/lançamento
+- preco_novo: melhor preço médio atual encontrado no mercado brasileiro
+- link_produto: link de busca real na Amazon Brasil (substitua PRODUTO+AQUI pelo nome do produto com + entre palavras)`;
+
+        const respostaRaw = await chamarGemini(promptIA, "Você é um assistente de compras brasileiro. Responda APENAS com JSON válido, sem texto adicional.");
+        const jsonMatch = respostaRaw.match(/\{[\s\S]*?\}/);
+        const dados = jsonMatch ? JSON.parse(jsonMatch[0]) : {};
 
         // 2. Notifica o admin
         await emailjs.send("service_v94cf8p", "template_6l0zsew", {
@@ -2153,15 +2172,14 @@ async function enviarPedido() {
             detalhes: `Email: ${email}\n${detalhes || "Sem detalhes adicionais"}`
         });
 
-        // 3. Envia resposta com IA para o usuário
-        if (CONFIG.EMAILJS_TEMPLATE_RESPOSTA) {
-            await emailjs.send("service_v94cf8p", CONFIG.EMAILJS_TEMPLATE_RESPOSTA, {
-                to_email: email,
-                nome,
-                produto,
-                resposta_ia: respostaIA
-            });
-        }
+        // 3. Envia email bonito para o usuário com a oferta encontrada pela IA
+        await emailjs.send("service_v94cf8p", CONFIG.EMAILJS_TEMPLATE_RESPOSTA, {
+            to_email: email,
+            produto_nome: dados.produto_nome || produto,
+            preco_antigo: dados.preco_antigo || "—",
+            preco_novo: dados.preco_novo || "—",
+            link_produto: dados.link_produto || `https://www.amazon.com.br/s?k=${encodeURIComponent(produto)}`
+        });
 
         // 4. Tela de agradecimento
         document.getElementById("formBox").innerHTML = `
@@ -2709,15 +2727,7 @@ window.enviarAlertaPreco = async function() {
     const alertas = JSON.parse(localStorage.getItem('cdf_alertas') || '[]');
     alertas.push({ ofertaId: _alertaOferta.id, titulo: _alertaOferta.titulo, precoAtual: _alertaOferta.precoNovo, precoAlvo, email, ts: Date.now() });
     localStorage.setItem('cdf_alertas', JSON.stringify(alertas));
-    try {
-        await emailjs.send("service_v94cf8p", "template_ihnjh4j", {
-            to_email: email,
-            produto_nome: _alertaOferta.titulo,
-            preco_antigo: formatarMoeda(_alertaOferta.precoAntigo || _alertaOferta.precoNovo),
-            preco_novo: formatarMoeda(_alertaOferta.precoNovo),
-            link_produto: _alertaOferta.link
-        });
-    } catch(e) {}
+    // alerta de preço por email desativado (template em uso para pedidos)
     msgEl.style.color = '#22c55e';
     msgEl.textContent = '✅ Alerta guardado! Receberás aviso quando o preço baixar.';
     setTimeout(() => window.fecharAlertaModal(), 2500);
