@@ -16,6 +16,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎯</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>emailjs.init("48K0LO6SE17R-n6zv");</script>
 
 <!-- ═══ SEO SCHEMA.ORG ═══ -->
 <script type="application/ld+json">
@@ -597,6 +599,100 @@ img, video{max-width:100%;display:block}
   color:var(--text2);transition:all .2s;
 }
 .btn-partilhar:hover{background:var(--surface3)}
+
+/* ══ BOTÃO COMPARAR ══ */
+.btn-comparar{
+  width:38px;flex-shrink:0;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--surface2);border:1px solid var(--border2);
+  color:var(--text2);font-size:16px;transition:all .2s;cursor:pointer;
+}
+.btn-comparar:hover{background:var(--brand-blue);color:#fff;border-color:var(--brand-blue);}
+.btn-comparar.comparar-ativo{background:var(--brand-blue);color:#fff;border-color:var(--brand-blue);}
+
+/* ══ BOTÃO ALERTA ══ */
+.btn-alerta{
+  width:38px;flex-shrink:0;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--surface2);border:1px solid var(--border2);
+  color:var(--text2);font-size:16px;transition:all .2s;cursor:pointer;
+}
+.btn-alerta:hover{background:#f59e0b;color:#fff;border-color:#f59e0b;}
+
+/* ══ BARRA FLUTUANTE COMPARADOR ══ */
+#comparadorBarra{
+  position:fixed;bottom:80px;left:50%;transform:translateX(-50%);
+  background:var(--surface);border:1px solid var(--border2);
+  border-radius:16px;padding:12px 16px;
+  display:none;align-items:center;gap:12px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.4);z-index:900;
+  max-width:90vw;flex-wrap:wrap;
+}
+.comparar-item-chip{
+  display:flex;align-items:center;gap:6px;
+  background:var(--surface2);border-radius:8px;padding:4px 10px;
+  font-size:12px;color:var(--text2);
+}
+.comparar-item-chip button{
+  background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;padding:0;
+}
+#comparadorBarraBtn{
+  background:var(--accent);color:#fff;border:none;
+  border-radius:10px;padding:8px 16px;font-weight:700;
+  cursor:pointer;white-space:nowrap;font-size:14px;
+}
+#comparadorBarraBtn:disabled{opacity:.4;cursor:not-allowed;}
+
+/* ══ MODAL COMPARADOR ══ */
+#comparadorModal{
+  position:fixed;inset:0;background:rgba(0,0,0,.7);
+  z-index:1100;display:none;align-items:center;justify-content:center;padding:16px;
+}
+.comparador-modal-content{
+  background:var(--surface);border:1px solid var(--border2);
+  border-radius:20px;width:100%;max-width:800px;
+  max-height:90vh;overflow-y:auto;padding:24px;
+  position:relative;
+}
+.comparador-tabela{display:flex;flex-direction:column;gap:0;}
+.comp-row{display:flex;border-bottom:1px solid var(--border);}
+.comp-row:last-child{border-bottom:none;}
+.comp-header{background:var(--surface2);border-radius:12px 12px 0 0;}
+.comp-cell{flex:1;padding:12px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;text-align:center;font-size:14px;}
+.comp-label{flex:0 0 130px;font-weight:600;color:var(--text2);font-size:13px;justify-content:flex-start;text-align:left;}
+.comp-melhor{background:rgba(34,197,94,.08);border-left:2px solid #22c55e;border-right:2px solid #22c55e;}
+.comp-produto-img{width:60px;height:60px;object-fit:contain;}
+.comp-produto-img img{width:100%;height:100%;object-fit:contain;border-radius:8px;}
+.comp-produto-nome{font-size:12px;color:var(--text2);line-height:1.3;}
+.comp-btn{display:inline-block;padding:8px 14px;border-radius:8px;color:#fff;font-weight:700;font-size:13px;text-decoration:none;}
+.comp-cta-row{background:var(--surface2);}
+
+/* ══ MODAL ALERTA DE PREÇO ══ */
+#alertaModal{
+  position:fixed;inset:0;background:rgba(0,0,0,.7);
+  z-index:1100;display:none;align-items:center;justify-content:center;padding:16px;
+}
+.alerta-modal-content{
+  background:var(--surface);border:1px solid var(--border2);
+  border-radius:20px;width:100%;max-width:440px;
+  padding:28px;position:relative;
+}
+.alerta-modal-content h3{font-family:'Syne',sans-serif;margin-bottom:4px;}
+.alerta-produto-nome{color:var(--text2);font-size:14px;margin-bottom:16px;line-height:1.3;}
+.alerta-preco-ref{display:flex;align-items:center;gap:8px;margin-bottom:20px;padding:12px;background:var(--surface2);border-radius:10px;}
+.alerta-form label{display:block;font-size:13px;color:var(--text2);margin-bottom:6px;font-weight:600;}
+.alerta-form input{
+  width:100%;background:var(--surface2);border:1px solid var(--border2);
+  border-radius:10px;padding:10px 14px;color:var(--text);font-size:15px;
+  margin-bottom:14px;
+}
+.alerta-form input:focus{outline:2px solid var(--accent);}
+.alerta-submit{
+  width:100%;background:var(--accent);color:#fff;border:none;
+  border-radius:10px;padding:12px;font-weight:700;font-size:15px;cursor:pointer;
+}
+.alerta-submit:hover{opacity:.9;}
+#alertaMsg{font-size:13px;margin-top:10px;text-align:center;min-height:20px;}
 
 /* ══ BOTÃO IA E AVATAR (ESTILO OTIMIZADO) ══ */
 .ai-btn{
@@ -1224,7 +1320,7 @@ footer{
       </div>
       
       <button class="form-submit" id="formSubmit" onclick="window.enviarPedido()" disabled aria-label="Enviar pedido de oferta">
-        ✉️ Enviar Pedido no Grupo
+        ✉️ Enviar Pedido
       </button>
     </div>
   </section>
@@ -1299,6 +1395,44 @@ footer{
     </div>
     <div class="ai-modal-body" id="aiModalBody">
       <!-- O conteúdo será injetado dinamicamente pela API do Gemini -->
+    </div>
+  </div>
+</div>
+
+<!-- ═══ BARRA FLUTUANTE COMPARADOR ═══ -->
+<div id="comparadorBarra">
+  <span style="font-size:13px;font-weight:700;color:var(--text);white-space:nowrap;">⚖️ Comparar:</span>
+  <div id="comparadorBarraItens" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
+  <button id="comparadorBarraBtn" onclick="window.abrirComparador()" disabled>Comparar agora</button>
+  <button onclick="window.limparComparador()" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:18px;padding:0 4px;">✕</button>
+</div>
+
+<!-- ═══ MODAL COMPARADOR ═══ -->
+<div id="comparadorModal" onclick="if(event.target===this)window.fecharComparador()">
+  <div class="comparador-modal-content">
+    <button onclick="window.fecharComparador()" style="position:absolute;top:16px;right:16px;background:none;border:none;color:var(--text);font-size:20px;cursor:pointer;">✕</button>
+    <h3 style="font-family:'Syne',sans-serif;margin-bottom:20px;">⚖️ Comparador de Preços</h3>
+    <div id="comparadorCorpo"></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL ALERTA DE PREÇO ═══ -->
+<div id="alertaModal" onclick="if(event.target===this)window.fecharAlertaModal()">
+  <div class="alerta-modal-content">
+    <button onclick="window.fecharAlertaModal()" style="position:absolute;top:16px;right:16px;background:none;border:none;color:var(--text);font-size:20px;cursor:pointer;">✕</button>
+    <h3>🔔 Alerta de Preço</h3>
+    <p class="alerta-produto-nome" id="alertaTitulo"></p>
+    <div class="alerta-preco-ref">
+      <span style="font-size:13px;color:var(--text2);">Preço atual:</span>
+      <span style="font-weight:800;color:var(--accent);font-size:18px;" id="alertaPrecoAtual"></span>
+    </div>
+    <div class="alerta-form">
+      <label>Quero ser avisado quando baixar para:</label>
+      <input type="number" id="alertaPrecoAlvo" placeholder="Ex: 999,90" step="0.01" min="0">
+      <label>Seu e-mail:</label>
+      <input type="email" id="alertaEmail" placeholder="seu@email.com">
+      <button class="alerta-submit" onclick="window.enviarAlertaPreco()">🔔 Activar Alerta</button>
+      <p id="alertaMsg"></p>
     </div>
   </div>
 </div>
@@ -1776,7 +1910,7 @@ function criarCardHTML(o, delayIdx) {
         : `<strong style="color:var(--green)">Preço acessível</strong>`;
 
     return `
-    <div class="oferta-card fade-up" style="animation-delay:${(delayIdx%10)*0.05}s">
+    <div class="oferta-card fade-up" data-oferta-id="${o.id}" style="animation-delay:${(delayIdx%10)*0.05}s">
         <div class="badges-top-left">
             ${o.desconto > 0 ? `<div class="oferta-desconto" style="background:${bgGrad}">-${o.desconto}%</div>` : ''}
             ${o.selo ? `<div class="oferta-selo" style="background:${loja.cor};color:#fff">${esc(o.selo)}</div>` : ''}
@@ -1801,13 +1935,13 @@ function criarCardHTML(o, delayIdx) {
                 ${o.desconto > 0 ? `<div class="oferta-economia">Poupa ${formatarMoeda(o.precoAntigo - o.precoNovo)}</div>` : ''}
             </div>
             <div class="botoes-acao">
-                <button class="ai-btn" onclick="window.analisarOferta(${o.id})" aria-label="Analisar oferta com Inteligência Artificial" title="A IA analisa se vale a pena!">
-                    ✨
-                </button>
-                <a href="${esc(o.link)}" target="_blank" rel="noopener" class="oferta-btn" style="background:${loja.cor}15;color:${loja.cor};border:1px solid ${loja.cor}40" onmouseover="this.style.background='${loja.cor}';this.style.color='#fff'" onmouseout="this.style.background='${loja.cor}15';this.style.color='${loja.cor}'">
+                <button class="ai-btn" onclick="window.analisarOferta(${o.id})" aria-label="Analisar oferta com Inteligência Artificial" title="A IA analisa se vale a pena!">✨</button>
+                <button class="btn-comparar" data-comparar-id="${o.id}" onclick="window.toggleComparar(${o.id})" title="Adicionar à comparação">⚖️</button>
+                <a href="${esc(o.link)}" target="_blank" rel="noopener" class="oferta-btn" style="background:${loja.cor}15;color:${loja.cor};border:1px solid ${loja.cor}40" onmouseover="this.style.background='${loja.cor}';this.style.color='#fff'" onmouseout="this.style.background='${loja.cor}15';this.style.color='${loja.cor}'" onclick="window.trackClick(${o.id},'${esc(o.titulo)}','${o.loja}',${o.precoNovo})">
                     Pegar Oferta 🛒
                 </a>
-                <button class="btn-partilhar" onclick="window.compartilharOferta('${esc(o.titulo)}', '${esc(o.link)}')" aria-label="Partilhar oferta ${esc(o.titulo)}" title="Partilhar">
+                <button class="btn-alerta" onclick="window.abrirAlertaPreco(${o.id})" title="Alerta de preço">🔔</button>
+                <button class="btn-partilhar" onclick="window.compartilharOferta('${esc(o.titulo)}', '${esc(o.link)}', ${o.id})" aria-label="Partilhar oferta ${esc(o.titulo)}" title="Partilhar">
                     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
                 </button>
             </div>
@@ -1981,11 +2115,25 @@ function toggleFormLoja(btn, loja, cor) {
     }
 }
 
-function enviarPedido() {
+async function enviarPedido() {
     const p = document.getElementById("pedidoProduto").value.trim();
     if (!p) return;
-    const msg = encodeURIComponent(`🎯 *NOVO PEDIDO NO SITE*\n\n📦 *Produto:* ${p}\n${document.getElementById("pedidoOrcamento").value ? `💰 *Orçamento:* ${document.getElementById("pedidoOrcamento").value}\n` : ''}${formLojaSelecionada ? `🏪 *Loja:* ${LOJAS[formLojaSelecionada]?.nome}\n` : ''}${document.getElementById("pedidoDetalhes").value ? `📝 *Detalhes:* ${document.getElementById("pedidoDetalhes").value}\n` : ''}`);
-    document.getElementById("formBox").innerHTML = `<div class="form-success fade-up"><div class="form-success-icon">✓</div><h3 style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--text);margin-bottom:8px">Pedido Preparado!</h3><p style="color:var(--text2);margin-bottom:24px">O seu pedido foi gerado. Clique abaixo para enviar diretamente para a nossa equipa no Telegram.</p><a href="${CONFIG.TELEGRAM}?text=${msg}" target="_blank" class="btn-primary" style="text-decoration:none">Enviar Pedido no Telegram</a></div>`;
+    const btn = document.getElementById("formSubmit");
+    btn.disabled = true;
+    btn.textContent = "A enviar...";
+    try {
+        await emailjs.send("service_v94cf8p", "template_6l0zsew", {
+            produto: p,
+            orcamento: document.getElementById("pedidoOrcamento").value || "Não informado",
+            loja: formLojaSelecionada ? LOJAS[formLojaSelecionada]?.nome : "Sem preferência",
+            detalhes: document.getElementById("pedidoDetalhes").value || "Sem detalhes adicionais"
+        });
+        document.getElementById("formBox").innerHTML = `<div class="form-success fade-up"><div class="form-success-icon">✓</div><h3 style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--text);margin-bottom:8px">Pedido Enviado!</h3><p style="color:var(--text2);margin-bottom:24px">Recebemos o seu pedido e vamos buscar o melhor preço para si. Enquanto isso, acompanhe as nossas ofertas em tempo real.</p><a href="${CONFIG.TELEGRAM}" target="_blank" class="btn-primary" style="text-decoration:none">Acompanhar no Telegram</a></div>`;
+    } catch(e) {
+        btn.disabled = false;
+        btn.textContent = "✉️ Enviar Pedido";
+        mostrarToast("❌", "Erro ao enviar. Tente novamente.");
+    }
 }
 
 // ==========================================
@@ -2376,9 +2524,177 @@ iniciarAutoRefresh();
 
 setTimeout(() => { if(!chatOpen) document.getElementById("chatBadge").style.display="block"; }, 5000);
 
+// ==========================================
+// FEATURE 1: ANALYTICS — RASTREAMENTO DE CLIQUES
+// ==========================================
+window.trackClick = function(id, titulo, loja, preco) {
+    try {
+        const clicks = JSON.parse(localStorage.getItem('cdf_analytics') || '[]');
+        clicks.push({ id, titulo, loja, preco, ts: Date.now() });
+        if (clicks.length > 1000) clicks.splice(0, clicks.length - 1000);
+        localStorage.setItem('cdf_analytics', JSON.stringify(clicks));
+    } catch(e) {}
+};
+
+// ==========================================
+// FEATURE 4: LINKS ÚNICOS POR OFERTA
+// ==========================================
+window.compartilharOferta = function(titulo, link, ofertaId) {
+    const pageUrl = ofertaId
+        ? `${location.origin}${location.pathname}#oferta/${ofertaId}`
+        : link;
+    const shareData = { title: `🔥 ${titulo}`, text: 'Olha esta promoção no Caçador de Ofertas!', url: pageUrl };
+    if (navigator.share) {
+        navigator.share(shareData).catch(console.error);
+    } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(pageUrl).then(() => mostrarToast("🔗", "Link da oferta copiado!"));
+    } else {
+        const el = document.createElement('textarea');
+        el.value = pageUrl;
+        el.style.cssText = 'position:fixed;opacity:0';
+        document.body.appendChild(el);
+        el.select();
+        try { document.execCommand('copy'); mostrarToast("🔗", "Link copiado!"); } catch(e) {}
+        document.body.removeChild(el);
+    }
+};
+
+// ==========================================
+// FEATURE 3: COMPARADOR DE PREÇOS
+// ==========================================
+let comparacaoLista = [];
+const MAX_COMPARAR = 3;
+
+window.toggleComparar = function(id) {
+    const oferta = todasOfertas.find(o => o.id === id);
+    if (!oferta) return;
+    const idx = comparacaoLista.findIndex(o => o.id === id);
+    if (idx !== -1) {
+        comparacaoLista.splice(idx, 1);
+    } else {
+        if (comparacaoLista.length >= MAX_COMPARAR) {
+            mostrarToast("⚠️", `Máximo ${MAX_COMPARAR} produtos para comparar.`); return;
+        }
+        comparacaoLista.push(oferta);
+    }
+    document.querySelectorAll('[data-comparar-id]').forEach(btn => {
+        const btnId = parseInt(btn.getAttribute('data-comparar-id'));
+        btn.classList.toggle('comparar-ativo', comparacaoLista.some(o => o.id === btnId));
+    });
+    _atualizarBarraComparar();
+};
+
+window.limparComparador = function() {
+    comparacaoLista = [];
+    document.querySelectorAll('[data-comparar-id]').forEach(btn => btn.classList.remove('comparar-ativo'));
+    _atualizarBarraComparar();
+};
+
+function _atualizarBarraComparar() {
+    const barra = document.getElementById('comparadorBarra');
+    if (!barra) return;
+    if (comparacaoLista.length === 0) { barra.style.display = 'none'; return; }
+    barra.style.display = 'flex';
+    document.getElementById('comparadorBarraItens').innerHTML = comparacaoLista.map(o =>
+        `<div class="comparar-item-chip"><span>${o.titulo.slice(0,22)}${o.titulo.length>22?'…':''}</span><button onclick="window.toggleComparar(${o.id})">✕</button></div>`
+    ).join('');
+    document.getElementById('comparadorBarraBtn').disabled = comparacaoLista.length < 2;
+}
+
+window.abrirComparador = function() {
+    if (comparacaoLista.length < 2) return;
+    const corpo = document.getElementById('comparadorCorpo');
+    const precos = comparacaoLista.map(o => o.precoNovo).filter(p => p > 0);
+    const melhorPreco = Math.min(...precos);
+    const linhas = [
+        { label: '🏪 Loja', fn: o => { const l=LOJAS[o.loja]||LOJAS.outras; return `<span style="color:${l.cor};font-weight:700">${l.emoji} ${o.loja.charAt(0).toUpperCase()+o.loja.slice(1)}</span>`; }},
+        { label: '💰 Preço Original', fn: o => o.precoAntigo>0?`<span style="text-decoration:line-through;color:var(--text3)">${formatarMoeda(o.precoAntigo)}</span>`:'—'},
+        { label: '🏷️ Preço Atual', fn: o => `<span style="color:var(--accent);font-weight:800;font-size:18px">${formatarMoeda(o.precoNovo)}</span>`},
+        { label: '📉 Desconto', fn: o => o.desconto>0?`<span style="color:#22c55e;font-weight:700">-${o.desconto}%</span>`:'—'},
+        { label: '💵 Economia', fn: o => o.precoAntigo>0&&o.precoNovo>0?`<span style="color:#22c55e">${formatarMoeda(o.precoAntigo-o.precoNovo)}</span>`:'—'},
+    ];
+    let html = `<div class="comparador-tabela">`;
+    html += `<div class="comp-row comp-header"><div class="comp-cell comp-label"></div>`;
+    comparacaoLista.forEach(o => {
+        html += `<div class="comp-cell"><div class="comp-produto-img">${o.img.startsWith('http')?`<img src="${esc(o.img)}" alt="" onerror="this.style.display='none'" loading="lazy">`:`<span style="font-size:36px">${esc(o.img)}</span>`}</div><div class="comp-produto-nome">${esc(o.titulo)}</div></div>`;
+    });
+    html += `</div>`;
+    linhas.forEach(linha => {
+        html += `<div class="comp-row"><div class="comp-cell comp-label">${linha.label}</div>`;
+        comparacaoLista.forEach(o => {
+            const isBest = linha.label.includes('Preço Atual') && o.precoNovo === melhorPreco;
+            html += `<div class="comp-cell${isBest?' comp-melhor':''}">${linha.fn(o)}</div>`;
+        });
+        html += `</div>`;
+    });
+    html += `<div class="comp-row comp-cta-row"><div class="comp-cell comp-label">🛒 Comprar</div>`;
+    comparacaoLista.forEach(o => {
+        const l = LOJAS[o.loja]||LOJAS.outras;
+        html += `<div class="comp-cell"><a href="${esc(o.link)}" target="_blank" rel="noopener" class="comp-btn" style="background:${l.cor}" onclick="window.trackClick(${o.id},'${esc(o.titulo)}','${o.loja}',${o.precoNovo})">Ir à oferta</a></div>`;
+    });
+    html += `</div></div>`;
+    corpo.innerHTML = html;
+    document.getElementById('comparadorModal').style.display = 'flex';
+};
+window.fecharComparador = () => document.getElementById('comparadorModal').style.display = 'none';
+
+// ==========================================
+// FEATURE 2: ALERTAS DE PREÇO
+// ==========================================
+let _alertaOferta = null;
+
+window.abrirAlertaPreco = function(id) {
+    _alertaOferta = todasOfertas.find(o => o.id === id);
+    if (!_alertaOferta) return;
+    document.getElementById('alertaTitulo').textContent = _alertaOferta.titulo;
+    document.getElementById('alertaPrecoAtual').textContent = formatarMoeda(_alertaOferta.precoNovo);
+    document.getElementById('alertaPrecoAlvo').value = '';
+    document.getElementById('alertaEmail').value = '';
+    document.getElementById('alertaMsg').textContent = '';
+    document.getElementById('alertaModal').style.display = 'flex';
+};
+window.fecharAlertaModal = () => document.getElementById('alertaModal').style.display = 'none';
+
+window.enviarAlertaPreco = async function() {
+    const email = document.getElementById('alertaEmail').value.trim();
+    const precoAlvo = parseFloat(document.getElementById('alertaPrecoAlvo').value.replace(',','.'));
+    const msgEl = document.getElementById('alertaMsg');
+    if (!email || !/\S+@\S+\.\S+/.test(email)) { msgEl.style.color='#f87171'; msgEl.textContent='⚠️ Insira um e-mail válido.'; return; }
+    if (!precoAlvo || precoAlvo <= 0) { msgEl.style.color='#f87171'; msgEl.textContent='⚠️ Insira o preço desejado.'; return; }
+    const alertas = JSON.parse(localStorage.getItem('cdf_alertas') || '[]');
+    alertas.push({ ofertaId: _alertaOferta.id, titulo: _alertaOferta.titulo, precoAtual: _alertaOferta.precoNovo, precoAlvo, email, ts: Date.now() });
+    localStorage.setItem('cdf_alertas', JSON.stringify(alertas));
+    try {
+        await emailjs.send("service_v94cf8p", "template_ihnjh4j", {
+            to_email: email,
+            produto: _alertaOferta.titulo,
+            preco_atual: formatarMoeda(_alertaOferta.precoNovo),
+            preco_alvo: formatarMoeda(precoAlvo),
+            link: _alertaOferta.link
+        });
+    } catch(e) {}
+    msgEl.style.color = '#22c55e';
+    msgEl.textContent = '✅ Alerta guardado! Receberás aviso quando o preço baixar.';
+    setTimeout(() => window.fecharAlertaModal(), 2500);
+};
+
+// ==========================================
+// HASH ROUTING — incluindo #oferta/ID
+// ==========================================
 (function() {
     const hash = location.hash.replace("#", "");
-    if (["home","ofertas","favoritos","pedir"].includes(hash)) setTimeout(() => navegar(hash), 100);
+    if (["home","ofertas","favoritos","pedir"].includes(hash)) {
+        setTimeout(() => navegar(hash), 100);
+    } else if (hash.startsWith("oferta/")) {
+        const id = parseInt(hash.split("/")[1]);
+        setTimeout(() => {
+            navegar("ofertas");
+            setTimeout(() => {
+                const card = document.querySelector(`[data-oferta-id="${id}"]`);
+                if (card) { card.scrollIntoView({behavior:'smooth',block:'center'}); card.style.outline='2px solid var(--accent)'; setTimeout(()=>card.style.outline='',2000); }
+            }, 800);
+        }, 200);
+    }
 })();
 </script>
 </body>
