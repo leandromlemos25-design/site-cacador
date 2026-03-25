@@ -16,6 +16,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎯</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>emailjs.init("48K0LO6SE17R-n6zv");</script>
 
 <!-- ═══ SEO SCHEMA.ORG ═══ -->
 <script type="application/ld+json">
@@ -1318,7 +1320,7 @@ footer{
       </div>
       
       <button class="form-submit" id="formSubmit" onclick="window.enviarPedido()" disabled aria-label="Enviar pedido de oferta">
-        ✉️ Enviar Pedido no Grupo
+        ✉️ Enviar Pedido
       </button>
     </div>
   </section>
@@ -2113,11 +2115,25 @@ function toggleFormLoja(btn, loja, cor) {
     }
 }
 
-function enviarPedido() {
+async function enviarPedido() {
     const p = document.getElementById("pedidoProduto").value.trim();
     if (!p) return;
-    const msg = encodeURIComponent(`🎯 *NOVO PEDIDO NO SITE*\n\n📦 *Produto:* ${p}\n${document.getElementById("pedidoOrcamento").value ? `💰 *Orçamento:* ${document.getElementById("pedidoOrcamento").value}\n` : ''}${formLojaSelecionada ? `🏪 *Loja:* ${LOJAS[formLojaSelecionada]?.nome}\n` : ''}${document.getElementById("pedidoDetalhes").value ? `📝 *Detalhes:* ${document.getElementById("pedidoDetalhes").value}\n` : ''}`);
-    document.getElementById("formBox").innerHTML = `<div class="form-success fade-up"><div class="form-success-icon">✓</div><h3 style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--text);margin-bottom:8px">Pedido Preparado!</h3><p style="color:var(--text2);margin-bottom:24px">O seu pedido foi gerado. Clique abaixo para enviar diretamente para a nossa equipa no Telegram.</p><a href="${CONFIG.TELEGRAM}?text=${msg}" target="_blank" class="btn-primary" style="text-decoration:none">Enviar Pedido no Telegram</a></div>`;
+    const btn = document.getElementById("formSubmit");
+    btn.disabled = true;
+    btn.textContent = "A enviar...";
+    try {
+        await emailjs.send("service_v94cf8p", "template_6l0zsew", {
+            produto: p,
+            orcamento: document.getElementById("pedidoOrcamento").value || "Não informado",
+            loja: formLojaSelecionada ? LOJAS[formLojaSelecionada]?.nome : "Sem preferência",
+            detalhes: document.getElementById("pedidoDetalhes").value || "Sem detalhes adicionais"
+        });
+        document.getElementById("formBox").innerHTML = `<div class="form-success fade-up"><div class="form-success-icon">✓</div><h3 style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--text);margin-bottom:8px">Pedido Enviado!</h3><p style="color:var(--text2);margin-bottom:24px">Recebemos o seu pedido e vamos buscar o melhor preço para si. Enquanto isso, acompanhe as nossas ofertas em tempo real.</p><a href="${CONFIG.TELEGRAM}" target="_blank" class="btn-primary" style="text-decoration:none">Acompanhar no Telegram</a></div>`;
+    } catch(e) {
+        btn.disabled = false;
+        btn.textContent = "✉️ Enviar Pedido";
+        mostrarToast("❌", "Erro ao enviar. Tente novamente.");
+    }
 }
 
 // ==========================================
@@ -2648,13 +2664,15 @@ window.enviarAlertaPreco = async function() {
     const alertas = JSON.parse(localStorage.getItem('cdf_alertas') || '[]');
     alertas.push({ ofertaId: _alertaOferta.id, titulo: _alertaOferta.titulo, precoAtual: _alertaOferta.precoNovo, precoAlvo, email, ts: Date.now() });
     localStorage.setItem('cdf_alertas', JSON.stringify(alertas));
-    if (window.emailjs) {
-        const svc = localStorage.getItem('cdf_emailjs_service');
-        const tpl = localStorage.getItem('cdf_emailjs_template');
-        if (svc && tpl) {
-            try { await emailjs.send(svc, tpl, { to_email: email, produto: _alertaOferta.titulo, preco_atual: formatarMoeda(_alertaOferta.precoNovo), preco_alvo: formatarMoeda(precoAlvo), link: _alertaOferta.link }); } catch(e) {}
-        }
-    }
+    try {
+        await emailjs.send("service_v94cf8p", "template_ihnjh4j", {
+            to_email: email,
+            produto: _alertaOferta.titulo,
+            preco_atual: formatarMoeda(_alertaOferta.precoNovo),
+            preco_alvo: formatarMoeda(precoAlvo),
+            link: _alertaOferta.link
+        });
+    } catch(e) {}
     msgEl.style.color = '#22c55e';
     msgEl.textContent = '✅ Alerta guardado! Receberás aviso quando o preço baixar.';
     setTimeout(() => window.fecharAlertaModal(), 2500);
