@@ -1300,8 +1300,20 @@ footer{
   <section class="section">
     <div class="form-box fade-up" id="formBox">
       <h2 class="form-title">🎯 Pedir Promoção</h2>
-      <p class="form-sub">Não achou o que queria? Diga-nos qual produto você quer e a nossa equipa vai buscar o melhor preço da internet para si.</p>
-      
+      <p class="form-sub">Diga-nos o que você procura e a nossa IA vai buscar as melhores opções e enviar direto para o seu e-mail.</p>
+
+      <div class="form-group">
+        <label class="form-label" for="pedidoNome">Seu Nome *</label>
+        <input class="form-input" id="pedidoNome" placeholder='Ex: "João Silva"' aria-label="Seu nome">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="pedidoEmail">Seu E-mail *</label>
+        <input class="form-input" type="email" id="pedidoEmail" placeholder='Ex: "joao@email.com"' aria-label="Seu e-mail">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="pedidoWhatsapp">WhatsApp (Opcional)</label>
+        <input class="form-input" type="tel" id="pedidoWhatsapp" placeholder='Ex: "(11) 99999-9999"' aria-label="Seu WhatsApp">
+      </div>
       <div class="form-group">
         <label class="form-label" for="pedidoProduto">O que você procura? *</label>
         <input class="form-input" id="pedidoProduto" placeholder='Ex: "PlayStation 5 256GB"' aria-label="Nome do produto procurado">
@@ -1311,16 +1323,12 @@ footer{
         <input class="form-input" id="pedidoOrcamento" placeholder='Ex: "Até R$ 3.500"' aria-label="Orçamento máximo">
       </div>
       <div class="form-group">
-        <label class="form-label">Loja de Preferência (Opcional)</label>
-        <div class="form-lojas" id="formLojas"></div>
-      </div>
-      <div class="form-group">
         <label class="form-label" for="pedidoDetalhes">Detalhes Adicionais (Opcional)</label>
         <textarea class="form-textarea" id="pedidoDetalhes" placeholder='Ex: "Pode ser recondicionado, cor branca..."' aria-label="Detalhes adicionais"></textarea>
       </div>
-      
+
       <button class="form-submit" id="formSubmit" onclick="window.enviarPedido()" aria-label="Enviar pedido de oferta">
-        ✉️ Enviar Pedido
+        🔍 Buscar e Enviar por E-mail
       </button>
     </div>
   </section>
@@ -1493,7 +1501,8 @@ const CONFIG = {
     REFRESH_INTERVAL: 2 * 60 * 60 * 1000, // Atualiza a cada 2 horas
     HORAS_NOVO: 24,
     DIAS_EXPIRACAO: 7, // Deleta ofertas do site após 1 semana
-    ITEMS_PER_PAGE: 12
+    ITEMS_PER_PAGE: 12,
+    EMAILJS_TEMPLATE_RESPOSTA: "" // Preencher com o ID do template de resposta ao usuário
 };
 
 const LOJAS = {
@@ -2116,23 +2125,59 @@ function toggleFormLoja(btn, loja, cor) {
 }
 
 async function enviarPedido() {
-    const p = document.getElementById("pedidoProduto").value.trim();
-    if (!p) { mostrarToast("⚠️", "Escreva o nome do produto primeiro."); return; }
+    const nome    = document.getElementById("pedidoNome").value.trim();
+    const email   = document.getElementById("pedidoEmail").value.trim();
+    const produto = document.getElementById("pedidoProduto").value.trim();
+    if (!nome)    { mostrarToast("⚠️", "Informe o seu nome."); return; }
+    if (!email || !/\S+@\S+\.\S+/.test(email)) { mostrarToast("⚠️", "Informe um e-mail válido."); return; }
+    if (!produto) { mostrarToast("⚠️", "Escreva o nome do produto."); return; }
+
+    const orcamento = document.getElementById("pedidoOrcamento").value || "";
+    const whatsapp  = document.getElementById("pedidoWhatsapp").value || "";
+    const detalhes  = document.getElementById("pedidoDetalhes").value || "";
+
     const btn = document.getElementById("formSubmit");
     btn.disabled = true;
-    btn.textContent = "A enviar...";
+    btn.innerHTML = '<span style="display:inline-flex;align-items:center;gap:8px"><span class="loader-spinner" style="width:16px;height:16px;border-width:2px"></span> A IA está buscando...</span>';
+
     try {
+        // 1. Gemini busca o produto
+        const promptIA = `Você é um especialista em compras no Brasil. Um cliente pediu ajuda para encontrar o melhor preço de um produto.\n\nProduto: ${produto}${orcamento ? `\nOrçamento máximo: ${orcamento}` : ''}${detalhes ? `\nDetalhes: ${detalhes}` : ''}\n\nResponda em formato de e-mail amigável com:\n1. Onde encontrar este produto no Brasil (Amazon, Shopee, Magalu, Mercado Livre, etc.)\n2. Faixa de preço típica atual\n3. O que observar ao comprar (versão, garantia, etc.)\n4. Dica para economizar\n\nSeja direto, útil e use emojis. Máximo 3 parágrafos curtos.`;
+        const respostaIA = await chamarGemini(promptIA, "Você é um assistente de compras brasileiro. Responda sempre em português do Brasil de forma amigável e objetiva.");
+
+        // 2. Notifica o admin
         await emailjs.send("service_v94cf8p", "template_6l0zsew", {
-            produto: p,
-            orcamento: document.getElementById("pedidoOrcamento").value || "Não informado",
-            loja: formLojaSelecionada ? LOJAS[formLojaSelecionada]?.nome : "Sem preferência",
-            detalhes: document.getElementById("pedidoDetalhes").value || "Sem detalhes adicionais"
+            produto,
+            orcamento: orcamento || "Não informado",
+            loja: whatsapp ? `WhatsApp: ${whatsapp}` : "Não informado",
+            detalhes: `Email: ${email}\n${detalhes || "Sem detalhes adicionais"}`
         });
-        document.getElementById("formBox").innerHTML = `<div class="form-success fade-up"><div class="form-success-icon">✓</div><h3 style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--text);margin-bottom:8px">Pedido Enviado!</h3><p style="color:var(--text2);margin-bottom:24px">Recebemos o seu pedido e vamos buscar o melhor preço para si. Enquanto isso, acompanhe as nossas ofertas em tempo real.</p><a href="${CONFIG.TELEGRAM}" target="_blank" class="btn-primary" style="text-decoration:none">Acompanhar no Telegram</a></div>`;
+
+        // 3. Envia resposta com IA para o usuário
+        if (CONFIG.EMAILJS_TEMPLATE_RESPOSTA) {
+            await emailjs.send("service_v94cf8p", CONFIG.EMAILJS_TEMPLATE_RESPOSTA, {
+                to_email: email,
+                nome,
+                produto,
+                resposta_ia: respostaIA
+            });
+        }
+
+        // 4. Tela de agradecimento
+        document.getElementById("formBox").innerHTML = `
+        <div class="form-success fade-up">
+          <div class="form-success-icon">✓</div>
+          <h3 style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--text);margin-bottom:8px">Pronto, ${nome.split(' ')[0]}!</h3>
+          <p style="color:var(--text2);margin-bottom:8px">A nossa IA já buscou as melhores opções para <strong>${produto}</strong> e enviou tudo para <strong>${email}</strong>. Verifique a sua caixa de entrada (e a pasta spam).</p>
+          <p style="color:var(--text2);margin-bottom:24px">Enquanto isso, entre no nosso grupo e fique por dentro de todas as promoções em tempo real — todos os dias!</p>
+          <a href="${CONFIG.TELEGRAM}" target="_blank" class="btn-primary" style="text-decoration:none;display:inline-block;margin-bottom:12px">🔥 Entrar no Grupo de Ofertas</a>
+          <br>
+          <button onclick="document.getElementById('formBox').innerHTML=''" style="background:none;border:none;color:var(--text3);font-size:13px;cursor:pointer;margin-top:8px">Fazer outro pedido</button>
+        </div>`;
     } catch(e) {
         btn.disabled = false;
-        btn.textContent = "✉️ Enviar Pedido";
-        mostrarToast("❌", "Erro ao enviar. Tente novamente.");
+        btn.textContent = "🔍 Buscar e Enviar por E-mail";
+        mostrarToast("❌", "Erro ao processar. Tente novamente.");
     }
 }
 
