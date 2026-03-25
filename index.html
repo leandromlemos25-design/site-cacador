@@ -1502,7 +1502,7 @@ const CONFIG = {
     HORAS_NOVO: 24,
     DIAS_EXPIRACAO: 7, // Deleta ofertas do site após 1 semana
     ITEMS_PER_PAGE: 12,
-    EMAILJS_TEMPLATE_RESPOSTA: "template_ihnjh4j"
+    EMAILJS_TEMPLATE_RESPOSTA: "" // sem template disponível no plano free
 };
 
 const LOJAS = {
@@ -2709,7 +2709,15 @@ window.enviarAlertaPreco = async function() {
     const alertas = JSON.parse(localStorage.getItem('cdf_alertas') || '[]');
     alertas.push({ ofertaId: _alertaOferta.id, titulo: _alertaOferta.titulo, precoAtual: _alertaOferta.precoNovo, precoAlvo, email, ts: Date.now() });
     localStorage.setItem('cdf_alertas', JSON.stringify(alertas));
-    // envio por email desativado (template reconfigurado para pedidos)
+    try {
+        await emailjs.send("service_v94cf8p", "template_ihnjh4j", {
+            to_email: email,
+            produto_nome: _alertaOferta.titulo,
+            preco_antigo: formatarMoeda(_alertaOferta.precoAntigo || _alertaOferta.precoNovo),
+            preco_novo: formatarMoeda(_alertaOferta.precoNovo),
+            link_produto: _alertaOferta.link
+        });
+    } catch(e) {}
     msgEl.style.color = '#22c55e';
     msgEl.textContent = '✅ Alerta guardado! Receberás aviso quando o preço baixar.';
     setTimeout(() => window.fecharAlertaModal(), 2500);
