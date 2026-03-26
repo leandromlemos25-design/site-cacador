@@ -11,8 +11,8 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   const afiliadoId = 'FF182A-079E';
-  const searchQuery = req.query?.q || 'oferta desconto';
-  const path = `/sites/MLB/search?q=${encodeURIComponent(searchQuery)}&limit=20&sort=relevance`;
+  const searchQuery = req.query?.q || 'smartphone celular notebook';
+  const path = `/sites/MLB/search?q=${encodeURIComponent(searchQuery)}&limit=50&sort=relevance`;
 
   try {
     const searchData = await new Promise((resolve, reject) => {
@@ -35,17 +35,24 @@ export default async function handler(req, res) {
     });
 
     const produtos = (searchData.results || [])
-      .filter(p => p.original_price && p.original_price > p.price)
-      .slice(0, 12)
-      .map(p => ({
-        offerName:     p.title,
-        price:         p.original_price,
-        discountPrice: p.price,
-        discountRate:  Math.round(((p.original_price - p.price) / p.original_price) * 100),
-        offerLink:     `${p.permalink}?tracking_id=${afiliadoId}`,
-        imageUrl:      (p.thumbnail || '').replace('http://', 'https://').replace('-I.jpg', '-O.jpg'),
-        loja:          'mercadolivre'
-      }));
+      .map(p => {
+        const precoOriginal = p.original_price || null;
+        const precoAtual = p.price || 0;
+        const desconto = precoOriginal && precoOriginal > precoAtual
+          ? Math.round(((precoOriginal - precoAtual) / precoOriginal) * 100)
+          : 0;
+        return {
+          offerName:     p.title,
+          price:         precoOriginal || precoAtual,
+          discountPrice: precoAtual,
+          discountRate:  desconto,
+          offerLink:     `${p.permalink}?tracking_id=${afiliadoId}`,
+          imageUrl:      (p.thumbnail || '').replace('http://', 'https://').replace('-I.jpg', '-O.jpg'),
+          loja:          'mercadolivre'
+        };
+      })
+      .filter(p => p.discountRate >= 5)
+      .slice(0, 12);
 
     return res.status(200).json(produtos);
 
