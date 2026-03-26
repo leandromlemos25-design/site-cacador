@@ -231,9 +231,10 @@ img, video{max-width:100%;display:block}
 /* ══ HERO ══ */
 #hero{
   min-height:auto;
-  display:flex;flex-direction:column;
+  display:flex;flex-direction:row;
   align-items:center;justify-content:center;
-  padding:100px 24px 60px;
+  gap:40px;
+  padding:100px 40px 60px;
   position:relative;overflow:hidden;
   text-align:center;
   max-width:100vw;
@@ -241,6 +242,17 @@ img, video{max-width:100%;display:block}
 }
 #hero::before{display:none}
 #hero::after{display:none}
+/* Logo decorativa de fundo no hero */
+.hero-bg-logo{
+  position:absolute;
+  right:-60px;top:50%;transform:translateY(-50%);
+  width:520px;height:520px;
+  opacity:0.04;
+  pointer-events:none;
+  z-index:0;
+}
+.hero-bg-logo img{width:100%;height:100%;object-fit:contain;}
+.hero-text-side{position:relative;z-index:1}
 
 .hero-badge{
   display:inline-flex;align-items:center;gap:8px;
@@ -441,6 +453,37 @@ img, video{max-width:100%;display:block}
   0%,100%{transform:translateY(0) rotate(0deg);opacity:0.7}
   33%{transform:translateY(-12px) rotate(10deg);opacity:1}
   66%{transform:translateY(6px) rotate(-8deg);opacity:0.8}
+}
+
+/* ══ HERO FEATURES COLUMN ══ */
+.hero-features-side{
+  display:flex;flex-direction:column;gap:14px;
+  min-width:240px;max-width:260px;
+}
+.hero-feature-card{
+  display:flex;align-items:flex-start;gap:14px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius-md);
+  padding:14px 16px;
+  transition:border-color .2s;
+}
+.hero-feature-card:hover{border-color:var(--accent);}
+.hero-feature-icon{
+  font-size:22px;flex-shrink:0;
+  width:42px;height:42px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--accent-soft);
+  border-radius:var(--radius-sm);
+}
+.hero-feature-card strong{
+  display:block;font-size:.9rem;
+  color:var(--text);font-weight:700;
+  margin-bottom:3px;
+}
+.hero-feature-card span{
+  font-size:.78rem;color:var(--text3);
+  line-height:1.4;
 }
 
 /* ══ SEÇÕES ══ */
@@ -1056,7 +1099,8 @@ footer{
 
 /* ══ RESPONSIVE ══ */
 @media(max-width:1024px){
-  #hero{padding:80px 24px 48px}
+  #hero{padding:80px 24px 48px;flex-direction:column}
+  .hero-features-side{display:none}
   .section{padding:48px 24px}
   footer{padding:32px 24px 16px}
   .footer-inner{grid-template-columns:1fr 1fr}
@@ -1095,34 +1139,9 @@ footer{
 
 <!-- NAVBAR COM A LOGO 100% EM CÓDIGO -->
 <nav id="navbar">
-  <div class="nav-logo">
-    <div class="custom-logo-container">
-      <svg class="custom-logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <g transform="translate(25, 55) rotate(-30)">
-          <rect x="-18" y="-14" width="36" height="28" rx="4" fill="var(--brand-blue)"></rect>
-          <circle cx="-6" cy="-4" r="2.5" fill="#fff"></circle>
-          <circle cx="6" cy="4" r="2.5" fill="#fff"></circle>
-          <line x1="-6" y1="6" x2="6" y2="-6" stroke="#fff" stroke-width="2" stroke-linecap="round"></line>
-        </g>
-        <g transform="translate(52, 38) rotate(-15)">
-          <rect x="-18" y="-18" width="36" height="36" rx="5" fill="var(--brand-blue)"></rect>
-          <circle cx="10" cy="-8" r="2.5" fill="#fff"></circle>
-          <polygon points="-4,-6 -2,0 4,0 -1,4 1,10 -4,6 -9,10 -7,4 -12,0 -6,0" fill="#fff"></polygon>
-        </g>
-        <circle cx="58" cy="38" r="20" stroke="var(--accent)" stroke-width="6.5" fill="none"></circle>
-        <g transform="translate(72, 52) rotate(45)">
-          <line x1="0" y1="0" x2="18" y2="0" stroke="var(--accent)" stroke-width="6.5" stroke-linecap="round"></line>
-          <polygon points="14,-7 26,0 14,7" fill="var(--accent)"></polygon>
-        </g>
-        <path d="M 30 18 Q 33 18 33 15 Q 33 18 36 18 Q 33 18 33 21 Q 33 18 30 18 Z" fill="var(--accent)"></path>
-        <circle cx="42" cy="16" r="1.5" fill="var(--accent)"></circle>
-      </svg>
-      <div class="custom-logo-text">
-        <span class="custom-logo-text-top">O CAÇADOR</span>
-        <span class="custom-logo-text-bottom">DE OFERTAS</span>
-      </div>
-    </div>
-  </div>
+  <a class="nav-logo" href="#" onclick="window.navegar('home');return false" style="display:flex;align-items:center;text-decoration:none;">
+    <img src="logo.png" alt="O Caçador de Ofertas" style="height:44px;width:auto;display:block;">
+  </a>
   <div class="nav-links">
     <button class="nav-btn active" data-page="home" onclick="window.navegar('home')" aria-label="Página Inicial">Início</button>
     <button class="nav-btn" data-page="ofertas" onclick="window.navegar('ofertas')" aria-label="Catálogo de Ofertas">Ofertas</button>
@@ -1156,7 +1175,12 @@ footer{
 <!-- ═══ PÁGINA HOME ═══ -->
 <div class="page active" id="page-home">
   <section id="hero">
-    
+
+    <!-- LOGO DECORATIVA DE FUNDO -->
+    <div class="hero-bg-logo" aria-hidden="true">
+      <img src="logo.png" alt="">
+    </div>
+
     <!-- PARTICULAS -->
     <div class="teteco-particles">
       <div class="particle p1">🏷️</div>
@@ -1198,19 +1222,7 @@ footer{
            
            <div class="mock-header">
              <div class="mock-avatar">
-                <!-- LOGO SVG NO LUGAR DO ANTIGO EMOJI 🎯 -->
-                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px; margin-left: 2px;">
-                  <g transform="translate(25, 55) rotate(-30)">
-                    <rect x="-18" y="-14" width="36" height="28" rx="4" fill="var(--brand-blue)"></rect>
-                    <circle cx="-6" cy="-4" r="2.5" fill="#fff"></circle><circle cx="6" cy="4" r="2.5" fill="#fff"></circle><line x1="-6" y1="6" x2="6" y2="-6" stroke="#fff" stroke-width="2" stroke-linecap="round"></line>
-                  </g>
-                  <g transform="translate(52, 38) rotate(-15)">
-                    <rect x="-18" y="-18" width="36" height="36" rx="5" fill="var(--brand-blue)"></rect><circle cx="10" cy="-8" r="2.5" fill="#fff"></circle><polygon points="-4,-6 -2,0 4,0 -1,4 1,10 -4,6 -9,10 -7,4 -12,0 -6,0" fill="#fff"></polygon>
-                  </g>
-                  <circle cx="58" cy="38" r="20" stroke="var(--accent)" stroke-width="6.5" fill="none"></circle>
-                  <g transform="translate(72, 52) rotate(45)"><line x1="0" y1="0" x2="18" y2="0" stroke="var(--accent)" stroke-width="6.5" stroke-linecap="round"></line><polygon points="14,-7 26,0 14,7" fill="var(--accent)"></polygon></g>
-                  <path d="M 30 18 Q 33 18 33 15 Q 33 18 36 18 Q 33 18 33 21 Q 33 18 30 18 Z" fill="var(--accent)"></path><circle cx="42" cy="16" r="1.5" fill="var(--accent)"></circle>
-                </svg>
+                <img src="logo.png" alt="" style="width:24px;height:24px;object-fit:contain;border-radius:50%;">
              </div>
              <div class="mock-header-text">
                <strong>O Caçador de Ofertas</strong>
@@ -1237,6 +1249,38 @@ footer{
              <p>Com cupom ativo da loja!<br><span class="mock-price">R$ 89,90</span></p>
            </div>
 
+        </div>
+      </div>
+    </div>
+
+    <!-- LADO DIREITO: Features / Benefícios -->
+    <div class="hero-features-side fade-up fade-up-2">
+      <div class="hero-feature-card">
+        <div class="hero-feature-icon">🤖</div>
+        <div>
+          <strong>IA Anti-Fraude</strong>
+          <span>Verificamos cada oferta antes de publicar</span>
+        </div>
+      </div>
+      <div class="hero-feature-card">
+        <div class="hero-feature-icon">⚡</div>
+        <div>
+          <strong>Alertas em Tempo Real</strong>
+          <span>Notificações no Telegram assim que sai oferta</span>
+        </div>
+      </div>
+      <div class="hero-feature-card">
+        <div class="hero-feature-icon">🏪</div>
+        <div>
+          <strong>+10 Lojas Monitoradas</strong>
+          <span>Amazon, Shopee, Magalu, ML e muito mais</span>
+        </div>
+      </div>
+      <div class="hero-feature-card">
+        <div class="hero-feature-icon">🎁</div>
+        <div>
+          <strong>100% Gratuito</strong>
+          <span>Sem taxa, sem cadastro, sem enrolação</span>
         </div>
       </div>
     </div>
@@ -1390,18 +1434,7 @@ footer{
     <!-- Coluna 1: Marca -->
     <div class="footer-col">
       <div class="footer-brand">
-        <div class="custom-logo-container" style="opacity:0.9;">
-          <svg class="custom-logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <g transform="translate(25, 55) rotate(-30)"><rect x="-18" y="-14" width="36" height="28" rx="4" fill="var(--brand-blue)"></rect><circle cx="-6" cy="-4" r="2.5" fill="#fff"></circle><circle cx="6" cy="4" r="2.5" fill="#fff"></circle><line x1="-6" y1="6" x2="6" y2="-6" stroke="#fff" stroke-width="2" stroke-linecap="round"></line></g>
-            <g transform="translate(52, 38) rotate(-15)"><rect x="-18" y="-18" width="36" height="36" rx="5" fill="var(--brand-blue)"></rect><circle cx="10" cy="-8" r="2.5" fill="#fff"></circle><polygon points="-4,-6 -2,0 4,0 -1,4 1,10 -4,6 -9,10 -7,4 -12,0 -6,0" fill="#fff"></polygon></g>
-            <circle cx="58" cy="38" r="20" stroke="var(--accent)" stroke-width="6.5" fill="none"></circle>
-            <g transform="translate(72, 52) rotate(45)"><line x1="0" y1="0" x2="18" y2="0" stroke="var(--accent)" stroke-width="6.5" stroke-linecap="round"></line><polygon points="14,-7 26,0 14,7" fill="var(--accent)"></polygon></g>
-          </svg>
-          <div class="custom-logo-text">
-            <span class="custom-logo-text-top">O CAÇADOR</span>
-            <span class="custom-logo-text-bottom">DE OFERTAS</span>
-          </div>
-        </div>
+        <img src="logo.png" alt="O Caçador de Ofertas" style="height:48px;width:auto;display:block;opacity:0.9;">
       </div>
       <p class="footer-brand-tag" style="margin-top:12px;">A sua plataforma de inteligência em descontos.</p>
       <div class="footer-socials" id="footerSocials"></div>
