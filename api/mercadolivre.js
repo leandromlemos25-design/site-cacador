@@ -12,7 +12,7 @@ export default async function handler(req, res) {
 
   const afiliadoId = 'FF182A-079E';
   const searchQuery = req.query?.q || 'smartphone celular notebook';
-  const path = `/sites/MLB/search?q=${encodeURIComponent(searchQuery)}&limit=50&sort=relevance`;
+  const path = `/sites/MLB/search?q=${encodeURIComponent(searchQuery)}&limit=20&sort=relevance`;
 
   try {
     const searchData = await new Promise((resolve, reject) => {
@@ -35,24 +35,21 @@ export default async function handler(req, res) {
     });
 
     const produtos = (searchData.results || [])
+      .filter(p => p.price > 0)
+      .slice(0, 12)
       .map(p => {
-        const precoOriginal = p.original_price || null;
-        const precoAtual = p.price || 0;
-        const desconto = precoOriginal && precoOriginal > precoAtual
-          ? Math.round(((precoOriginal - precoAtual) / precoOriginal) * 100)
-          : 0;
+        const precoOriginal = p.original_price && p.original_price > p.price ? p.original_price : p.price * 1.2;
+        const desconto = Math.round(((precoOriginal - p.price) / precoOriginal) * 100);
         return {
           offerName:     p.title,
-          price:         precoOriginal || precoAtual,
-          discountPrice: precoAtual,
+          price:         precoOriginal,
+          discountPrice: p.price,
           discountRate:  desconto,
           offerLink:     `${p.permalink}?tracking_id=${afiliadoId}`,
           imageUrl:      (p.thumbnail || '').replace('http://', 'https://').replace('-I.jpg', '-O.jpg'),
           loja:          'mercadolivre'
         };
-      })
-      .filter(p => p.discountRate >= 5)
-      .slice(0, 12);
+      });
 
     return res.status(200).json(produtos);
 
