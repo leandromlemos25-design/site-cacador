@@ -8,36 +8,14 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  const appId     = process.env.ML_APP_ID;
-  const appSecret = process.env.ML_APP_SECRET;
   const afiliadoId = 'FF182A-079E';
 
-  if (!appId || !appSecret) {
-    return res.status(500).json({ error: 'Credenciais do Mercado Livre não configuradas.' });
-  }
-
   try {
-    // 1. Obter access token via client_credentials
-    const tokenRes = await fetch('https://api.mercadolibre.com/oauth/token', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' },
-      body: `grant_type=client_credentials&client_id=${appId}&client_secret=${appSecret}`
-    });
-    const tokenData = await tokenRes.json();
-    if (!tokenRes.ok || !tokenData.access_token) {
-      return res.status(500).json({ error: 'Falha ao autenticar no Mercado Livre.', detalhe: tokenData });
-    }
-    const token = tokenData.access_token;
+    // API pública do ML — não precisa de autenticação para busca
+    const searchQuery = req.query?.q || 'oferta desconto';
+    const url = `https://api.mercadolibre.com/sites/MLB/search?q=${encodeURIComponent(searchQuery)}&limit=20&sort=relevance`;
 
-    // 2. Buscar produtos com desconto no Brasil
-    const searchQuery = req.query?.q || '';
-    const endpoint = searchQuery
-      ? `https://api.mercadolibre.com/sites/MLB/search?q=${encodeURIComponent(searchQuery)}&limit=20&sort=relevance`
-      : `https://api.mercadolibre.com/sites/MLB/search?q=oferta+do+dia&limit=20&sort=price_desc`;
-
-    const searchRes = await fetch(endpoint, {
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
+    const searchRes = await fetch(url);
     const searchData = await searchRes.json();
 
     if (!searchRes.ok) {
@@ -49,16 +27,14 @@ export default async function handler(req, res) {
       .slice(0, 12)
       .map(p => {
         const desconto = Math.round(((p.original_price - p.price) / p.original_price) * 100);
-        // Embute o ID de afiliado no link do produto
-        const linkAfiliado = `${p.permalink}?tracking_id=${afiliadoId}`;
         return {
-          offerName:    p.title,
-          price:        p.original_price,
+          offerName:     p.title,
+          price:         p.original_price,
           discountPrice: p.price,
-          discountRate: desconto,
-          offerLink:    linkAfiliado,
-          imageUrl:     p.thumbnail?.replace('http://', 'https://').replace('-I.jpg', '-O.jpg') || '',
-          loja:         'mercadolivre'
+          discountRate:  desconto,
+          offerLink:     `${p.permalink}?tracking_id=${afiliadoId}`,
+          imageUrl:      p.thumbnail?.replace('http://', 'https://').replace('-I.jpg', '-O.jpg') || '',
+          loja:          'mercadolivre'
         };
       });
 
