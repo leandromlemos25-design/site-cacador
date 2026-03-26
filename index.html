@@ -1733,6 +1733,35 @@ function getSkeletonsHTML(qtd = 6) {
         </div>`).join("");
 }
 
+async function carregarOfertasMercadoLivre() {
+    try {
+        const response = await fetch('/api/mercadolivre');
+        if (!response.ok) throw new Error('Falha ao obter ofertas do Mercado Livre.');
+        const ofertas = await response.json();
+        if (ofertas && ofertas.length > 0) {
+            const maxId = todasOfertas.length > 0 ? Math.max(...todasOfertas.map(o => o.id)) : 0;
+            const novas = ofertas.map((oferta, index) => ({
+                id: maxId + index + 1,
+                loja: "mercadolivre",
+                titulo: oferta.offerName || "Oferta Mercado Livre",
+                precoAntigo: oferta.price || 0,
+                precoNovo: oferta.discountPrice || 0,
+                desconto: oferta.discountRate || 0,
+                link: oferta.offerLink || "#",
+                img: oferta.imageUrl || "🛒",
+                categoria: "Mercado Livre",
+                selo: "🔥 EXCLUSIVO",
+                ativo: true,
+                timestamp: Date.now()
+            }));
+            todasOfertas = [...todasOfertas, ...novas];
+            renderizarTudo();
+        }
+    } catch (err) {
+        console.warn("Aviso ML API Frontend:", err.message);
+    }
+}
+
 async function carregarOfertasShopee() {
     try {
         const response = await fetch('/api/shopee');
@@ -1869,7 +1898,7 @@ async function carregarOfertas(silencioso = false) {
         }
 
         todasOfertas = novas;
-        await carregarOfertasShopee();
+        await Promise.all([carregarOfertasShopee(), carregarOfertasMercadoLivre()]);
         
         ultimaAtualizacao = Date.now();
         salvarCache(todasOfertas);
@@ -2487,11 +2516,20 @@ ${contextoOfertas}
             for (let i = 0; i < fila.length; i++) {
                 const termo = fila[i];
                 try {
-                    const res = await fetch('/api/shopee?q=' + encodeURIComponent(termo));
-                    if (!res.ok) continue;
-                    const raw = await res.json();
-                    if (!Array.isArray(raw)) continue;
-                    const filtrado = filtrarAntiAcessorios(raw, termo);
+                    const [resShopee, resML] = await Promise.allSettled([
+                        fetch('/api/shopee?q=' + encodeURIComponent(termo)),
+                        fetch('/api/mercadolivre?q=' + encodeURIComponent(termo))
+                    ]);
+                    let combinado = [];
+                    if (resShopee.status === 'fulfilled' && resShopee.value.ok) {
+                        const raw = await resShopee.value.json();
+                        if (Array.isArray(raw)) combinado.push(...raw);
+                    }
+                    if (resML.status === 'fulfilled' && resML.value.ok) {
+                        const raw = await resML.value.json();
+                        if (Array.isArray(raw)) combinado.push(...raw);
+                    }
+                    const filtrado = filtrarAntiAcessorios(combinado, termo);
                     if (filtrado.length > 0) return { ofertas: filtrado, termoUsado: termo, tentativa: i + 1 };
                 } catch(_) { /* tenta próximo */ }
             }
