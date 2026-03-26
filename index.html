@@ -124,66 +124,35 @@ img, video{max-width:100%;display:block}
 
 .syne{font-family:'Plus Jakarta Sans','DM Sans',sans-serif;font-weight:800}
 
-/* ══ ESTILOS DA NOVA LOGO EM CSS/SVG ══ */
-.custom-logo-container {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-  transition: transform 0.2s;
+/* ══ LOGO CSS/SVG ══ */
+.nav-logo{
+  display:inline-flex;align-items:center;gap:10px;
+  text-decoration:none;transition:opacity .2s;flex-shrink:0;
 }
-.custom-logo-container:hover {
-  transform: scale(1.02);
+.nav-logo:hover{opacity:0.85}
+.nav-logo-icon{
+  width:38px;height:38px;flex-shrink:0;
+  background:var(--accent);
+  border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;
+  box-shadow:0 2px 10px rgba(255,122,0,0.35);
 }
-.custom-logo-svg {
-  width: 44px;
-  height: 44px;
-  flex-shrink: 0;
-  filter: drop-shadow(0 2px 8px var(--accent-glow));
+.nav-logo-text{display:flex;flex-direction:column;line-height:1}
+.nav-logo-line1{
+  font-family:'Plus Jakarta Sans','DM Sans',sans-serif;
+  font-size:15px;font-weight:800;
+  color:var(--text);letter-spacing:-0.3px;
 }
-.custom-logo-text {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+.nav-logo-line2{
+  font-family:'Plus Jakarta Sans','DM Sans',sans-serif;
+  font-size:11px;font-weight:700;
+  color:var(--accent);letter-spacing:0.3px;
+  margin-top:1px;
 }
-.custom-logo-text-top {
-  font-family: 'Syne', sans-serif;
-  font-size: 19px;
-  font-weight: 800;
-  line-height: 1;
-  color: var(--text);
-  letter-spacing: -0.5px;
-}
-.custom-logo-text-bottom {
-  font-family: 'Plus Jakarta Sans','DM Sans', sans-serif;
-  font-size: 13px;
-  font-weight: 800;
-  line-height: 1;
-  color: var(--accent);
-  font-style: italic;
-  letter-spacing: 0.5px;
-  margin-top: 3px;
-}
-
-/* ══ NAVBAR ══ */
-#navbar{
-  position:fixed;top:0;left:0;right:0;z-index:2000;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 24px;height:64px;
-  background:var(--navbar-bg);
-  backdrop-filter:blur(16px);
-  border-bottom:1px solid var(--border);
   transition:all .3s;
 }
 #navbar.scrolled{box-shadow:0 2px 24px rgba(0,0,0,.3)}
-.nav-logo{
-  display:inline-flex;align-items:center;
-  text-decoration:none;
-  transition:opacity .2s;
-}
-.nav-logo:hover{opacity:0.8;}
-.nav-logo img{height:44px;width:auto;display:block;}
 .nav-links{display:flex;align-items:center;gap:4px}
 .nav-btn{
   padding:6px 14px;border-radius:100px;
@@ -1273,8 +1242,12 @@ footer{
 
 <!-- NAVBAR COM A LOGO 100% EM CÓDIGO -->
 <nav id="navbar">
-  <a class="nav-logo" href="#" onclick="window.navegar('home');return false">
-    <img src="logo-transparent.png" alt="O Caçador de Ofertas">
+  <a class="nav-logo" href="#" onclick="window.navegar('home');return false" aria-label="O Caçador de Ofertas - Página inicial">
+    <div class="nav-logo-icon">🎯</div>
+    <div class="nav-logo-text">
+      <span class="nav-logo-line1">O Caçador</span>
+      <span class="nav-logo-line2">de Ofertas</span>
+    </div>
   </a>
   <div class="nav-links">
     <button class="nav-btn active" data-page="home" onclick="window.navegar('home')" aria-label="Página Inicial">Início</button>
@@ -1544,7 +1517,13 @@ footer{
     <!-- Coluna 1: Marca -->
     <div class="footer-col">
       <div class="footer-brand">
-        <img src="logo-transparent.png" alt="O Caçador de Ofertas" style="height:48px;width:auto;display:block;opacity:0.9;">
+        <a class="nav-logo" href="#" onclick="window.navegar('home');return false" style="gap:12px">
+          <div class="nav-logo-icon" style="width:44px;height:44px;border-radius:12px;font-size:22px">🎯</div>
+          <div class="nav-logo-text">
+            <span class="nav-logo-line1" style="font-size:17px">O Caçador</span>
+            <span class="nav-logo-line2" style="font-size:12px">de Ofertas</span>
+          </div>
+        </a>
       </div>
       <p class="footer-brand-tag" style="margin-top:12px;">A sua plataforma de inteligência em descontos.</p>
       <div class="footer-socials" id="footerSocials"></div>
