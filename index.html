@@ -235,63 +235,181 @@ img, video{max-width:100%;display:block}
 .page{display:none;padding-top:64px}
 .page.active{display:block}
 
-/* ══ HERO ══ */
+/* ══ HERO PROMO BANNER ══ */
 #hero{
-  min-height:auto;
-  display:flex;flex-direction:row;
-  align-items:center;justify-content:center;
-  gap:40px;
-  padding:100px 40px 60px;
+  width:100%;
+  padding-top:64px;
+  background:linear-gradient(135deg,#c93a00 0%,#ff6200 35%,#ff8c00 70%,#ffaa00 100%);
   position:relative;overflow:hidden;
-  text-align:center;
-  max-width:100vw;
-  background:linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
+  display:block;
 }
-#hero::before{display:none}
+#hero::before{
+  content:'';position:absolute;inset:0;
+  background:url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='30' cy='30' r='1.5' fill='white' opacity='.12'/%3E%3C/svg%3E") repeat;
+  pointer-events:none;z-index:0;
+}
 #hero::after{display:none}
-/* Logo decorativa de fundo no hero */
-.hero-bg-logo{
-  position:absolute;
-  right:-60px;top:50%;transform:translateY(-50%);
-  width:520px;height:520px;
-  opacity:0.04;
-  pointer-events:none;
-  z-index:0;
+.hero-banner-inner{
+  max-width:var(--max-width);
+  margin:0 auto;
+  padding:52px 32px 48px;
+  display:flex;align-items:center;
+  justify-content:space-between;
+  gap:32px;
+  position:relative;z-index:1;
 }
-.hero-bg-logo img{width:100%;height:100%;object-fit:contain;}
-.hero-text-side{position:relative;z-index:1}
-
-.hero-badge{
-  display:inline-flex;align-items:center;gap:8px;
-  padding:6px 14px;border-radius:100px;
-  background:rgba(255,122,0,0.1);
-  border:1px solid rgba(255,122,0,0.3);
-  color:var(--accent2);font-size:12px;font-weight:600;
-  letter-spacing:0.5px;text-transform:uppercase;
-  margin-bottom:24px;
+.hero-left-col{flex:1;min-width:0}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(0,0,0,0.2);
+  border:1px solid rgba(255,255,255,0.25);
+  border-radius:100px;
+  padding:4px 14px;
+  font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  color:#fff;margin-bottom:16px;
 }
-.hero-badge::before{content:'●';font-size:8px;animation:blink 1.5s infinite}
-@keyframes blink{0%,100%{opacity:1} 50%{opacity:0.3}}
-
-.hero-text-side{max-width:720px;margin:0 auto;text-align:center}
-.hero-title{
+.hero-tag::before{content:'●';font-size:8px;animation:blink 1.5s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.hero-main-title{
   font-family:'Plus Jakarta Sans','DM Sans',sans-serif;
-  font-size:clamp(32px,4vw,52px);
-  font-weight:800;line-height:1.15;
-  letter-spacing:-1px;
-  margin-bottom:16px;
+  font-size:clamp(40px,6vw,80px);
+  font-weight:800;line-height:1.05;
+  letter-spacing:-2px;color:#fff;
+  margin-bottom:12px;
+  text-shadow:0 2px 20px rgba(0,0,0,0.25);
 }
-.hero-title .accent{
-  color:var(--accent);display:inline;
+.hero-main-title span{display:block;font-size:clamp(18px,2.5vw,28px);font-weight:500;letter-spacing:0;opacity:0.9}
+.hero-main-sub{
+  font-size:15px;color:rgba(255,255,255,0.88);
+  line-height:1.6;margin-bottom:28px;max-width:480px;
 }
-.hero-title .accent::after{display:none}
-.hero-sub{
-  font-size:16px;color:var(--text2);line-height:1.7;
-  max-width:560px;margin:0 auto 32px;
+.hero-banner-btns{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:36px}
+.hero-btn-solid{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:13px 24px;border-radius:100px;
+  background:#fff;color:#c93a00;
+  font-weight:800;font-size:14px;
+  box-shadow:0 4px 18px rgba(0,0,0,0.2);
+  transition:transform .15s,box-shadow .15s;
+  white-space:nowrap;
 }
-.hero-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:40px;position:relative;z-index:10;}
+.hero-btn-solid:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.25)}
+.hero-btn-outline{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:13px 24px;border-radius:100px;
+  background:rgba(0,0,0,0.2);color:#fff;
+  border:2px solid rgba(255,255,255,0.5);
+  font-weight:700;font-size:14px;
+  transition:all .15s;white-space:nowrap;
+}
+.hero-btn-outline:hover{background:rgba(0,0,0,0.35);border-color:#fff}
+.hero-banner-stats{display:flex;gap:28px;flex-wrap:wrap}
+.hero-banner-stat{text-align:left}
+.hero-banner-stat-val{font-family:'Plus Jakarta Sans','DM Sans',sans-serif;font-size:22px;font-weight:800;color:#fff;line-height:1}
+.hero-banner-stat-lbl{font-size:11px;color:rgba(255,255,255,0.75);margin-top:3px;font-weight:500;text-transform:uppercase;letter-spacing:0.5px}
+.hero-right-col{
+  display:flex;flex-direction:column;align-items:flex-end;gap:12px;
+  flex-shrink:0;
+}
+.hero-offer-card{
+  background:rgba(255,255,255,0.12);
+  backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,0.25);
+  border-radius:16px;padding:16px 20px;
+  width:240px;
+  animation:heroCardFloat 4s ease-in-out infinite;
+}
+.hero-offer-card:nth-child(2){animation-delay:2s;width:220px}
+@keyframes heroCardFloat{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-8px)}
+}
+.hero-card-badge{
+  font-size:10px;font-weight:800;letter-spacing:0.5px;text-transform:uppercase;
+  color:#fff;background:rgba(0,0,0,0.25);
+  border-radius:4px;padding:3px 8px;display:inline-block;margin-bottom:8px;
+}
+.hero-card-name{font-size:13px;font-weight:700;color:#fff;line-height:1.3;margin-bottom:6px}
+.hero-card-price{font-size:20px;font-weight:800;color:#fff;font-family:'Plus Jakarta Sans','DM Sans',sans-serif}
+.hero-card-old{font-size:12px;color:rgba(255,255,255,0.65);text-decoration:line-through}
+
+/* ══ CATEGORY NAV ══ */
+.category-nav{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:20px 24px;
+}
+.category-nav-inner{
+  max-width:var(--max-width);margin:0 auto;
+  display:flex;gap:8px;overflow-x:auto;
+  scrollbar-width:none;justify-content:center;flex-wrap:wrap;
+}
+.category-nav-inner::-webkit-scrollbar{display:none}
+.cat-btn{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  padding:12px 16px;border-radius:var(--radius-md);
+  background:var(--surface2);border:1px solid var(--border);
+  color:var(--text2);font-size:11px;font-weight:600;
+  min-width:72px;flex-shrink:0;
+  transition:all .15s;cursor:pointer;
+  text-transform:uppercase;letter-spacing:0.3px;
+}
+.cat-btn:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+.cat-btn-icon{font-size:24px;line-height:1}
+.cat-btn.active{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+
+/* ══ FLASH SALE HEADER ══ */
+.flash-sale-header{
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:12px;
+  margin-bottom:24px;
+  padding:16px 20px;
+  background:linear-gradient(135deg,#1a0a00 0%,#2d1200 100%);
+  border-radius:var(--radius-lg);
+  border:1px solid rgba(255,122,0,0.3);
+}
+[data-theme="light"] .flash-sale-header{
+  background:linear-gradient(135deg,#fff3eb 0%,#ffe0c8 100%);
+  border-color:rgba(255,122,0,0.4);
+}
+.flash-title{
+  display:flex;align-items:center;gap:12px;
+}
+.flash-title h2{
+  font-family:'Plus Jakarta Sans','DM Sans',sans-serif;
+  font-size:20px;font-weight:800;color:#fff;
+  letter-spacing:-0.3px;
+}
+[data-theme="light"] .flash-title h2{color:#c93a00}
+.flash-live{
+  display:flex;align-items:center;gap:6px;
+  background:var(--red);border-radius:100px;
+  padding:3px 10px;font-size:11px;font-weight:800;color:#fff;
+  letter-spacing:0.5px;
+}
+.flash-live::before{content:'●';font-size:7px;animation:blink 1s infinite}
+.flash-countdown{display:flex;align-items:center;gap:8px}
+.countdown-label{font-size:12px;color:rgba(255,255,255,0.6);font-weight:500}
+[data-theme="light"] .countdown-label{color:#8b5000}
+.countdown-timer{display:flex;align-items:center;gap:4px}
+.countdown-seg{
+  background:var(--accent);color:#fff;
+  font-family:'Plus Jakarta Sans','DM Sans',sans-serif;
+  font-size:16px;font-weight:800;
+  padding:4px 8px;border-radius:6px;
+  min-width:34px;text-align:center;
+  line-height:1;
+}
+.countdown-sep{color:var(--accent);font-weight:800;font-size:16px}
+
+.hero-badge{display:none}
+.hero-text-side{display:none}
 .hero-mascot-side{display:none}
+.hero-features-side{display:none}
 .teteco-particles{display:none}
+.hero-bg-logo{display:none}
+.hero-btns{display:none}
+.hero-stats{display:none}
 .btn-primary{
   display:inline-flex;align-items:center;gap:8px;
   padding:12px 24px;border-radius:100px;
@@ -1106,17 +1224,25 @@ footer{
 
 /* ══ RESPONSIVE ══ */
 @media(max-width:1024px){
-  #hero{padding:80px 24px 48px;flex-direction:column}
-  .hero-features-side{display:none}
+  .hero-banner-inner{padding:44px 24px 40px}
+  .hero-right-col{display:none}
   .section{padding:48px 24px}
   footer{padding:32px 24px 16px}
   .footer-inner{grid-template-columns:1fr 1fr}
   .stats-row{grid-template-columns:repeat(2,1fr)}
   .trust-bar{flex-wrap:wrap;gap:16px}
   .nav-search{display:none}
+  .category-nav-inner{justify-content:flex-start}
 }
 @media(max-width:768px){
-  #hero{padding:80px 16px 40px}
+  .hero-banner-inner{padding:36px 16px 32px}
+  .hero-main-title{font-size:clamp(36px,8vw,60px)}
+  .hero-banner-stats{gap:16px}
+  .category-nav{padding:14px 16px}
+  .cat-btn{min-width:60px;padding:10px 10px;font-size:10px}
+  .cat-btn-icon{font-size:20px}
+  .flash-sale-header{flex-direction:column;align-items:flex-start;gap:10px}
+  .flash-countdown{flex-wrap:wrap}
   .section{padding:40px 16px}
   footer{padding:28px 16px 16px}
   .footer-inner{grid-template-columns:1fr;gap:24px}
@@ -1128,7 +1254,6 @@ footer{
   .chat-fab{bottom:16px;right:16px}
   .chat-fab.active{display:none !important}
   .stats-row{grid-template-columns:repeat(2,1fr);gap:10px}
-  .hero-stats{flex-wrap:wrap;gap:20px}
   .trust-bar{flex-direction:column;gap:12px}
 }
 @media(max-width:480px){
@@ -1139,6 +1264,8 @@ footer{
   .oferta-preco-novo{font-size:18px}
   .botoes-acao{gap:4px}
   .btn-partilhar,.btn-comparar,.btn-alerta,.ai-btn{width:30px;height:30px;font-size:12px}
+  .hero-banner-btns{flex-direction:column}
+  .hero-btn-solid,.hero-btn-outline{width:100%;justify-content:center}
 }
 </style>
 </head>
@@ -1182,116 +1309,89 @@ footer{
 <!-- ═══ PÁGINA HOME ═══ -->
 <div class="page active" id="page-home">
   <section id="hero">
-
-    <!-- LOGO DECORATIVA DE FUNDO -->
-    <div class="hero-bg-logo" aria-hidden="true">
-      <img src="logo-transparent.png" alt="">
-    </div>
-
-    <!-- PARTICULAS -->
-    <div class="teteco-particles">
-      <div class="particle p1">🏷️</div>
-      <div class="particle p2">💰</div>
-      <div class="particle p3">🛒</div>
-    </div>
-    
-    <div class="hero-text-side fade-up">
-      <div class="hero-badge">🔥 OFERTAS ATUALIZADAS 24/7</div>
-      <h1 class="hero-title">Não pague o preço cheio.<br>Nós caçamos as <span class="accent">Melhores Ofertas</span>.</h1>
-      <p class="hero-sub">Promoções imperdíveis da Amazon, Shopee, Mercado Livre e muito mais. O Teteco vasculha a internet para poupar o seu dinheiro.</p>
-      
-      <div class="hero-btns">
-        <a class="btn-primary" href="https://t.me/ocacadordeoferta" target="_blank" aria-label="Entrar no grupo VIP">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.94z"/></svg> 
-          Entrar no Grupo VIP
-        </a>
-        <button class="btn-ghost" onclick="window.navegar('ofertas')" aria-label="Ver catálogo de ofertas">Ver Catálogo</button>
-      </div>
-
-      <div class="hero-stats">
-        <div class="hero-stat">
-          <div class="hero-stat-val" id="stat-total">0</div>
-          <div class="hero-stat-label">Ofertas Ativas</div>
+    <div class="hero-banner-inner">
+      <!-- ESQUERDA: Texto + CTAs -->
+      <div class="hero-left-col fade-up">
+        <div class="hero-tag">🔥 SUPER OFERTAS DO DIA</div>
+        <h1 class="hero-main-title">
+          Até 80% OFF
+          <span>nas melhores lojas do Brasil</span>
+        </h1>
+        <p class="hero-main-sub">Ofertas verificadas da Amazon, Shopee, Magalu, Mercado Livre e muito mais — atualizadas em tempo real, 24 horas por dia.</p>
+        <div class="hero-banner-btns">
+          <a class="hero-btn-solid" href="https://t.me/ocacadordeoferta" target="_blank" aria-label="Entrar no grupo VIP">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.94z"/></svg>
+            Entrar no Grupo VIP
+          </a>
+          <button class="hero-btn-outline" onclick="window.navegar('ofertas')" aria-label="Ver todas as ofertas">Ver Todas as Ofertas →</button>
         </div>
-        <div class="hero-stat">
-          <div class="hero-stat-val">24h</div>
-          <div class="hero-stat-label">Monitoramento</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- LADO DIREITO: Mockup de Celular Clean & Premium -->
-    <div class="hero-mascot-side fade-up fade-up-1">
-      <div class="teteco-glow-bg"></div>
-      <div class="phone-mockup">
-        <div class="phone-notch"></div>
-        <div class="phone-screen">
-           
-           <div class="mock-header">
-             <div class="mock-avatar">
-                <img src="logo-transparent.png" alt="" style="width:24px;height:24px;object-fit:contain;border-radius:50%;">
-             </div>
-             <div class="mock-header-text">
-               <strong>O Caçador de Ofertas</strong>
-               <span>Agora mesmo</span>
-             </div>
-           </div>
-
-           <!-- Simulação de Notificações de Ofertas -->
-           <div class="mock-msg msg-1">
-             <span class="mock-badge">🔥 OFERTA</span>
-             <strong>Smartphone S24 Ultra 256GB</strong>
-             <p>De: <s>R$ 7.999</s><br>Por: <span class="mock-price">R$ 5.499</span></p>
-           </div>
-
-           <div class="mock-msg msg-2">
-             <span class="mock-badge">⚡ BUG</span>
-             <strong>Smart TV 55" 4K UHD</strong>
-             <p>De: <s>R$ 3.299</s><br>Por: <span class="mock-price">R$ 1.899</span></p>
-           </div>
-
-           <div class="mock-msg msg-3">
-             <span class="mock-badge">📦 CUPOM</span>
-             <strong>Fralda Pampers Confort Sec</strong>
-             <p>Com cupom ativo da loja!<br><span class="mock-price">R$ 89,90</span></p>
-           </div>
-
+        <div class="hero-banner-stats">
+          <div class="hero-banner-stat">
+            <div class="hero-banner-stat-val" id="stat-total">—</div>
+            <div class="hero-banner-stat-lbl">Ofertas Ativas</div>
+          </div>
+          <div class="hero-banner-stat">
+            <div class="hero-banner-stat-val" id="stat-desconto-hero">—</div>
+            <div class="hero-banner-stat-lbl">Desconto Médio</div>
+          </div>
+          <div class="hero-banner-stat">
+            <div class="hero-banner-stat-val">10+</div>
+            <div class="hero-banner-stat-lbl">Lojas Parceiras</div>
+          </div>
+          <div class="hero-banner-stat">
+            <div class="hero-banner-stat-val">24/7</div>
+            <div class="hero-banner-stat-lbl">Monitoramento</div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- LADO DIREITO: Features / Benefícios -->
-    <div class="hero-features-side fade-up fade-up-2">
-      <div class="hero-feature-card">
-        <div class="hero-feature-icon">🤖</div>
-        <div>
-          <strong>IA Anti-Fraude</strong>
-          <span>Verificamos cada oferta antes de publicar</span>
+      <!-- DIREITA: Cards flutuantes de ofertas -->
+      <div class="hero-right-col desktop-only fade-up fade-up-1" aria-hidden="true">
+        <div class="hero-offer-card">
+          <div class="hero-card-badge">🔥 Bug de Preço</div>
+          <div class="hero-card-name">Smartphone Samsung Galaxy A55 8GB/256GB</div>
+          <div class="hero-card-old">De: R$ 2.199</div>
+          <div class="hero-card-price">R$ 1.299</div>
         </div>
-      </div>
-      <div class="hero-feature-card">
-        <div class="hero-feature-icon">⚡</div>
-        <div>
-          <strong>Alertas em Tempo Real</strong>
-          <span>Notificações no Telegram assim que sai oferta</span>
-        </div>
-      </div>
-      <div class="hero-feature-card">
-        <div class="hero-feature-icon">🏪</div>
-        <div>
-          <strong>+10 Lojas Monitoradas</strong>
-          <span>Amazon, Shopee, Magalu, ML e muito mais</span>
-        </div>
-      </div>
-      <div class="hero-feature-card">
-        <div class="hero-feature-icon">🎁</div>
-        <div>
-          <strong>100% Gratuito</strong>
-          <span>Sem taxa, sem cadastro, sem enrolação</span>
+        <div class="hero-offer-card">
+          <div class="hero-card-badge">⚡ Oferta Relâmpago</div>
+          <div class="hero-card-name">Smart TV LG 55" 4K UHD WebOS</div>
+          <div class="hero-card-old">De: R$ 3.499</div>
+          <div class="hero-card-price">R$ 1.999</div>
         </div>
       </div>
     </div>
   </section>
+
+  <!-- CATEGORIAS -->
+  <nav class="category-nav" aria-label="Navegar por categoria">
+    <div class="category-nav-inner">
+      <button class="cat-btn" onclick="window.filtrarCategoria('celular')" aria-label="Ver celulares">
+        <span class="cat-btn-icon">📱</span>Celulares
+      </button>
+      <button class="cat-btn" onclick="window.filtrarCategoria('notebook')" aria-label="Ver notebooks">
+        <span class="cat-btn-icon">💻</span>Notebooks
+      </button>
+      <button class="cat-btn" onclick="window.filtrarCategoria('tv')" aria-label="Ver Smart TVs">
+        <span class="cat-btn-icon">📺</span>Smart TV
+      </button>
+      <button class="cat-btn" onclick="window.filtrarCategoria('game')" aria-label="Ver games">
+        <span class="cat-btn-icon">🎮</span>Games
+      </button>
+      <button class="cat-btn" onclick="window.filtrarCategoria('casa')" aria-label="Ver casa e cozinha">
+        <span class="cat-btn-icon">🏠</span>Casa
+      </button>
+      <button class="cat-btn" onclick="window.filtrarCategoria('eletro')" aria-label="Ver eletrodomésticos">
+        <span class="cat-btn-icon">⚡</span>Eletros
+      </button>
+      <button class="cat-btn" onclick="window.filtrarCategoria('moda')" aria-label="Ver moda">
+        <span class="cat-btn-icon">👗</span>Moda
+      </button>
+      <button class="cat-btn" onclick="window.navegar('ofertas')" aria-label="Ver todas as ofertas">
+        <span class="cat-btn-icon">🔥</span>Mais Vendidos
+      </button>
+    </div>
+  </nav>
 
   <!-- STATS -->
   <section class="section section-alt">
@@ -1302,21 +1402,24 @@ footer{
       <div class="stat-card fade-up fade-up-3"><div class="stat-icon">⚡</div><div class="stat-info"><div class="stat-val syne" style="color:var(--green)">24/7</div><div class="stat-lbl">Monitoramento</div></div></div>
     </div>
 
-    <!-- Barra de Confiança -->
-    <div class="trust-bar">
-      <div class="trust-item">✅ Ofertas Verificadas</div>
-      <div class="trust-item">🔒 Sem Custo Adicional</div>
-      <div class="trust-item">⏰ Monitoramento 24h</div>
-      <div class="trust-item">🏪 +10 Lojas Parceiras</div>
-    </div>
-
-    <div class="section-header">
-      <div>
-        <span class="section-label">Seleção VIP</span>
-        <h2 class="section-title">Destaques de Hoje</h2>
-        <p class="section-sub" style="margin-bottom:0">As promoções com as maiores quedas de preço registradas nas últimas horas.</p>
+    <!-- FLASH SALE HEADER com Countdown -->
+    <div class="flash-sale-header fade-up">
+      <div class="flash-title">
+        <span style="font-size:26px">🔥</span>
+        <h2>OFERTAS RELÂMPAGO</h2>
+        <div class="flash-live">AO VIVO</div>
       </div>
-      <button class="btn-ghost" onclick="window.navegar('ofertas')" aria-label="Ver todas as ofertas">Ver Todas →</button>
+      <div class="flash-countdown">
+        <span class="countdown-label">Termina em:</span>
+        <div class="countdown-timer">
+          <span class="countdown-seg" id="cdHoras">00</span>
+          <span class="countdown-sep">:</span>
+          <span class="countdown-seg" id="cdMinutos">00</span>
+          <span class="countdown-sep">:</span>
+          <span class="countdown-seg" id="cdSegundos">00</span>
+        </div>
+        <button class="btn-ghost" onclick="window.navegar('ofertas')" style="font-size:13px;padding:8px 14px" aria-label="Ver todas as ofertas">Ver Todas →</button>
+      </div>
     </div>
 
     <div class="destaque-grid" id="destaqueGrid"></div>
@@ -2191,6 +2294,9 @@ function atualizarStats() {
     
     const elDesc2 = document.getElementById("stat-desconto-2");
     if (elDesc2) elDesc2.textContent = media + "%";
+
+    const elDescHero = document.getElementById("stat-desconto-hero");
+    if (elDescHero) elDescHero.textContent = media + "%";
 }
 
 function inicializarFiltros() {
@@ -2799,6 +2905,40 @@ document.addEventListener('click', (e) => {
         if (box) box.style.display = 'none';
     }
 });
+
+// ==========================================
+// COUNTDOWN RELÂMPAGO (até meia-noite)
+// ==========================================
+function atualizarContagem() {
+    const agora = new Date();
+    const meiaNoite = new Date(agora);
+    meiaNoite.setHours(24, 0, 0, 0);
+    let diff = Math.floor((meiaNoite - agora) / 1000);
+    if (diff < 0) diff = 0;
+    const h = Math.floor(diff / 3600);
+    const m = Math.floor((diff % 3600) / 60);
+    const s = diff % 60;
+    const pad = n => String(n).padStart(2, '0');
+    const elH = document.getElementById('cdHoras');
+    const elM = document.getElementById('cdMinutos');
+    const elS = document.getElementById('cdSegundos');
+    if (elH) elH.textContent = pad(h);
+    if (elM) elM.textContent = pad(m);
+    if (elS) elS.textContent = pad(s);
+}
+atualizarContagem();
+setInterval(atualizarContagem, 1000);
+
+// ==========================================
+// FILTRO POR CATEGORIA (botões da category-nav)
+// ==========================================
+window.filtrarCategoria = function(termo) {
+    window.navegar('ofertas');
+    setTimeout(() => {
+        const inp = document.getElementById('buscaInput');
+        if (inp) { inp.value = termo; window.filtrarOfertas && window.filtrarOfertas(); }
+    }, 100);
+};
 
 // ==========================================
 // INICIALIZAÇÃO
