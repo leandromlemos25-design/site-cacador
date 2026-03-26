@@ -241,6 +241,17 @@ img, video{max-width:100%;display:block}
 }
 #hero::before{display:none}
 #hero::after{display:none}
+/* Logo decorativa de fundo no hero */
+.hero-bg-logo{
+  position:absolute;
+  right:-60px;top:50%;transform:translateY(-50%);
+  width:520px;height:520px;
+  opacity:0.04;
+  pointer-events:none;
+  z-index:0;
+}
+.hero-bg-logo svg{width:100%;height:100%}
+.hero-text-side{position:relative;z-index:1}
 
 .hero-badge{
   display:inline-flex;align-items:center;gap:8px;
@@ -1156,7 +1167,31 @@ footer{
 <!-- ═══ PÁGINA HOME ═══ -->
 <div class="page active" id="page-home">
   <section id="hero">
-    
+
+    <!-- LOGO DECORATIVA DE FUNDO -->
+    <div class="hero-bg-logo" aria-hidden="true">
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <g transform="translate(25, 55) rotate(-30)">
+          <rect x="-18" y="-14" width="36" height="28" rx="4" fill="var(--brand-blue)"></rect>
+          <circle cx="-6" cy="-4" r="2.5" fill="#fff"></circle>
+          <circle cx="6" cy="4" r="2.5" fill="#fff"></circle>
+          <line x1="-6" y1="6" x2="6" y2="-6" stroke="#fff" stroke-width="2" stroke-linecap="round"></line>
+        </g>
+        <g transform="translate(52, 38) rotate(-15)">
+          <rect x="-18" y="-18" width="36" height="36" rx="5" fill="var(--brand-blue)"></rect>
+          <circle cx="10" cy="-8" r="2.5" fill="#fff"></circle>
+          <polygon points="-4,-6 -2,0 4,0 -1,4 1,10 -4,6 -9,10 -7,4 -12,0 -6,0" fill="#fff"></polygon>
+        </g>
+        <circle cx="58" cy="38" r="20" stroke="var(--accent)" stroke-width="6.5" fill="none"></circle>
+        <g transform="translate(72, 52) rotate(45)">
+          <line x1="0" y1="0" x2="18" y2="0" stroke="var(--accent)" stroke-width="6.5" stroke-linecap="round"></line>
+          <polygon points="14,-7 26,0 14,7" fill="var(--accent)"></polygon>
+        </g>
+        <path d="M 30 18 Q 33 18 33 15 Q 33 18 36 18 Q 33 18 33 21 Q 33 18 30 18 Z" fill="var(--accent)"></path>
+        <circle cx="42" cy="16" r="1.5" fill="var(--accent)"></circle>
+      </svg>
+    </div>
+
     <!-- PARTICULAS -->
     <div class="teteco-particles">
       <div class="particle p1">🏷️</div>
