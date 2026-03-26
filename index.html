@@ -2377,7 +2377,7 @@ Regras:
           <p style="color:var(--text2);margin-bottom:24px">Entre no nosso grupo e fique por dentro de todas as promoções em tempo real — todos os dias!</p>
           <a href="${CONFIG.TELEGRAM}" target="_blank" class="btn-primary" style="text-decoration:none;display:inline-block;margin-bottom:12px">🔥 Entrar no Grupo de Ofertas</a>
           <br>
-          <button onclick="document.getElementById('formBox').innerHTML=''" style="background:none;border:none;color:var(--text3);font-size:13px;cursor:pointer;margin-top:8px">Fazer outro pedido</button>
+          <button onclick="window.resetarFormulario()" style="background:none;border:none;color:var(--text3);font-size:13px;cursor:pointer;margin-top:8px">Fazer outro pedido</button>
         </div>`;
     } catch(e) {
         btn.disabled = false;
@@ -2730,6 +2730,38 @@ window.compartilharOferta = compartilharOferta;
 window.mostrarToast = mostrarToast;
 window.toggleFormLoja = toggleFormLoja;
 window.enviarPedido = enviarPedido;
+window.resetarFormulario = function() {
+    document.getElementById("formBox").innerHTML = `
+      <h2 class="form-title">🎯 Pedir Promoção</h2>
+      <p class="form-sub">Diga-nos o que você procura e a nossa IA vai buscar as melhores opções e enviar direto para o seu e-mail.</p>
+      <div class="form-group">
+        <label class="form-label" for="pedidoNome">Seu Nome *</label>
+        <input class="form-input" id="pedidoNome" placeholder='Ex: "João Silva"' aria-label="Seu nome">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="pedidoEmail">Seu E-mail *</label>
+        <input class="form-input" type="email" id="pedidoEmail" placeholder='Ex: "joao@email.com"' aria-label="Seu e-mail">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="pedidoWhatsapp">WhatsApp (Opcional)</label>
+        <input class="form-input" type="tel" id="pedidoWhatsapp" placeholder='Ex: "(11) 99999-9999"' aria-label="Seu WhatsApp">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="pedidoProduto">O que você procura? *</label>
+        <input class="form-input" id="pedidoProduto" placeholder='Ex: "PlayStation 5 256GB"' aria-label="Nome do produto procurado">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="pedidoOrcamento">Orçamento Máximo (Opcional)</label>
+        <input class="form-input" id="pedidoOrcamento" placeholder='Ex: "Até R$ 3.500"' aria-label="Orçamento máximo">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="pedidoDetalhes">Detalhes Adicionais (Opcional)</label>
+        <textarea class="form-textarea" id="pedidoDetalhes" placeholder='Ex: "Pode ser recondicionado, cor branca..."' aria-label="Detalhes adicionais"></textarea>
+      </div>
+      <button class="form-submit" id="formSubmit" onclick="window.enviarPedido()" aria-label="Enviar pedido de oferta">
+        🔍 Buscar e Enviar por E-mail
+      </button>`;
+};
 window.toggleChat = toggleChat;
 window.enviarMsg = enviarMsg;
 window.analisarOferta = analisarOferta;
