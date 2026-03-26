@@ -1733,6 +1733,35 @@ function getSkeletonsHTML(qtd = 6) {
         </div>`).join("");
 }
 
+async function carregarOfertasMercadoLivre() {
+    try {
+        const response = await fetch('/api/mercadolivre');
+        if (!response.ok) throw new Error('Falha ao obter ofertas do Mercado Livre.');
+        const ofertas = await response.json();
+        if (ofertas && ofertas.length > 0) {
+            const maxId = todasOfertas.length > 0 ? Math.max(...todasOfertas.map(o => o.id)) : 0;
+            const novas = ofertas.map((oferta, index) => ({
+                id: maxId + index + 1,
+                loja: "mercadolivre",
+                titulo: oferta.offerName || "Oferta Mercado Livre",
+                precoAntigo: oferta.price || 0,
+                precoNovo: oferta.discountPrice || 0,
+                desconto: oferta.discountRate || 0,
+                link: oferta.offerLink || "#",
+                img: oferta.imageUrl || "🛒",
+                categoria: "Mercado Livre",
+                selo: "🔥 EXCLUSIVO",
+                ativo: true,
+                timestamp: Date.now()
+            }));
+            todasOfertas = [...todasOfertas, ...novas];
+            renderizarTudo();
+        }
+    } catch (err) {
+        console.warn("Aviso ML API Frontend:", err.message);
+    }
+}
+
 async function carregarOfertasShopee() {
     try {
         const response = await fetch('/api/shopee');
@@ -1869,7 +1898,7 @@ async function carregarOfertas(silencioso = false) {
         }
 
         todasOfertas = novas;
-        await carregarOfertasShopee();
+        await Promise.all([carregarOfertasShopee(), carregarOfertasMercadoLivre()]);
         
         ultimaAtualizacao = Date.now();
         salvarCache(todasOfertas);
@@ -2141,7 +2170,16 @@ async function enviarPedido() {
     btn.innerHTML = '<span style="display:inline-flex;align-items:center;gap:8px"><span class="loader-spinner" style="width:16px;height:16px;border-width:2px"></span> A IA está buscando...</span>';
 
     try {
-        // 1. Gemini busca o produto e retorna JSON estruturado
+        // Links de afiliado por loja
+        const q = encodeURIComponent(produto);
+        const linksAfiliado = {
+            amazon:       `https://www.amazon.com.br/s?k=${q}&tag=ocacadordeo02`,
+            magalu:       `https://www.magazinevoce.com.br/magazinein_2463196/busca/${q}/`,
+            mercadolivre: `https://www.mercadolivre.com.br/busca?q=${q}&tracking_id=FF182A-079E`,
+            shopee:       `https://shopee.com.br/search?keyword=${q}`
+        };
+
+        // 1. Gemini escolhe a melhor loja e retorna preços
         const promptIA = `Você é um especialista em compras no Brasil. Um cliente quer encontrar a melhor oferta de um produto.
 
 Produto: ${produto}${orcamento ? `\nOrçamento máximo: ${orcamento}` : ''}${detalhes ? `\nDetalhes: ${detalhes}` : ''}
@@ -2151,34 +2189,36 @@ Responda APENAS com um JSON válido, sem texto antes ou depois, neste formato ex
   "produto_nome": "nome completo do produto com modelo e especificações",
   "preco_antigo": "R$ X.XXX,XX",
   "preco_novo": "R$ X.XXX,XX",
-  "link_produto": "https://www.amazon.com.br/s?k=PRODUTO+AQUI"
+  "loja": "amazon"
 }
 
 Regras:
 - produto_nome: nome completo e específico do produto
-- preco_antigo: preço típico de tabela/lançamento
-- preco_novo: melhor preço médio atual encontrado no mercado brasileiro
-- link_produto: link de busca real na Amazon Brasil (substitua PRODUTO+AQUI pelo nome do produto com + entre palavras)`;
+- preco_antigo: preço típico de tabela/lançamento no Brasil
+- preco_novo: melhor preço médio atual no mercado brasileiro
+- loja: escolha UMA entre: amazon, magalu, mercadolivre, shopee (a que normalmente tem o melhor preço para este tipo de produto)`;
 
         const respostaRaw = await chamarGemini(promptIA, "Você é um assistente de compras brasileiro. Responda APENAS com JSON válido, sem texto adicional.");
         const jsonMatch = respostaRaw.match(/\{[\s\S]*?\}/);
         const dados = jsonMatch ? JSON.parse(jsonMatch[0]) : {};
+        const lojaEscolhida = dados.loja && linksAfiliado[dados.loja] ? dados.loja : "amazon";
+        const linkAfiliado = linksAfiliado[lojaEscolhida];
 
         // 2. Notifica o admin
         await emailjs.send("service_v94cf8p", "template_6l0zsew", {
             produto,
             orcamento: orcamento || "Não informado",
-            loja: whatsapp ? `WhatsApp: ${whatsapp}` : "Não informado",
-            detalhes: `Email: ${email}\n${detalhes || "Sem detalhes adicionais"}`
+            loja: lojaEscolhida,
+            detalhes: `Email: ${email}${whatsapp ? ` | WhatsApp: ${whatsapp}` : ''}\n${detalhes || "Sem detalhes adicionais"}`
         });
 
-        // 3. Envia email bonito para o usuário com a oferta encontrada pela IA
+        // 3. Envia email bonito para o usuário com link de afiliado embutido
         await emailjs.send("service_v94cf8p", CONFIG.EMAILJS_TEMPLATE_RESPOSTA, {
             to_email: email,
             produto_nome: dados.produto_nome || produto,
             preco_antigo: dados.preco_antigo || "—",
             preco_novo: dados.preco_novo || "—",
-            link_produto: dados.link_produto || `https://www.amazon.com.br/s?k=${encodeURIComponent(produto)}`
+            link_produto: linkAfiliado
         });
 
         // 4. Tela de agradecimento
@@ -2476,11 +2516,20 @@ ${contextoOfertas}
             for (let i = 0; i < fila.length; i++) {
                 const termo = fila[i];
                 try {
-                    const res = await fetch('/api/shopee?q=' + encodeURIComponent(termo));
-                    if (!res.ok) continue;
-                    const raw = await res.json();
-                    if (!Array.isArray(raw)) continue;
-                    const filtrado = filtrarAntiAcessorios(raw, termo);
+                    const [resShopee, resML] = await Promise.allSettled([
+                        fetch('/api/shopee?q=' + encodeURIComponent(termo)),
+                        fetch('/api/mercadolivre?q=' + encodeURIComponent(termo))
+                    ]);
+                    let combinado = [];
+                    if (resShopee.status === 'fulfilled' && resShopee.value.ok) {
+                        const raw = await resShopee.value.json();
+                        if (Array.isArray(raw)) combinado.push(...raw);
+                    }
+                    if (resML.status === 'fulfilled' && resML.value.ok) {
+                        const raw = await resML.value.json();
+                        if (Array.isArray(raw)) combinado.push(...raw);
+                    }
+                    const filtrado = filtrarAntiAcessorios(combinado, termo);
                     if (filtrado.length > 0) return { ofertas: filtrado, termoUsado: termo, tentativa: i + 1 };
                 } catch(_) { /* tenta próximo */ }
             }
