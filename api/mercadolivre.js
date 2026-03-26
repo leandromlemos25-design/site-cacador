@@ -1,3 +1,5 @@
+const https = require('https');
+
 export default async function handler(req, res) {
   const origin = req.headers.origin;
   const allowed = !origin || origin.includes('ocacadordeofertas.com') || origin.includes('vercel.app') || origin.includes('localhost');
@@ -9,34 +11,41 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   const afiliadoId = 'FF182A-079E';
+  const searchQuery = req.query?.q || 'oferta desconto';
+  const path = `/sites/MLB/search?q=${encodeURIComponent(searchQuery)}&limit=20&sort=relevance`;
 
   try {
-    // API pública do ML — não precisa de autenticação para busca
-    const searchQuery = req.query?.q || 'oferta desconto';
-    const url = `https://api.mercadolibre.com/sites/MLB/search?q=${encodeURIComponent(searchQuery)}&limit=20&sort=relevance`;
-
-    const searchRes = await fetch(url);
-    const searchData = await searchRes.json();
-
-    if (!searchRes.ok) {
-      return res.status(500).json({ error: 'Erro na busca do Mercado Livre.', detalhe: searchData });
-    }
+    const searchData = await new Promise((resolve, reject) => {
+      const options = {
+        hostname: 'api.mercadolibre.com',
+        port: 443,
+        path,
+        method: 'GET',
+        headers: { 'Accept': 'application/json' }
+      };
+      const reqML = https.request(options, (resML) => {
+        let body = '';
+        resML.on('data', chunk => body += chunk);
+        resML.on('end', () => {
+          try { resolve(JSON.parse(body)); } catch(e) { reject(new Error('Resposta inválida do ML')); }
+        });
+      });
+      reqML.on('error', reject);
+      reqML.end();
+    });
 
     const produtos = (searchData.results || [])
       .filter(p => p.original_price && p.original_price > p.price)
       .slice(0, 12)
-      .map(p => {
-        const desconto = Math.round(((p.original_price - p.price) / p.original_price) * 100);
-        return {
-          offerName:     p.title,
-          price:         p.original_price,
-          discountPrice: p.price,
-          discountRate:  desconto,
-          offerLink:     `${p.permalink}?tracking_id=${afiliadoId}`,
-          imageUrl:      p.thumbnail?.replace('http://', 'https://').replace('-I.jpg', '-O.jpg') || '',
-          loja:          'mercadolivre'
-        };
-      });
+      .map(p => ({
+        offerName:     p.title,
+        price:         p.original_price,
+        discountPrice: p.price,
+        discountRate:  Math.round(((p.original_price - p.price) / p.original_price) * 100),
+        offerLink:     `${p.permalink}?tracking_id=${afiliadoId}`,
+        imageUrl:      (p.thumbnail || '').replace('http://', 'https://').replace('-I.jpg', '-O.jpg'),
+        loja:          'mercadolivre'
+      }));
 
     return res.status(200).json(produtos);
 
