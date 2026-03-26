@@ -1898,14 +1898,15 @@ async function carregarOfertas(silencioso = false) {
         }
 
         todasOfertas = novas;
-        await Promise.all([carregarOfertasShopee(), carregarOfertasMercadoLivre()]);
-        
         ultimaAtualizacao = Date.now();
         salvarCache(todasOfertas);
 
     } catch (err) {
         console.warn("API Sheets erro:", err.message);
     }
+
+    // Shopee e ML carregam independente do resultado do Sheets
+    await Promise.all([carregarOfertasShopee(), carregarOfertasMercadoLivre()]);
 
     if (refreshBar) refreshBar.classList.remove("atualizando");
     document.getElementById("refreshStatus").textContent = "Atualizado agora";
