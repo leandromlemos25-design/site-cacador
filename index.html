@@ -1501,7 +1501,7 @@ const CONFIG = {
     REFRESH_INTERVAL: 24 * 60 * 60 * 1000, // Atualiza a cada 24 horas
     HORAS_NOVO: 24,
     DIAS_EXPIRACAO: 7, // Deleta ofertas do site após 1 semana
-    ITEMS_PER_PAGE: 12,
+    ITEMS_PER_PAGE: 20,
     EMAILJS_TEMPLATE_RESPOSTA: "template_ihnjh4j"
 };
 
@@ -1993,7 +1993,7 @@ function renderDestaques() {
     if (!grid || todasOfertas.length === 0) return;
     
     // Filtra quem tem a palavra DESTAQUE ou um super desconto
-    let destCandidatos = todasOfertas.filter(o => (o.selo && o.selo.includes("DESTAQUE")) || o.desconto >= 40);
+    let destCandidatos = todasOfertas.filter(o => (o.selo && o.selo.includes("DESTAQUE")) || o.desconto >= 10);
     
     // Força os itens manuais marcados como "DESTAQUE" a ficarem no topo absoluto da vitrine VIP
     destCandidatos.sort((a, b) => {
@@ -2003,7 +2003,7 @@ function renderDestaques() {
         return b.timestamp - a.timestamp;
     });
 
-    const dest = destCandidatos.slice(0, 4);
+    const dest = destCandidatos.slice(0, 20);
     grid.innerHTML = dest.length ? dest.map((o, i) => criarCardHTML(o, i)).join("") : `<div class="empty-state">Sem destaques no momento.</div>`;
     initLazyLoading();
 }
