@@ -2066,7 +2066,9 @@ function renderSocial() {
 }
 
 function renderFormLojas() {
-    document.getElementById("formLojas").innerHTML = Object.keys(LOJAS).filter(k => k !== "todas").map(k => `<button class="form-loja-btn" onclick="window.toggleFormLoja(this,'${k}','${LOJAS[k].cor}')" aria-label="Selecionar loja ${LOJAS[k].nome}">${LOJAS[k].emoji} ${LOJAS[k].nome}</button>`).join("");
+    const el = document.getElementById("formLojas");
+    if (!el) return;
+    el.innerHTML = Object.keys(LOJAS).filter(k => k !== "todas").map(k => `<button class="form-loja-btn" onclick="window.toggleFormLoja(this,'${k}','${LOJAS[k].cor}')" aria-label="Selecionar loja ${LOJAS[k].nome}">${LOJAS[k].emoji} ${LOJAS[k].nome}</button>`).join("");
 }
 
 function atualizarStats() {
