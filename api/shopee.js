@@ -11,7 +11,7 @@ export default async function handler(req, res) {
 
   // MUDANÇA: Aumentamos o limite para 20. Assim o filtro do site (index.html) terá munição de sobra para jogar as capinhas fora e exibir os celulares.
   const searchQuery = req.query?.q || "";
-  const limit = searchQuery ? 20 : 12; 
+  const limit = searchQuery ? 50 : 100;
   const keywordFilter = searchQuery ? `, keyword: "${searchQuery}"` : "";
 
   try {
