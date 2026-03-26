@@ -1,106 +1,75 @@
 const crypto = require('crypto');
 const https = require('https');
 
-export default async function handler(req, res) {
-  const appId = process.env.SHOPEE_APP_ID;
-  const appSecret = process.env.SHOPEE_APP_SECRET; 
-
-  if (!appId || !appSecret) {
-      return res.status(500).json({ erro_identificado: 'Credenciais da Shopee não configuradas nas variáveis de ambiente da Vercel.' });
-  }
-
-  // MUDANÇA: Aumentamos o limite para 20. Assim o filtro do site (index.html) terá munição de sobra para jogar as capinhas fora e exibir os celulares.
-  const searchQuery = req.query?.q || "";
-  const limit = searchQuery ? 50 : 100;
-  const keywordFilter = searchQuery ? `, keyword: "${searchQuery}"` : "";
-
-  try {
-    const timestamp = Math.floor(Date.now() / 1000).toString();
-    
-    // Injetamos a palavra-chave (keyword) na requisição se ela existir
+async function fetchShopee(appId, appSecret, page, limit, keyword) {
+    const keywordFilter = keyword ? `, keyword: "${keyword}"` : "";
     const graphqlPayload = JSON.stringify({
-      query: `
-        {
-          productOfferV2(page: 1, limit: ${limit}${keywordFilter}) {
-            nodes {
-              productName
-              price
-              priceDiscountRate
-              offerLink
-              imageUrl
-            }
-          }
-        }
-      `
+        query: `{ productOfferV2(page: ${page}, limit: ${limit}${keywordFilter}) { nodes { productName price priceDiscountRate offerLink imageUrl } } }`
     });
-
-    const baseString = appId + timestamp + graphqlPayload + appSecret;
-    const signature = crypto.createHash('sha256').update(baseString).digest('hex');
-
+    const timestamp = Math.floor(Date.now() / 1000).toString();
+    const signature = crypto.createHash('sha256').update(appId + timestamp + graphqlPayload + appSecret).digest('hex');
     const options = {
-      hostname: 'open-api.affiliate.shopee.com.br',
-      port: 443,
-      path: '/graphql',
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `SHA256 Credential=${appId}, Timestamp=${timestamp}, Signature=${signature}`,
-        'Content-Length': Buffer.byteLength(graphqlPayload)
-      }
+        hostname: 'open-api.affiliate.shopee.com.br',
+        port: 443,
+        path: '/graphql',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `SHA256 Credential=${appId}, Timestamp=${timestamp}, Signature=${signature}`,
+            'Content-Length': Buffer.byteLength(graphqlPayload)
+        }
     };
-
-    const data = await new Promise((resolve, reject) => {
-      const reqShopee = https.request(options, (resShopee) => {
-        let responseBody = '';
-        resShopee.on('data', (chunk) => responseBody += chunk);
-        resShopee.on('end', () => {
-          try {
-            resolve(JSON.parse(responseBody));
-          } catch (e) {
-            reject(new Error("A Shopee não retornou um JSON válido"));
-          }
+    return new Promise((resolve, reject) => {
+        const req = https.request(options, (r) => {
+            let body = '';
+            r.on('data', c => body += c);
+            r.on('end', () => { try { resolve(JSON.parse(body)); } catch(e) { resolve(null); } });
         });
-      });
-
-      reqShopee.on('error', (e) => reject(e));
-      reqShopee.write(graphqlPayload);
-      reqShopee.end();
+        req.on('error', () => resolve(null));
+        req.write(graphqlPayload);
+        req.end();
     });
+}
 
-    if (data.errors || data.error) {
-        return res.status(400).json({ 
-            erro_identificado: 'A Shopee recusou os campos.', 
-            detalhes_oficiais_da_shopee: data.errors || data
-        });
-    }
-    
-    const nodes = data.data?.productOfferV2?.nodes || [];
-    
-    const produtosFormatados = nodes.map(n => {
+function formatarProdutos(nodes) {
+    return (nodes || []).map(n => {
         const precoAtual = parseFloat(n.price) || 0;
-        const porcentagemDesconto = parseFloat(n.priceDiscountRate) || 0;
-        let precoAntigo = precoAtual;
-        
-        if (porcentagemDesconto > 0 && porcentagemDesconto < 100) {
-            precoAntigo = precoAtual / (1 - (porcentagemDesconto / 100));
+        const desconto = parseFloat(n.priceDiscountRate) || 0;
+        const precoAntigo = desconto > 0 && desconto < 100 ? precoAtual / (1 - desconto / 100) : precoAtual;
+        return { offerName: n.productName || "Oferta Shopee", price: precoAntigo, discountPrice: precoAtual, discountRate: desconto, offerLink: n.offerLink, imageUrl: n.imageUrl };
+    });
+}
+
+export default async function handler(req, res) {
+    const origin = req.headers.origin;
+    const allowed = !origin || origin.includes('ocacadordeofertas.com') || origin.includes('vercel.app') || origin.includes('localhost');
+    if (!allowed) return res.status(403).json({ erro_identificado: 'Acesso negado.' });
+
+    res.setHeader('Access-Control-Allow-Origin', origin || '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    if (req.method === 'OPTIONS') return res.status(200).end();
+
+    const appId = process.env.SHOPEE_APP_ID;
+    const appSecret = process.env.SHOPEE_APP_SECRET;
+    if (!appId || !appSecret) return res.status(500).json({ erro_identificado: 'Credenciais da Shopee não configuradas.' });
+
+    try {
+        const searchQuery = req.query?.q || "";
+
+        if (searchQuery) {
+            // Busca por palavra-chave: 1 página de 20
+            const data = await fetchShopee(appId, appSecret, 1, 20, searchQuery);
+            const nodes = data?.data?.productOfferV2?.nodes || [];
+            return res.status(200).json(formatarProdutos(nodes));
         }
 
-        return {
-            offerName: n.productName || "Oferta Shopee",
-            price: precoAntigo,            
-            discountPrice: precoAtual,     
-            discountRate: porcentagemDesconto,
-            offerLink: n.offerLink,
-            imageUrl: n.imageUrl
-        };
-    });
+        // Home: busca 5 páginas × 20 = 100 ofertas em paralelo
+        const paginas = await Promise.all([1,2,3,4,5].map(p => fetchShopee(appId, appSecret, p, 20, "")));
+        const todos = paginas.flatMap(d => d?.data?.productOfferV2?.nodes || []);
+        return res.status(200).json(formatarProdutos(todos));
 
-    return res.status(200).json(produtosFormatados);
-
-  } catch (error) {
-    return res.status(500).json({ 
-        erro_identificado: 'Falha interna', 
-        detalhes: error.message 
-    });
-  }
+    } catch (error) {
+        return res.status(500).json({ erro_identificado: 'Falha interna', detalhes: error.message });
+    }
 }
