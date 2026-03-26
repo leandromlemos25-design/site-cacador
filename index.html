@@ -2281,27 +2281,36 @@ async function enviarPedido() {
     btn.innerHTML = '<span style="display:inline-flex;align-items:center;gap:8px"><span class="loader-spinner" style="width:16px;height:16px;border-width:2px"></span> A IA está buscando a melhor oferta...</span>';
 
     try {
-        // 1. Busca real na Shopee via API de afiliado (filtro anti-acessórios sempre ativo)
+        // 1. Busca Shopee: retorna {filtrados, melhorLink}
+        // melhorLink = offerLink do produto mais caro (maior preço = produto principal, não acessório)
+        // O offerLink da API já tem rastreio de afiliado embutido (gerado pelo SHOPEE_APP_ID)
         async function buscarShopeeForm(termo) {
             try {
                 const res = await fetch('/api/shopee?q=' + encodeURIComponent(termo));
-                if (!res.ok) return [];
+                if (!res.ok) return { filtrados: [], melhorLink: null };
                 const raw = await res.json();
-                if (!Array.isArray(raw)) return [];
-                return filtrarAntiAcessorios(raw, termo);
-            } catch(_) { return []; }
+                if (!Array.isArray(raw) || !raw.length) return { filtrados: [], melhorLink: null };
+                // Melhor link = produto mais caro dos resultados brutos (afiliado garantido)
+                const ordenado = [...raw].sort((a, b) => (b.discountPrice || b.price || 0) - (a.discountPrice || a.price || 0));
+                const melhorLink = ordenado[0].offerLink || null;
+                return { filtrados: filtrarAntiAcessorios(raw, termo), melhorLink };
+            } catch(_) { return { filtrados: [], melhorLink: null }; }
         }
 
-        // Cascata: termo completo → primeiras 2 palavras → Gemini fallback
-        let resultados = await buscarShopeeForm(produto);
-        if (!resultados.length) {
+        // Cascata: termo completo → primeiras 2 palavras
+        let busca = await buscarShopeeForm(produto);
+        if (!busca.filtrados.length) {
             const termoCurto = produto.split(' ').slice(0, 2).join(' ');
-            if (termoCurto !== produto) resultados = await buscarShopeeForm(termoCurto);
+            if (termoCurto !== produto) {
+                const busca2 = await buscarShopeeForm(termoCurto);
+                if (busca2.filtrados.length || busca2.melhorLink) busca = busca2;
+            }
         }
 
         let dadosEmail;
-        if (resultados.length) {
-            const melhor = resultados[0];
+        if (busca.filtrados.length) {
+            // Produto real encontrado na Shopee com filtro
+            const melhor = busca.filtrados[0];
             dadosEmail = {
                 produto_nome: melhor.offerName || produto,
                 preco_antigo: melhor.price ? formatarMoeda(melhor.price) : "—",
@@ -2309,7 +2318,7 @@ async function enviarPedido() {
                 link_produto: melhor.offerLink
             };
         } else {
-            // Fallback: Gemini formata nome e estima preço, mas link vai para Shopee (afiliado)
+            // Sem produto no filtro: Gemini formata nome+preço, link usa offerLink afiliado (se houver)
             try {
                 const promptFallback = `Você é especialista em compras no Brasil. Formate o nome do produto e estime o preço atual no mercado brasileiro.
 
@@ -2322,21 +2331,22 @@ Regras:
 - produto_nome: nome oficial com marca, modelo e especificação principal (ex: "Samsung Galaxy S23 128GB")
 - preco_antigo: preço de lançamento ou tabela no Brasil
 - preco_novo: melhor preço atual estimado no mercado brasileiro`;
-                const raw = await chamarGemini(promptFallback, "Responda APENAS com JSON válido.");
-                const match = raw.match(/\{[\s\S]*?\}/);
+                const rawGemini = await chamarGemini(promptFallback, "Responda APENAS com JSON válido.");
+                const match = rawGemini.match(/\{[\s\S]*?\}/);
                 const dados = match ? JSON.parse(match[0]) : {};
                 dadosEmail = {
                     produto_nome: dados.produto_nome || produto,
                     preco_antigo: dados.preco_antigo || "—",
                     preco_novo:   dados.preco_novo   || "—",
-                    link_produto: `https://shopee.com.br/search?keyword=${encodeURIComponent(dados.produto_nome || produto)}`
+                    // Prioridade: offerLink afiliado da API > search URL sem rastreio
+                    link_produto: busca.melhorLink || `https://shopee.com.br/search?keyword=${encodeURIComponent(dados.produto_nome || produto)}`
                 };
             } catch(_) {
                 dadosEmail = {
                     produto_nome: produto,
                     preco_antigo: "—",
                     preco_novo:   "—",
-                    link_produto: `https://shopee.com.br/search?keyword=${encodeURIComponent(produto)}`
+                    link_produto: busca.melhorLink || `https://shopee.com.br/search?keyword=${encodeURIComponent(produto)}`
                 };
             }
         }
