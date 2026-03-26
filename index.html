@@ -177,6 +177,16 @@ img, video{max-width:100%;display:block}
   transition:all .3s;
 }
 #navbar.scrolled{box-shadow:0 2px 24px rgba(0,0,0,.3)}
+.nav-logo{
+  display:inline-flex;align-items:center;
+  background:#fff;
+  border-radius:8px;
+  padding:3px 10px;
+  transition:opacity .2s;
+  text-decoration:none;
+}
+.nav-logo:hover{opacity:0.85;}
+.nav-logo img{height:34px;width:auto;display:block;}
 .nav-links{display:flex;align-items:center;gap:4px}
 .nav-btn{
   padding:6px 14px;border-radius:100px;
@@ -1139,8 +1149,8 @@ footer{
 
 <!-- NAVBAR COM A LOGO 100% EM CÓDIGO -->
 <nav id="navbar">
-  <a class="nav-logo" href="#" onclick="window.navegar('home');return false" style="display:flex;align-items:center;text-decoration:none;">
-    <img src="logo.png" alt="O Caçador de Ofertas" style="height:44px;width:auto;display:block;">
+  <a class="nav-logo" href="#" onclick="window.navegar('home');return false">
+    <img src="logo.png" alt="O Caçador de Ofertas">
   </a>
   <div class="nav-links">
     <button class="nav-btn active" data-page="home" onclick="window.navegar('home')" aria-label="Página Inicial">Início</button>
@@ -2268,58 +2278,61 @@ async function enviarPedido() {
 
     const btn = document.getElementById("formSubmit");
     btn.disabled = true;
-    btn.innerHTML = '<span style="display:inline-flex;align-items:center;gap:8px"><span class="loader-spinner" style="width:16px;height:16px;border-width:2px"></span> A IA está buscando...</span>';
+    btn.innerHTML = '<span style="display:inline-flex;align-items:center;gap:8px"><span class="loader-spinner" style="width:16px;height:16px;border-width:2px"></span> Buscando na Shopee...</span>';
 
     try {
-        // Links de afiliado por loja
-        const q = encodeURIComponent(produto);
-        const linksAfiliado = {
-            amazon:       `https://www.amazon.com.br/s?k=${q}&tag=ocacadordeo02`,
-            magalu:       `https://www.magazinevoce.com.br/magazinein_2463196/busca/${q}/`,
-            mercadolivre: `https://www.mercadolivre.com.br/busca?q=${q}&tracking_id=FF182A-079E`,
-            shopee:       `https://shopee.com.br/search?keyword=${q}`
-        };
+        // 1. Busca real na Shopee via API de afiliado
+        async function buscarShopeeForm(termo) {
+            try {
+                const res = await fetch('/api/shopee?q=' + encodeURIComponent(termo));
+                if (!res.ok) return [];
+                const raw = await res.json();
+                if (!Array.isArray(raw)) return [];
+                return filtrarAntiAcessorios(raw, termo);
+            } catch(_) { return []; }
+        }
 
-        // 1. Gemini escolhe a melhor loja e retorna preços
-        const promptIA = `Você é um especialista em compras no Brasil. Um cliente quer encontrar a melhor oferta de um produto.
+        // Cascata: termo completo → primeiras 2 palavras
+        let resultados = await buscarShopeeForm(produto);
+        if (!resultados.length) {
+            const termoCurto = produto.split(' ').slice(0, 2).join(' ');
+            if (termoCurto !== produto) resultados = await buscarShopeeForm(termoCurto);
+        }
 
-Produto: ${produto}${orcamento ? `\nOrçamento máximo: ${orcamento}` : ''}${detalhes ? `\nDetalhes: ${detalhes}` : ''}
-
-Responda APENAS com um JSON válido, sem texto antes ou depois, neste formato exato:
-{
-  "produto_nome": "nome completo do produto com modelo e especificações",
-  "preco_antigo": "R$ X.XXX,XX",
-  "preco_novo": "R$ X.XXX,XX",
-  "loja": "amazon"
-}
-
-Regras:
-- produto_nome: nome completo e específico do produto
-- preco_antigo: preço típico de tabela/lançamento no Brasil
-- preco_novo: melhor preço médio atual no mercado brasileiro
-- loja: escolha UMA entre: amazon, magalu, mercadolivre, shopee (a que normalmente tem o melhor preço para este tipo de produto)`;
-
-        const respostaRaw = await chamarGemini(promptIA, "Você é um assistente de compras brasileiro. Responda APENAS com JSON válido, sem texto adicional.");
-        const jsonMatch = respostaRaw.match(/\{[\s\S]*?\}/);
-        const dados = jsonMatch ? JSON.parse(jsonMatch[0]) : {};
-        const lojaEscolhida = dados.loja && linksAfiliado[dados.loja] ? dados.loja : "amazon";
-        const linkAfiliado = linksAfiliado[lojaEscolhida];
+        let dadosEmail;
+        if (resultados.length) {
+            const melhor = resultados[0];
+            dadosEmail = {
+                produto_nome: melhor.offerName || produto,
+                preco_antigo: melhor.price ? formatarMoeda(melhor.price) : "—",
+                preco_novo:   melhor.discountPrice ? formatarMoeda(melhor.discountPrice) : (melhor.price ? formatarMoeda(melhor.price) : "—"),
+                link_produto: melhor.offerLink
+            };
+        } else {
+            // Fallback: link de busca na Shopee (sem preço inventado)
+            dadosEmail = {
+                produto_nome: produto,
+                preco_antigo: "—",
+                preco_novo:   "—",
+                link_produto: `https://shopee.com.br/search?keyword=${encodeURIComponent(produto)}`
+            };
+        }
 
         // 2. Notifica o admin
         await emailjs.send("service_v94cf8p", "template_6l0zsew", {
             produto,
             orcamento: orcamento || "Não informado",
-            loja: lojaEscolhida,
-            detalhes: `Email: ${email}${whatsapp ? ` | WhatsApp: ${whatsapp}` : ''}\n${detalhes || "Sem detalhes adicionais"}`
+            loja: whatsapp ? `WhatsApp: ${whatsapp}` : "Não informado",
+            detalhes: `Email: ${email}\n${detalhes || "Sem detalhes adicionais"}`
         });
 
-        // 3. Envia email bonito para o usuário com link de afiliado embutido
+        // 3. Envia email com oferta real da Shopee (link com comissão de afiliado)
         await emailjs.send("service_v94cf8p", CONFIG.EMAILJS_TEMPLATE_RESPOSTA, {
             to_email: email,
-            produto_nome: dados.produto_nome || produto,
-            preco_antigo: dados.preco_antigo || "—",
-            preco_novo: dados.preco_novo || "—",
-            link_produto: linkAfiliado
+            produto_nome: dadosEmail.produto_nome,
+            preco_antigo: dadosEmail.preco_antigo,
+            preco_novo:   dadosEmail.preco_novo,
+            link_produto: dadosEmail.link_produto
         });
 
         // 4. Tela de agradecimento
@@ -2327,8 +2340,8 @@ Regras:
         <div class="form-success fade-up">
           <div class="form-success-icon">✓</div>
           <h3 style="font-family:'Plus Jakarta Sans','DM Sans',sans-serif;font-size:24px;font-weight:800;color:var(--text);margin-bottom:8px">Pronto, ${nome.split(' ')[0]}!</h3>
-          <p style="color:var(--text2);margin-bottom:8px">A nossa IA já buscou as melhores opções para <strong>${produto}</strong> e enviou tudo para <strong>${email}</strong>. Verifique a sua caixa de entrada (e a pasta spam).</p>
-          <p style="color:var(--text2);margin-bottom:24px">Enquanto isso, entre no nosso grupo e fique por dentro de todas as promoções em tempo real — todos os dias!</p>
+          <p style="color:var(--text2);margin-bottom:8px">Buscamos na Shopee e enviamos a melhor oferta de <strong>${produto}</strong> para <strong>${email}</strong>. Verifique a sua caixa de entrada (e a pasta spam).</p>
+          <p style="color:var(--text2);margin-bottom:24px">Entre no nosso grupo e fique por dentro de todas as promoções em tempo real — todos os dias!</p>
           <a href="${CONFIG.TELEGRAM}" target="_blank" class="btn-primary" style="text-decoration:none;display:inline-block;margin-bottom:12px">🔥 Entrar no Grupo de Ofertas</a>
           <br>
           <button onclick="document.getElementById('formBox').innerHTML=''" style="background:none;border:none;color:var(--text3);font-size:13px;cursor:pointer;margin-top:8px">Fazer outro pedido</button>
