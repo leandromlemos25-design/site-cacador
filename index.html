@@ -1606,10 +1606,10 @@ const CONFIG = {
     TIKTOK: "https://www.tiktok.com/@o.cacador.de.oferta",
     FACEBOOK: "https://www.facebook.com/share/18X4uDszrG/",
     TWITTER: "https://x.com/ocacadordeoferta",
-    REFRESH_INTERVAL: 2 * 60 * 60 * 1000, // Atualiza a cada 2 horas
+    REFRESH_INTERVAL: 24 * 60 * 60 * 1000, // Atualiza a cada 24 horas
     HORAS_NOVO: 24,
     DIAS_EXPIRACAO: 7, // Deleta ofertas do site após 1 semana
-    ITEMS_PER_PAGE: 12,
+    ITEMS_PER_PAGE: 20,
     EMAILJS_TEMPLATE_RESPOSTA: "template_ihnjh4j"
 };
 
@@ -1841,6 +1841,35 @@ function getSkeletonsHTML(qtd = 6) {
         </div>`).join("");
 }
 
+async function carregarOfertasMercadoLivre() {
+    try {
+        const response = await fetch('/api/mercadolivre');
+        if (!response.ok) throw new Error('Falha ao obter ofertas do Mercado Livre.');
+        const ofertas = await response.json();
+        if (ofertas && ofertas.length > 0) {
+            const maxId = todasOfertas.length > 0 ? Math.max(...todasOfertas.map(o => o.id)) : 0;
+            const novas = ofertas.map((oferta, index) => ({
+                id: maxId + index + 1,
+                loja: "mercadolivre",
+                titulo: oferta.offerName || "Oferta Mercado Livre",
+                precoAntigo: oferta.price || 0,
+                precoNovo: oferta.discountPrice || 0,
+                desconto: oferta.discountRate || 0,
+                link: oferta.offerLink || "#",
+                img: oferta.imageUrl || "🛒",
+                categoria: "Mercado Livre",
+                selo: "🔥 EXCLUSIVO",
+                ativo: true,
+                timestamp: Date.now()
+            }));
+            todasOfertas = [...todasOfertas, ...novas];
+            renderizarTudo();
+        }
+    } catch (err) {
+        console.warn("Aviso ML API Frontend:", err.message);
+    }
+}
+
 async function carregarOfertasShopee() {
     try {
         const response = await fetch('/api/shopee');
@@ -1977,14 +2006,15 @@ async function carregarOfertas(silencioso = false) {
         }
 
         todasOfertas = novas;
-        await carregarOfertasShopee();
-        
         ultimaAtualizacao = Date.now();
         salvarCache(todasOfertas);
 
     } catch (err) {
         console.warn("API Sheets erro:", err.message);
     }
+
+    // Shopee e ML carregam independente do resultado do Sheets
+    await Promise.all([carregarOfertasShopee(), carregarOfertasMercadoLivre()]);
 
     if (refreshBar) refreshBar.classList.remove("atualizando");
     document.getElementById("refreshStatus").textContent = "Atualizado agora";
@@ -2071,7 +2101,7 @@ function renderDestaques() {
     if (!grid || todasOfertas.length === 0) return;
     
     // Filtra quem tem a palavra DESTAQUE ou um super desconto
-    let destCandidatos = todasOfertas.filter(o => (o.selo && o.selo.includes("DESTAQUE")) || o.desconto >= 40);
+    let destCandidatos = todasOfertas.filter(o => (o.selo && o.selo.includes("DESTAQUE")) || o.desconto >= 10);
     
     // Força os itens manuais marcados como "DESTAQUE" a ficarem no topo absoluto da vitrine VIP
     destCandidatos.sort((a, b) => {
@@ -2081,7 +2111,7 @@ function renderDestaques() {
         return b.timestamp - a.timestamp;
     });
 
-    const dest = destCandidatos.slice(0, 4);
+    const dest = destCandidatos.slice(0, 20);
     grid.innerHTML = dest.length ? dest.map((o, i) => criarCardHTML(o, i)).join("") : `<div class="empty-state">Sem destaques no momento.</div>`;
     initLazyLoading();
 }
@@ -2144,7 +2174,9 @@ function renderSocial() {
 }
 
 function renderFormLojas() {
-    document.getElementById("formLojas").innerHTML = Object.keys(LOJAS).filter(k => k !== "todas").map(k => `<button class="form-loja-btn" onclick="window.toggleFormLoja(this,'${k}','${LOJAS[k].cor}')" aria-label="Selecionar loja ${LOJAS[k].nome}">${LOJAS[k].emoji} ${LOJAS[k].nome}</button>`).join("");
+    const el = document.getElementById("formLojas");
+    if (!el) return;
+    el.innerHTML = Object.keys(LOJAS).filter(k => k !== "todas").map(k => `<button class="form-loja-btn" onclick="window.toggleFormLoja(this,'${k}','${LOJAS[k].cor}')" aria-label="Selecionar loja ${LOJAS[k].nome}">${LOJAS[k].emoji} ${LOJAS[k].nome}</button>`).join("");
 }
 
 function atualizarStats() {
@@ -2598,11 +2630,20 @@ ${contextoOfertas}
             for (let i = 0; i < fila.length; i++) {
                 const termo = fila[i];
                 try {
-                    const res = await fetch('/api/shopee?q=' + encodeURIComponent(termo));
-                    if (!res.ok) continue;
-                    const raw = await res.json();
-                    if (!Array.isArray(raw)) continue;
-                    const filtrado = filtrarAntiAcessorios(raw, termo);
+                    const [resShopee, resML] = await Promise.allSettled([
+                        fetch('/api/shopee?q=' + encodeURIComponent(termo)),
+                        fetch('/api/mercadolivre?q=' + encodeURIComponent(termo))
+                    ]);
+                    let combinado = [];
+                    if (resShopee.status === 'fulfilled' && resShopee.value.ok) {
+                        const raw = await resShopee.value.json();
+                        if (Array.isArray(raw)) combinado.push(...raw);
+                    }
+                    if (resML.status === 'fulfilled' && resML.value.ok) {
+                        const raw = await resML.value.json();
+                        if (Array.isArray(raw)) combinado.push(...raw);
+                    }
+                    const filtrado = filtrarAntiAcessorios(combinado, termo);
                     if (filtrado.length > 0) return { ofertas: filtrado, termoUsado: termo, tentativa: i + 1 };
                 } catch(_) { /* tenta próximo */ }
             }
