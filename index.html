@@ -2281,24 +2281,23 @@ async function enviarPedido() {
     btn.innerHTML = '<span style="display:inline-flex;align-items:center;gap:8px"><span class="loader-spinner" style="width:16px;height:16px;border-width:2px"></span> Buscando na Shopee...</span>';
 
     try {
-        // 1. Busca real na Shopee via API de afiliado
-        async function buscarShopeeForm(termo, comFiltro = true) {
+        // 1. Busca real na Shopee via API de afiliado (filtro anti-acessórios sempre ativo)
+        async function buscarShopeeForm(termo) {
             try {
                 const res = await fetch('/api/shopee?q=' + encodeURIComponent(termo));
                 if (!res.ok) return [];
                 const raw = await res.json();
                 if (!Array.isArray(raw)) return [];
-                return comFiltro ? filtrarAntiAcessorios(raw, termo) : raw;
+                return filtrarAntiAcessorios(raw, termo);
             } catch(_) { return []; }
         }
 
-        // Cascata: termo completo (com filtro) → 2 palavras (com filtro) → sem filtro
+        // Cascata: termo completo → primeiras 2 palavras → Gemini fallback
         let resultados = await buscarShopeeForm(produto);
         if (!resultados.length) {
             const termoCurto = produto.split(' ').slice(0, 2).join(' ');
             if (termoCurto !== produto) resultados = await buscarShopeeForm(termoCurto);
         }
-        if (!resultados.length) resultados = await buscarShopeeForm(produto, false);
 
         let dadosEmail;
         if (resultados.length) {
