@@ -1586,7 +1586,8 @@ footer{
 <div id="comparadorBarra">
   <span style="font-size:13px;font-weight:700;color:var(--text);white-space:nowrap;">⚖️ Comparar:</span>
   <div id="comparadorBarraItens" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
-  <button id="comparadorBarraBtn" onclick="window.abrirComparador()" disabled>Comparar agora</button>
+  <button id="comparadorBarraBtn" onclick="window.abrirComparador()">Comparar agora</button>
+  <span id="comparadorHint" style="font-size:11px;color:var(--text3);white-space:nowrap;display:none">+ 1 produto</span>
   <button onclick="window.limparComparador()" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:18px;padding:0 4px;">✕</button>
 </div>
 
@@ -2993,11 +2994,14 @@ function _atualizarBarraComparar() {
     document.getElementById('comparadorBarraItens').innerHTML = comparacaoLista.map(o =>
         `<div class="comparar-item-chip"><span>${o.titulo.slice(0,22)}${o.titulo.length>22?'…':''}</span><button onclick="window.toggleComparar(${o.id})">✕</button></div>`
     ).join('');
-    document.getElementById('comparadorBarraBtn').disabled = comparacaoLista.length < 2;
+    const podeComparar = comparacaoLista.length >= 2;
+    document.getElementById('comparadorBarraBtn').disabled = !podeComparar;
+    const hint = document.getElementById('comparadorHint');
+    if (hint) hint.style.display = podeComparar ? 'none' : 'inline';
 }
 
 window.abrirComparador = function() {
-    if (comparacaoLista.length < 2) return;
+    if (comparacaoLista.length < 2) { mostrarToast('Adicione mais 1 produto para comparar ⚖️'); return; }
     const corpo = document.getElementById('comparadorCorpo');
     const precos = comparacaoLista.map(o => o.precoNovo).filter(p => p > 0);
     const melhorPreco = Math.min(...precos);
