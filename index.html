@@ -825,6 +825,43 @@ nav#navbar{
 #comparadorBarraBtn:disabled{opacity:.4;cursor:not-allowed;}
 
 /* ══ MODAL COMPARADOR ══ */
+/* ══ MODAL TERMOS / PRIVACIDADE ══ */
+#modalTermos,#modalPrivacidade{
+  position:fixed;inset:0;background:rgba(0,0,0,.75);
+  z-index:1200;display:none;align-items:center;justify-content:center;padding:16px;
+  backdrop-filter:blur(4px);
+}
+#modalTermos.open,#modalPrivacidade.open{display:flex}
+.legal-modal-content{
+  background:var(--surface);border:1px solid var(--border2);
+  border-radius:20px;width:100%;max-width:680px;
+  max-height:85vh;overflow-y:auto;padding:32px;
+  position:relative;
+  scrollbar-width:thin;scrollbar-color:var(--border2) transparent;
+}
+.legal-modal-content h2{
+  font-family:'Syne',sans-serif;font-size:24px;font-weight:800;
+  letter-spacing:-0.5px;margin-bottom:6px;color:var(--text);
+}
+.legal-modal-meta{font-size:12px;color:var(--text3);margin-bottom:24px}
+.legal-modal-content h3{
+  font-size:14px;font-weight:700;color:var(--text);
+  margin:20px 0 8px;text-transform:uppercase;letter-spacing:0.5px;
+}
+.legal-modal-content p,.legal-modal-content li{
+  font-size:14px;color:var(--text2);line-height:1.7;
+}
+.legal-modal-content ul{padding-left:18px;margin-bottom:8px}
+.legal-modal-close{
+  position:absolute;top:16px;right:16px;
+  width:32px;height:32px;border-radius:50%;
+  background:var(--surface2);color:var(--text2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;cursor:pointer;border:1px solid var(--border);
+  transition:all .15s;
+}
+.legal-modal-close:hover{background:var(--surface3);color:var(--text)}
+
 #comparadorModal{
   position:fixed;inset:0;background:rgba(0,0,0,.7);
   z-index:1100;display:none;align-items:center;justify-content:center;padding:16px;
@@ -1595,8 +1632,8 @@ footer{
       <h4>Suporte</h4>
       <a href="https://t.me/ocacadordeoferta" target="_blank">Telegram</a>
       <a href="https://www.instagram.com/ocacadorde_ofertas" target="_blank">Instagram</a>
-      <a>Termos de Uso</a>
-      <a>Política de Privacidade</a>
+      <a href="#" onclick="window.abrirModalTermos();return false">Termos de Uso</a>
+      <a href="#" onclick="window.abrirModalPrivacidade();return false">Política de Privacidade</a>
     </div>
   </div>
 
@@ -1658,6 +1695,74 @@ footer{
 </div>
 
 <!-- ═══ MODAL ALERTA DE PREÇO ═══ -->
+<!-- ═══ MODAL TERMOS DE USO ═══ -->
+<div id="modalTermos" onclick="if(event.target===this)window.fecharModalTermos()">
+  <div class="legal-modal-content">
+    <button class="legal-modal-close" onclick="window.fecharModalTermos()">✕</button>
+    <h2>Termos de Uso</h2>
+    <p class="legal-modal-meta">Última atualização: março de 2025</p>
+
+    <h3>1. Sobre o site</h3>
+    <p>O Caçador de Ofertas é um agregador de promoções e links de afiliados. Ao acessar este site, você concorda com os termos abaixo.</p>
+
+    <h3>2. Links de Afiliados</h3>
+    <p>As ofertas exibidas contêm links de programas de afiliados (Amazon, Shopee, Magalu, Mercado Livre). Ao comprar por esses links, recebemos uma comissão sem custo adicional para você. Isso nos permite manter o serviço gratuito.</p>
+
+    <h3>3. Preços e Disponibilidade</h3>
+    <p>Os preços e a disponibilidade dos produtos são fornecidos pelas lojas parceiras e podem mudar a qualquer momento. Não nos responsabilizamos por divergências de preço no momento da compra.</p>
+
+    <h3>4. Uso do Serviço</h3>
+    <ul>
+      <li>É proibido reproduzir ou redistribuir o conteúdo deste site sem autorização.</li>
+      <li>O uso de robôs ou scrapers para coletar dados é proibido.</li>
+      <li>O site é fornecido "como está", sem garantias de disponibilidade contínua.</li>
+    </ul>
+
+    <h3>5. Limitação de Responsabilidade</h3>
+    <p>Não somos responsáveis por problemas ocorridos nas lojas parceiras, como atrasos na entrega, produtos com defeito ou divergências de informação. Toda transação é realizada diretamente entre você e a loja.</p>
+
+    <h3>6. Alterações</h3>
+    <p>Estes termos podem ser atualizados a qualquer momento. O uso continuado do site implica aceitação das novas condições.</p>
+
+    <h3>7. Contato</h3>
+    <p>Dúvidas? Entre em contato pelo nosso <a href="https://t.me/ocacadordeoferta" target="_blank" style="color:var(--accent)">Telegram</a> ou <a href="https://www.instagram.com/ocacadorde_ofertas" target="_blank" style="color:var(--accent)">Instagram</a>.</p>
+  </div>
+</div>
+
+<!-- ═══ MODAL POLÍTICA DE PRIVACIDADE ═══ -->
+<div id="modalPrivacidade" onclick="if(event.target===this)window.fecharModalPrivacidade()">
+  <div class="legal-modal-content">
+    <button class="legal-modal-close" onclick="window.fecharModalPrivacidade()">✕</button>
+    <h2>Política de Privacidade</h2>
+    <p class="legal-modal-meta">Última atualização: março de 2025</p>
+
+    <h3>1. Dados Coletados</h3>
+    <p>Coletamos apenas os dados que você nos fornece voluntariamente, como nome, e-mail e WhatsApp ao preencher o formulário "Pedir Oferta". Não coletamos dados sem seu consentimento.</p>
+
+    <h3>2. Uso dos Dados</h3>
+    <ul>
+      <li>Envio da oferta solicitada por e-mail.</li>
+      <li>Comunicações sobre promoções, mediante consentimento.</li>
+      <li>Não vendemos nem compartilhamos seus dados com terceiros para fins comerciais.</li>
+    </ul>
+
+    <h3>3. Cookies</h3>
+    <p>Utilizamos cookies técnicos essenciais para o funcionamento do site (preferências de tema, favoritos locais). Não utilizamos cookies de rastreamento de terceiros.</p>
+
+    <h3>4. Favoritos</h3>
+    <p>Os produtos salvos como favoritos ficam armazenados apenas no seu navegador (localStorage), sem envio para nossos servidores.</p>
+
+    <h3>5. Segurança</h3>
+    <p>Os dados transmitidos pelo formulário são enviados via EmailJS com criptografia TLS. Adotamos boas práticas de segurança para proteger suas informações.</p>
+
+    <h3>6. Seus Direitos (LGPD)</h3>
+    <p>Conforme a Lei Geral de Proteção de Dados (Lei 13.709/2018), você pode solicitar a exclusão ou correção dos seus dados a qualquer momento pelo nosso <a href="https://t.me/ocacadordeoferta" target="_blank" style="color:var(--accent)">Telegram</a>.</p>
+
+    <h3>7. Contato</h3>
+    <p>Para questões relacionadas à privacidade, entre em contato pelo <a href="https://t.me/ocacadordeoferta" target="_blank" style="color:var(--accent)">Telegram</a> ou <a href="https://www.instagram.com/ocacadorde_ofertas" target="_blank" style="color:var(--accent)">Instagram</a>.</p>
+  </div>
+</div>
+
 <div id="alertaModal" onclick="if(event.target===this)window.fecharAlertaModal()">
   <div class="alerta-modal-content">
     <button onclick="window.fecharAlertaModal()" style="position:absolute;top:16px;right:16px;background:none;border:none;color:var(--text);font-size:20px;cursor:pointer;">✕</button>
@@ -3093,6 +3198,11 @@ window.abrirComparador = function() {
     document.getElementById('comparadorModal').style.display = 'flex';
 };
 window.fecharComparador = () => document.getElementById('comparadorModal').style.display = 'none';
+
+window.abrirModalTermos = () => document.getElementById('modalTermos').classList.add('open');
+window.fecharModalTermos = () => document.getElementById('modalTermos').classList.remove('open');
+window.abrirModalPrivacidade = () => document.getElementById('modalPrivacidade').classList.add('open');
+window.fecharModalPrivacidade = () => document.getElementById('modalPrivacidade').classList.remove('open');
 
 // ==========================================
 // FEATURE 2: ALERTAS DE PREÇO
