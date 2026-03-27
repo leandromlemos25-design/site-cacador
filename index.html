@@ -12,10 +12,10 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
-<meta name="theme-color" content="#09101a" id="themeColor">
+<meta name="theme-color" content="#0b1120" id="themeColor">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎯</text></svg>">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>emailjs.init("48K0LO6SE17R-n6zv");</script>
 
@@ -59,31 +59,41 @@ a{text-decoration:none;color:inherit}
 button{cursor:pointer;border:none;background:none;font-family:inherit;outline:none;}
 img, video{max-width:100%;display:block}
 
-/* ══ TOKENS (PALETA ATUALIZADA COM AS CORES DA LOGO) ══ */
+/* ══ TOKENS (PALETA PROFISSIONAL E-COMMERCE) ══ */
 :root{
-  /* Modo Escuro: Tons de Azul Marinho Profundo */
-  --bg: #09101a;
-  --bg2: #0f1724;
-  --surface: #131d2c;
-  --surface2: #1a2639;
-  --surface3: #22324a;
-  --border: #2a3b55;
-  --border2: #3b5275;
-  --text: #f0f4f8;
-  --text2: #a2b3c7;
-  --text3: #758ca6;
-  
+  /* Modo Escuro: Premium Dark — Inspirado em grandes lojas */
+  --bg: #0b1120;
+  --bg2: #111827;
+  --surface: #1e293b;
+  --surface2: #253348;
+  --surface3: #2d3f5a;
+  --border: #334155;
+  --border2: #475569;
+  --text: #f1f5f9;
+  --text2: #94a3b8;
+  --text3: #64748b;
+
   /* Cores da Marca */
-  --accent: #ff7a00; /* Laranja da Logo */
-  --accent2: #ffa040;
-  --accent-glow: rgba(255, 122, 0, 0.35);
-  --brand-blue: #1e60b3; /* Azul ajustado para ter brilho no modo escuro */
-  
-  --gold: #f5c518;
+  --accent: #ff7a00;
+  --accent2: #ff9933;
+  --accent-glow: rgba(255, 122, 0, 0.18);
+  --accent-soft: rgba(255, 122, 0, 0.08);
+  --brand-blue: #2563eb;
+
+  --gold: #fbbf24;
   --green: #22c55e;
-  --shadow: rgba(0,0,0,0.5);
-  --card-bg: #131d2c;
-  --navbar-bg: rgba(9, 16, 26, 0.92);
+  --red: #ef4444;
+  --shadow: rgba(0,0,0,0.35);
+  --shadow-lg: rgba(0,0,0,0.5);
+  --card-bg: #1e293b;
+  --navbar-bg: rgba(11, 17, 32, 0.95);
+
+  /* Tokens de layout */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --max-width: 1320px;
 }
 [data-theme="light"]{
   /* Modo Claro */
@@ -105,99 +115,69 @@ img, video{max-width:100%;display:block}
   --brand-blue: #103b70; /* Azul escuro original da Logo no modo claro */
   
   --shadow: rgba(0,0,0,0.08);
+  --shadow-lg: rgba(0,0,0,0.15);
   --card-bg: #ffffff;
-  --navbar-bg: rgba(244, 247, 251, 0.94);
+  --navbar-bg: rgba(244, 247, 251, 0.95);
+  --accent-soft: rgba(255, 122, 0, 0.06);
+  --red: #dc2626;
 }
 
-.syne{font-family:'Syne',sans-serif}
+.syne{font-family:'Plus Jakarta Sans','DM Sans',sans-serif;font-weight:800}
 
-/* ══ ESTILOS DA NOVA LOGO EM CSS/SVG ══ */
-.custom-logo-container {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-  transition: transform 0.2s;
+/* ══ NAVBAR LOGO ══ */
+.nav-logo{
+  display:inline-flex;align-items:center;
+  text-decoration:none;transition:opacity .2s;flex-shrink:0;
 }
-.custom-logo-container:hover {
-  transform: scale(1.02);
+.nav-logo:hover{opacity:0.85}
+.nav-logo img{
+  height:52px;width:auto;display:block;
+  filter:drop-shadow(0 1px 4px rgba(0,0,0,0.3));
 }
-.custom-logo-svg {
-  width: 44px;
-  height: 44px;
-  flex-shrink: 0;
-  filter: drop-shadow(0 2px 8px var(--accent-glow));
-}
-.custom-logo-text {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-.custom-logo-text-top {
-  font-family: 'Syne', sans-serif;
-  font-size: 19px;
-  font-weight: 800;
-  line-height: 1;
-  color: var(--text);
-  letter-spacing: -0.5px;
-}
-.custom-logo-text-bottom {
-  font-family: 'Syne', sans-serif;
-  font-size: 13px;
-  font-weight: 800;
-  line-height: 1;
-  color: var(--accent);
-  font-style: italic;
-  letter-spacing: 0.5px;
-  margin-top: 3px;
-}
-
-/* ══ NAVBAR ══ */
-#navbar{
-  position:fixed;top:0;left:0;right:0;z-index:2000;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 32px;height:70px;
-  background:var(--navbar-bg);
-  backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--border);
   transition:all .3s;
 }
-#navbar.scrolled{box-shadow:0 4px 40px rgba(0,0,0,.4)}
+#navbar.scrolled{box-shadow:0 2px 24px rgba(0,0,0,.3)}
 .nav-links{display:flex;align-items:center;gap:4px}
 .nav-btn{
-  padding:8px 16px;border-radius:8px;
-  font-size:14px;font-weight:500;color:var(--text2);
-  transition:all .2s;position:relative;
+  padding:6px 14px;border-radius:100px;
+  font-size:13px;font-weight:500;color:var(--text2);
+  transition:all .15s;position:relative;
 }
 .nav-btn:hover,.nav-btn.active{color:var(--text);background:var(--surface2)}
-.nav-btn.active::after{
-  content:'';position:absolute;bottom:4px;left:50%;transform:translateX(-50%);
-  width:16px;height:2px;border-radius:2px;background:var(--accent);
+.nav-btn.active::after{display:none}
+/* Barra de pesquisa na navbar (estilo Americanas/Magalu) */
+.nav-search{flex:1;max-width:520px;margin:0 24px;position:relative}
+.nav-search input{
+  width:100%;padding:10px 16px 10px 42px;border-radius:100px;
+  border:2px solid var(--border);background:var(--surface);
+  color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;
+  outline:none;transition:border-color .2s,background .2s;
 }
+.nav-search input:focus{border-color:var(--accent);background:var(--surface2)}
+.nav-search input::placeholder{color:var(--text3)}
+.nav-search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text3);pointer-events:none}
 .nav-actions{display:flex;align-items:center;gap:8px}
 .nav-cta{
   display:flex;align-items:center;gap:8px;
-  padding:9px 18px;border-radius:9px;
+  padding:8px 16px;border-radius:100px;
   background:var(--accent);color:#fff;
-  font-size:13px;font-weight:700;
-  box-shadow:0 0 20px var(--accent-glow);
-  transition:all .2s;
+  font-size:13px;font-weight:600;
+  transition:background .15s;
 }
-.nav-cta:hover{transform:translateY(-1px);box-shadow:0 4px 25px var(--accent-glow)}
+.nav-cta:hover{background:var(--accent2)}
 .nav-theme{
-  width:38px;height:38px;border-radius:9px;
+  width:36px;height:36px;border-radius:var(--radius-sm);
   display:flex;align-items:center;justify-content:center;
   background:var(--surface2);color:var(--text2);
-  font-size:16px;transition:all .2s;border:1px solid var(--border);
+  font-size:16px;transition:all .15s;border:1px solid var(--border);
 }
 .nav-theme:hover{background:var(--surface3)}
-.nav-mobile-btn{display:none;width:38px;height:38px;border-radius:9px;background:var(--surface2);align-items:center;justify-content:center;flex-direction:column;gap:5px;border:1px solid var(--border)}
+.nav-mobile-btn{display:none;width:36px;height:36px;border-radius:var(--radius-sm);background:var(--surface2);align-items:center;justify-content:center;flex-direction:column;gap:5px;border:1px solid var(--border)}
 .nav-mobile-btn span{display:block;width:18px;height:2px;background:var(--text);border-radius:2px;transition:.3s}
 
 /* ══ MOBILE MENU ══ */
 #mobileMenu{
-  display:none;position:fixed;top:70px;left:0;right:0;z-index:999;
+  display:none;position:fixed;top:64px;left:0;right:0;z-index:999;
   background:var(--bg2);border-bottom:1px solid var(--border);
   padding:16px;flex-direction:column;gap:4px;
 }
@@ -205,94 +185,205 @@ img, video{max-width:100%;display:block}
 #mobileMenu .nav-btn{font-size:16px;padding:12px 16px;width:100%;text-align:left}
 
 /* ══ PAGES ══ */
-.page{display:none;padding-top:70px}
+.page{display:none;padding-top:64px}
 .page.active{display:block}
 
-/* ══ HERO ══ */
+/* ══ HERO PROMO BANNER ══ */
 #hero{
-  min-height:calc(100vh - 70px);
-  display:grid;grid-template-columns:1fr 1fr;
-  align-items:center;gap:60px;
-  padding:80px 80px 80px;
-  position:relative;
-  overflow:hidden;
-  max-width: 100vw;
-  background:linear-gradient(135deg, var(--bg) 0%, var(--surface) 50%, var(--bg) 100%);
+  width:100%;
+  padding-top:64px;
+  background:linear-gradient(135deg,#c93a00 0%,#ff6200 35%,#ff8c00 70%,#ffaa00 100%);
+  position:relative;overflow:hidden;
+  display:block;
 }
 #hero::before{
   content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse 60% 70% at 75% 50%, var(--accent-glow) 0%, transparent 70%);
-  pointer-events:none;
+  background:url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='30' cy='30' r='1.5' fill='white' opacity='.12'/%3E%3C/svg%3E") repeat;
+  pointer-events:none;z-index:0;
 }
-#hero::after{
-  content:'';position:absolute;
-  top:-200px;right:-200px;
-  width:600px;height:600px;
-  background:radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
-  border-radius:50%;
-  animation:float 8s ease-in-out infinite;
-  pointer-events:none;
-  z-index:0;
+#hero::after{display:none}
+.hero-banner-inner{
+  max-width:var(--max-width);
+  margin:0 auto;
+  padding:52px 32px 48px;
+  display:flex;align-items:center;
+  justify-content:space-between;
+  gap:32px;
+  position:relative;z-index:1;
 }
-@keyframes float{0%,100%{transform:translateY(0)} 50%{transform:translateY(-20px)}}
-
-.hero-badge{
-  display:inline-flex;align-items:center;gap:8px;
-  padding:6px 14px;border-radius:100px;
-  background:rgba(255,122,0,0.1);
-  border:1px solid rgba(255,122,0,0.3);
-  color:var(--accent2);font-size:12px;font-weight:600;
-  letter-spacing:0.5px;text-transform:uppercase;
-  margin-bottom:24px;
+.hero-left-col{flex:1;min-width:0}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(0,0,0,0.2);
+  border:1px solid rgba(255,255,255,0.25);
+  border-radius:100px;
+  padding:4px 14px;
+  font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  color:#fff;margin-bottom:16px;
 }
-.hero-badge::before{content:'●';font-size:8px;animation:blink 1.5s infinite}
-@keyframes blink{0%,100%{opacity:1} 50%{opacity:0.3}}
-
-.hero-title{
-  font-family:'Syne',sans-serif;
-  font-size:clamp(42px,5vw,68px);
+.hero-tag::before{content:'●';font-size:8px;animation:blink 1.5s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.hero-main-title{
+  font-family:'Plus Jakarta Sans','DM Sans',sans-serif;
+  font-size:clamp(40px,6vw,80px);
   font-weight:800;line-height:1.05;
-  letter-spacing:-2px;
-  margin-bottom:20px;
+  letter-spacing:-2px;color:#fff;
+  margin-bottom:12px;
+  text-shadow:0 2px 20px rgba(0,0,0,0.25);
 }
-.hero-title .accent{
-  color:var(--accent);
-  display:inline-block;
-  position:relative;
+.hero-main-title span{display:block;font-size:clamp(18px,2.5vw,28px);font-weight:500;letter-spacing:0;opacity:0.9}
+.hero-main-sub{
+  font-size:15px;color:rgba(255,255,255,0.88);
+  line-height:1.6;margin-bottom:28px;max-width:480px;
 }
-.hero-title .accent::after{
-  content:'';position:absolute;
-  bottom:-4px;left:0;right:0;height:3px;
-  background:var(--accent);border-radius:2px;
-  opacity:0.4;
+.hero-banner-btns{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:36px}
+.hero-btn-solid{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:13px 24px;border-radius:100px;
+  background:#fff;color:#c93a00;
+  font-weight:800;font-size:14px;
+  box-shadow:0 4px 18px rgba(0,0,0,0.2);
+  transition:transform .15s,box-shadow .15s;
+  white-space:nowrap;
 }
-.hero-sub{
-  font-size:17px;color:var(--text2);line-height:1.65;
-  max-width:480px;margin-bottom:36px;
+.hero-btn-solid:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.25)}
+.hero-btn-outline{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:13px 24px;border-radius:100px;
+  background:rgba(0,0,0,0.2);color:#fff;
+  border:2px solid rgba(255,255,255,0.5);
+  font-weight:700;font-size:14px;
+  transition:all .15s;white-space:nowrap;
 }
-.hero-btns{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:48px; position:relative; z-index: 10;}
-.btn-primary{
-  display:inline-flex;align-items:center;gap:10px;
-  padding:14px 28px;border-radius:12px;
+.hero-btn-outline:hover{background:rgba(0,0,0,0.35);border-color:#fff}
+.hero-banner-stats{display:flex;gap:28px;flex-wrap:wrap}
+.hero-banner-stat{text-align:left}
+.hero-banner-stat-val{font-family:'Plus Jakarta Sans','DM Sans',sans-serif;font-size:22px;font-weight:800;color:#fff;line-height:1}
+.hero-banner-stat-lbl{font-size:11px;color:rgba(255,255,255,0.75);margin-top:3px;font-weight:500;text-transform:uppercase;letter-spacing:0.5px}
+.hero-right-col{
+  display:flex;flex-direction:column;align-items:flex-end;gap:12px;
+  flex-shrink:0;
+}
+.hero-offer-card{
+  background:rgba(255,255,255,0.12);
+  backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,0.25);
+  border-radius:16px;padding:16px 20px;
+  width:240px;
+  animation:heroCardFloat 4s ease-in-out infinite;
+}
+.hero-offer-card:nth-child(2){animation-delay:2s;width:220px}
+@keyframes heroCardFloat{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-8px)}
+}
+.hero-card-badge{
+  font-size:10px;font-weight:800;letter-spacing:0.5px;text-transform:uppercase;
+  color:#fff;background:rgba(0,0,0,0.25);
+  border-radius:4px;padding:3px 8px;display:inline-block;margin-bottom:8px;
+}
+.hero-card-name{font-size:13px;font-weight:700;color:#fff;line-height:1.3;margin-bottom:6px}
+.hero-card-price{font-size:20px;font-weight:800;color:#fff;font-family:'Plus Jakarta Sans','DM Sans',sans-serif}
+.hero-card-old{font-size:12px;color:rgba(255,255,255,0.65);text-decoration:line-through}
+
+/* ══ CATEGORY NAV ══ */
+.category-nav{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:20px 24px;
+}
+.category-nav-inner{
+  max-width:var(--max-width);margin:0 auto;
+  display:flex;gap:8px;overflow-x:auto;
+  scrollbar-width:none;justify-content:center;flex-wrap:wrap;
+}
+.category-nav-inner::-webkit-scrollbar{display:none}
+.cat-btn{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  padding:12px 16px;border-radius:var(--radius-md);
+  background:var(--surface2);border:1px solid var(--border);
+  color:var(--text2);font-size:11px;font-weight:600;
+  min-width:72px;flex-shrink:0;
+  transition:all .15s;cursor:pointer;
+  text-transform:uppercase;letter-spacing:0.3px;
+}
+.cat-btn:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+.cat-btn-icon{font-size:24px;line-height:1}
+.cat-btn.active{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+
+/* ══ FLASH SALE HEADER ══ */
+.flash-sale-header{
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:12px;
+  margin-bottom:24px;
+  padding:16px 20px;
+  background:linear-gradient(135deg,#1a0a00 0%,#2d1200 100%);
+  border-radius:var(--radius-lg);
+  border:1px solid rgba(255,122,0,0.3);
+}
+[data-theme="light"] .flash-sale-header{
+  background:linear-gradient(135deg,#fff3eb 0%,#ffe0c8 100%);
+  border-color:rgba(255,122,0,0.4);
+}
+.flash-title{
+  display:flex;align-items:center;gap:12px;
+}
+.flash-title h2{
+  font-family:'Plus Jakarta Sans','DM Sans',sans-serif;
+  font-size:20px;font-weight:800;color:#fff;
+  letter-spacing:-0.3px;
+}
+[data-theme="light"] .flash-title h2{color:#c93a00}
+.flash-live{
+  display:flex;align-items:center;gap:6px;
+  background:var(--red);border-radius:100px;
+  padding:3px 10px;font-size:11px;font-weight:800;color:#fff;
+  letter-spacing:0.5px;
+}
+.flash-live::before{content:'●';font-size:7px;animation:blink 1s infinite}
+.flash-countdown{display:flex;align-items:center;gap:8px}
+.countdown-label{font-size:12px;color:rgba(255,255,255,0.6);font-weight:500}
+[data-theme="light"] .countdown-label{color:#8b5000}
+.countdown-timer{display:flex;align-items:center;gap:4px}
+.countdown-seg{
   background:var(--accent);color:#fff;
-  font-weight:700;font-size:15px;
-  box-shadow:0 0 30px var(--accent-glow);
-  transition:all .25s;
+  font-family:'Plus Jakarta Sans','DM Sans',sans-serif;
+  font-size:16px;font-weight:800;
+  padding:4px 8px;border-radius:6px;
+  min-width:34px;text-align:center;
+  line-height:1;
 }
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 40px var(--accent-glow)}
+.countdown-sep{color:var(--accent);font-weight:800;font-size:16px}
+
+.hero-badge{display:none}
+.hero-text-side{display:none}
+.hero-mascot-side{display:none}
+.hero-features-side{display:none}
+.teteco-particles{display:none}
+.hero-bg-logo{display:none}
+.hero-btns{display:none}
+.hero-stats{display:none}
+.btn-primary{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:12px 24px;border-radius:100px;
+  background:var(--accent);color:#fff;
+  font-weight:700;font-size:14px;
+  transition:background .15s;
+}
+.btn-primary:hover{background:var(--accent2)}
 .btn-ghost{
-  display:inline-flex;align-items:center;gap:10px;
-  padding:14px 28px;border-radius:12px;
+  display:inline-flex;align-items:center;gap:8px;
+  padding:12px 24px;border-radius:100px;
   background:var(--surface2);color:var(--text);
   font-weight:600;font-size:15px;
   border:1px solid var(--border2);
   transition:all .25s;
 }
 .btn-ghost:hover{background:var(--surface3);border-color:var(--border2)}
-.hero-stats{display:flex;gap:32px}
-.hero-stat{text-align:left}
-.hero-stat-val{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--accent)}
-.hero-stat-label{font-size:12px;color:var(--text3);margin-top:2px;font-weight:500}
+.hero-stats{display:flex;gap:40px;justify-content:center;padding-top:32px;border-top:1px solid var(--border)}
+.hero-stat{text-align:center}
+.hero-stat-val{font-family:'Plus Jakarta Sans','DM Sans',sans-serif;font-size:24px;font-weight:800;color:var(--accent)}
+.hero-stat-label{font-size:12px;color:var(--text3);margin-top:4px;font-weight:500}
 
 /* ══ HERO VISUAL: MOCKUP DE CELULAR (Clean & Premium) ══ */
 .hero-mascot-side{
@@ -442,22 +533,56 @@ img, video{max-width:100%;display:block}
   66%{transform:translateY(6px) rotate(-8deg);opacity:0.8}
 }
 
+/* ══ HERO FEATURES COLUMN ══ */
+.hero-features-side{
+  display:flex;flex-direction:column;gap:14px;
+  min-width:240px;max-width:260px;
+}
+.hero-feature-card{
+  display:flex;align-items:flex-start;gap:14px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius-md);
+  padding:14px 16px;
+  transition:border-color .2s;
+}
+.hero-feature-card:hover{border-color:var(--accent);}
+.hero-feature-icon{
+  font-size:22px;flex-shrink:0;
+  width:42px;height:42px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--accent-soft);
+  border-radius:var(--radius-sm);
+}
+.hero-feature-card strong{
+  display:block;font-size:.9rem;
+  color:var(--text);font-weight:700;
+  margin-bottom:3px;
+}
+.hero-feature-card span{
+  font-size:.78rem;color:var(--text3);
+  line-height:1.4;
+}
+
 /* ══ SEÇÕES ══ */
-.section{padding:80px 80px}
+.section{padding:64px 24px;max-width:var(--max-width);margin:0 auto}
 .section-alt{background:var(--bg2)}
 .section-label{
   display:inline-block;
-  font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
-  color:var(--accent);margin-bottom:12px;
+  font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  color:var(--accent);margin-bottom:8px;
 }
 .section-title{
-  font-family:'Syne',sans-serif;
-  font-size:clamp(28px,3.5vw,42px);font-weight:800;
-  letter-spacing:-1px;margin-bottom:8px;
-  line-height:1.1;
+  font-family:'Plus Jakarta Sans','DM Sans',sans-serif;
+  font-size:clamp(24px,3vw,36px);font-weight:800;
+  letter-spacing:-0.5px;margin-bottom:8px;
+  line-height:1.15;
 }
-.section-sub{color:var(--text2);font-size:16px;margin-bottom:40px;max-width:560px}
-.section-header{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:20px;margin-bottom:36px}
+.section-sub{color:var(--text2);font-size:15px;margin-bottom:36px;max-width:560px}
+.section-header{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px;margin-bottom:28px}
+/* Trust bar */
+.trust-bar{display:flex;align-items:center;justify-content:center;gap:28px;padding:18px 24px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:40px}
+.trust-item{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--text2)}
 
 /* ══ REFRESH BAR ══ */
 .refresh-bar{
@@ -493,21 +618,21 @@ img, video{max-width:100%;display:block}
 .lojas-scroll::-webkit-scrollbar{display:none}
 .loja-btn{
   flex-shrink:0;display:flex;align-items:center;gap:6px;
-  padding:7px 14px;border-radius:8px;
-  background:var(--surface2);border:1px solid var(--border2);
-  color:var(--text2);font-size:13px;font-weight:500;
-  transition:all .2s;white-space:nowrap;
+  padding:6px 12px;border-radius:100px;
+  background:var(--surface2);border:1px solid var(--border);
+  color:var(--text2);font-size:12px;font-weight:500;
+  transition:all .15s;white-space:nowrap;
 }
 .loja-btn:hover{background:var(--surface3)}
-.loja-btn.active{font-weight:700}
+.loja-btn.active{font-weight:700;border-color:var(--accent);color:var(--text)}
 
 /* Ordenação */
 .ord-wrap{display:flex;align-items:center;gap:8px;margin-top:14px;flex-wrap:wrap}
 .ord-label{font-size:12px;color:var(--text3);font-weight:500}
 .ord-btn{
-  padding:5px 12px;border-radius:7px;font-size:12px;font-weight:600;
+  padding:5px 12px;border-radius:100px;font-size:12px;font-weight:600;
   background:var(--surface2);border:1px solid var(--border);
-  color:var(--text3);transition:all .2s;
+  color:var(--text3);transition:all .15s;
 }
 .ord-btn.active{background:var(--surface3);color:var(--text);border-color:var(--accent)}
 .contagem-wrap{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
@@ -516,33 +641,36 @@ img, video{max-width:100%;display:block}
 /* ══ CARDS OFERTA ══ */
 .ofertas-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
-  gap:20px;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:16px;
 }
 .oferta-card{
   background:var(--card-bg);border:1px solid var(--border);
-  border-radius:18px;overflow:hidden;
+  border-radius:var(--radius-lg);overflow:hidden;
   display:flex;flex-direction:column;
-  position:relative;transition:all .3s;
+  position:relative;transition:border-color .2s,box-shadow .2s;
 }
 .oferta-card:hover{
-  transform:translateY(-4px);
-  border-color:var(--border2);
-  box-shadow:0 12px 40px var(--shadow);
+  border-color:var(--accent);
+  box-shadow:0 4px 20px rgba(255,122,0,0.1);
 }
 .oferta-img{
   height:180px;display:flex;align-items:center;justify-content:center;
   position:relative;overflow:hidden;
-  border-bottom:1px solid var(--border);
+  background:#f8fafc;
 }
+[data-theme="light"] .oferta-img{background:#f1f5f9}
 .oferta-img img{
-  max-height:140px;max-width:140px;
+  max-height:140px;max-width:85%;
   object-fit:contain;opacity:0;transition:opacity .3s;
+  mix-blend-mode:multiply;
 }
 .oferta-loja-badge{
   position:absolute;bottom:8px;left:8px;
-  padding:3px 10px;border-radius:6px;
-  font-size:11px;font-weight:700;
+  padding:3px 8px;border-radius:4px;
+  font-size:10px;font-weight:700;
+  background:rgba(255,255,255,0.92);color:#333;
+  backdrop-filter:blur(4px);
   z-index:10;
 }
 .badges-top-left {
@@ -551,71 +679,74 @@ img, video{max-width:100%;display:block}
   max-width:70%;
 }
 .oferta-desconto{
-  padding:4px 10px;border-radius:8px;
-  font-size:12px;font-weight:800;color:#fff;
+  padding:3px 8px;border-radius:4px;
+  font-size:11px;font-weight:800;color:#fff;
+  background:var(--red);
 }
 .oferta-selo{
-  padding:4px 10px;border-radius:8px;
+  padding:3px 8px;border-radius:4px;
   font-size:11px;font-weight:700;
 }
 .badge-novo{
   position:absolute;top:10px;right:44px;
-  padding:3px 8px;border-radius:6px;
+  padding:3px 8px;border-radius:4px;
   background:var(--green);color:#fff;
   font-size:10px;font-weight:800;letter-spacing:0.5px;
   z-index:10;
 }
 .btn-favorito{
   position:absolute;top:8px;right:8px;z-index:10;
-  width:32px;height:32px;border-radius:8px;
-  background:var(--surface);border:1px solid var(--border);
+  width:32px;height:32px;border-radius:var(--radius-sm);
+  background:rgba(255,255,255,0.9);border:1px solid rgba(0,0,0,0.1);
   display:flex;align-items:center;justify-content:center;
-  font-size:14px;transition:all .2s;
+  font-size:14px;transition:all .15s;
 }
 .btn-favorito:hover,.btn-favorito.ativo{background:rgba(255,122,0,0.1);border-color:var(--accent)}
 .oferta-body{
-  padding:14px;display:flex;flex-direction:column;gap:6px;flex:1;
+  padding:14px 16px 16px;display:flex;flex-direction:column;gap:4px;flex:1;
 }
 .oferta-cat{font-size:10px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:0.5px}
 .oferta-titulo{
-  font-size:13px;font-weight:600;line-height:1.45;color:var(--text);
+  font-size:13px;font-weight:500;line-height:1.4;color:var(--text);
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
   overflow:hidden;word-break:break-word;
 }
 .oferta-preco-antigo{font-size:12px;color:var(--text3);text-decoration:line-through}
-.oferta-preco-novo{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--accent);letter-spacing:-0.5px}
+.oferta-preco-novo{font-family:'Plus Jakarta Sans','DM Sans',sans-serif;font-size:22px;font-weight:800;color:var(--accent);letter-spacing:-0.5px}
 .oferta-parcelamento{font-size:11px;color:var(--text3)}
 .oferta-economia{font-size:11px;color:var(--green);font-weight:600}
-.botoes-acao{display:flex;gap:8px;margin-top:auto;padding-top:10px}
+.botoes-acao{display:flex;gap:6px;margin-top:auto;padding-top:12px;border-top:1px solid var(--border)}
 .oferta-btn{
-  flex:1;padding:10px;border-radius:10px;
-  font-size:13px;font-weight:700;text-align:center;
-  transition:all .2s;
+  flex:1;padding:10px;border-radius:var(--radius-sm);
+  font-size:12px;font-weight:700;text-align:center;
+  transition:all .15s;
+  background:var(--accent)!important;color:#fff!important;border:none!important;
 }
+.oferta-btn:hover{background:var(--accent2)!important}
 .btn-partilhar{
-  width:38px;flex-shrink:0;border-radius:10px;
+  width:34px;height:34px;flex-shrink:0;border-radius:var(--radius-sm);
   display:flex;align-items:center;justify-content:center;
-  background:var(--surface2);border:1px solid var(--border2);
-  color:var(--text2);transition:all .2s;
+  background:var(--surface2);border:1px solid var(--border);
+  color:var(--text3);transition:all .15s;
 }
-.btn-partilhar:hover{background:var(--surface3)}
+.btn-partilhar:hover{color:var(--text);border-color:var(--border2);background:var(--surface3)}
 
 /* ══ BOTÃO COMPARAR ══ */
 .btn-comparar{
-  width:38px;flex-shrink:0;border-radius:10px;
+  width:34px;height:34px;flex-shrink:0;border-radius:var(--radius-sm);
   display:flex;align-items:center;justify-content:center;
-  background:var(--surface2);border:1px solid var(--border2);
-  color:var(--text2);font-size:16px;transition:all .2s;cursor:pointer;
+  background:var(--surface2);border:1px solid var(--border);
+  color:var(--text3);font-size:14px;transition:all .15s;cursor:pointer;
 }
-.btn-comparar:hover{background:var(--brand-blue);color:#fff;border-color:var(--brand-blue);}
+.btn-comparar:hover{color:var(--text);border-color:var(--border2);background:var(--surface3)}
 .btn-comparar.comparar-ativo{background:var(--brand-blue);color:#fff;border-color:var(--brand-blue);}
 
 /* ══ BOTÃO ALERTA ══ */
 .btn-alerta{
-  width:38px;flex-shrink:0;border-radius:10px;
+  width:34px;height:34px;flex-shrink:0;border-radius:var(--radius-sm);
   display:flex;align-items:center;justify-content:center;
-  background:var(--surface2);border:1px solid var(--border2);
-  color:var(--text2);font-size:16px;transition:all .2s;cursor:pointer;
+  background:var(--surface2);border:1px solid var(--border);
+  color:var(--text3);font-size:14px;transition:all .15s;cursor:pointer;
 }
 .btn-alerta:hover{background:#f59e0b;color:#fff;border-color:#f59e0b;}
 
@@ -677,7 +808,7 @@ img, video{max-width:100%;display:block}
   border-radius:20px;width:100%;max-width:440px;
   padding:28px;position:relative;
 }
-.alerta-modal-content h3{font-family:'Syne',sans-serif;margin-bottom:4px;}
+.alerta-modal-content h3{font-family:'Plus Jakarta Sans','DM Sans',sans-serif;margin-bottom:4px;}
 .alerta-produto-nome{color:var(--text2);font-size:14px;margin-bottom:16px;line-height:1.3;}
 .alerta-preco-ref{display:flex;align-items:center;gap:8px;margin-bottom:20px;padding:12px;background:var(--surface2);border-radius:10px;}
 .alerta-form label{display:block;font-size:13px;color:var(--text2);margin-bottom:6px;font-weight:600;}
@@ -752,18 +883,18 @@ img, video{max-width:100%;display:block}
 }
 .stat-card{
   background:var(--surface);border:1px solid var(--border);
-  border-radius:16px;padding:22px;
-  display:flex;align-items:center;gap:16px;
-  transition:all .3s;
+  border-radius:var(--radius-md);padding:18px 20px;
+  display:flex;align-items:center;gap:14px;
+  transition:border-color .2s;
 }
-.stat-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.stat-card:hover{border-color:var(--accent)}
 .stat-icon{
-  width:48px;height:48px;border-radius:12px;
-  background:rgba(255,122,0,0.1);
+  width:44px;height:44px;border-radius:var(--radius-sm);
+  background:var(--accent-soft);
   display:flex;align-items:center;justify-content:center;
-  font-size:22px;flex-shrink:0;
+  font-size:20px;flex-shrink:0;
 }
-.stat-val{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--accent)}
+.stat-val{font-family:'Plus Jakarta Sans','DM Sans',sans-serif;font-size:22px;font-weight:800;color:var(--accent);letter-spacing:-0.5px}
 .stat-lbl{font-size:12px;color:var(--text3);margin-top:2px}
 
 /* ══ REDES SOCIAIS ══ */
@@ -786,7 +917,7 @@ img, video{max-width:100%;display:block}
   background:var(--surface);border:1px solid var(--border);
   border-radius:20px;padding:36px;max-width:640px;margin:0 auto;
 }
-.form-title{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;margin-bottom:6px}
+.form-title{font-family:'Plus Jakarta Sans','DM Sans',sans-serif;font-size:24px;font-weight:800;margin-bottom:6px}
 .form-sub{color:var(--text2);font-size:14px;margin-bottom:28px}
 .form-group{margin-bottom:18px}
 .form-label{display:block;font-size:13px;font-weight:600;color:var(--text2);margin-bottom:7px}
@@ -806,14 +937,13 @@ img, video{max-width:100%;display:block}
   color:var(--text3);transition:all .2s;
 }
 .form-submit{
-  width:100%;padding:14px;border-radius:11px;
+  width:100%;padding:14px;border-radius:100px;
   background:var(--accent);color:#fff;
   font-weight:700;font-size:15px;
-  box-shadow:0 0 25px var(--accent-glow);
-  transition:all .2s;
+  transition:background .15s;
 }
-.form-submit:disabled{opacity:0.4;cursor:not-allowed;box-shadow:none}
-.form-submit:not(:disabled):hover{transform:translateY(-1px);box-shadow:0 4px 30px var(--accent-glow)}
+.form-submit:disabled{opacity:0.4;cursor:not-allowed}
+.form-submit:not(:disabled):hover{background:var(--accent2)}
 .form-success{text-align:center;padding:20px 0}
 .form-success-icon{font-size:48px;margin-bottom:16px}
 
@@ -825,16 +955,16 @@ img, video{max-width:100%;display:block}
 /* ══ CHAT ══ */
 .chat-fab{
   position:fixed;bottom:24px;right:24px;z-index:300;
-  width:60px;height:60px;border-radius:50%;
-  background:var(--surface2);
-  border:2px solid var(--accent);
+  width:56px;height:56px;border-radius:50%;
+  background:var(--accent);
+  border:none;
   display:flex;align-items:center;justify-content:center;
-  font-size:32px; 
-  box-shadow:0 4px 20px var(--accent-glow);
-  cursor:pointer;transition:all .3s;
+  font-size:28px;
+  box-shadow:0 4px 16px rgba(0,0,0,0.3);
+  cursor:pointer;transition:all .2s;
   padding:0;
 }
-.chat-fab:hover{transform:scale(1.08);box-shadow:0 6px 30px var(--accent-glow)}
+.chat-fab:hover{transform:scale(1.05);box-shadow:0 6px 24px rgba(0,0,0,0.4)}
 .chat-fab.active{background:var(--surface2);color:var(--text);font-size:20px;border-color:var(--border2)}
 
 .badge-notif{
@@ -936,8 +1066,8 @@ img, video{max-width:100%;display:block}
   margin: 0 auto;
 }
 .newsletter-title {
-  font-family: 'Syne', sans-serif;
-  font-size: 28px;
+  font-family: 'Plus Jakarta Sans','DM Sans', sans-serif;
+  font-size: 24px;
   font-weight: 800;
   color: var(--text);
   margin-bottom: 12px;
@@ -956,8 +1086,8 @@ img, video{max-width:100%;display:block}
 .newsletter-input {
   flex: 1;
   min-width: 250px;
-  padding: 14px 20px;
-  border-radius: 12px;
+  padding: 12px 18px;
+  border-radius: 100px;
   border: 1px solid var(--border2);
   background: var(--surface);
   color: var(--text);
@@ -971,28 +1101,36 @@ img, video{max-width:100%;display:block}
 /* ══ FOOTER ══ */
 footer{
   background:var(--bg);border-top:1px solid var(--border);
-  padding:40px 80px;
+  padding:48px 24px 24px;
 }
 .footer-inner{
-  display:flex;align-items:center;justify-content:space-between;
-  flex-wrap:wrap;gap:20px;max-width:1400px;margin:0 auto;
+  display:grid;grid-template-columns:2fr 1fr 1fr 1fr;
+  gap:40px;max-width:var(--max-width);margin:0 auto;
 }
 .footer-brand{display:flex;align-items:center;gap:12px}
-.footer-brand-name{font-family:'Syne',sans-serif;font-weight:800;font-size:15px;color:var(--text);}
+.footer-brand-name{font-family:'Plus Jakarta Sans','DM Sans',sans-serif;font-weight:800;font-size:15px;color:var(--text);}
 .footer-brand-tag{font-size:12px;color:var(--text3);margin-top:2px}
-.footer-socials{display:flex;gap:8px}
+.footer-col h4{font-size:13px;font-weight:700;color:var(--text);margin-bottom:14px;text-transform:uppercase;letter-spacing:0.5px}
+.footer-col a{display:block;font-size:13px;color:var(--text3);padding:3px 0;transition:color .15s}
+.footer-col a:hover{color:var(--accent)}
+.footer-socials{display:flex;gap:8px;margin-top:12px}
 .footer-social{
-  width:38px;height:38px;border-radius:9px;
+  width:36px;height:36px;border-radius:var(--radius-sm);
   background:var(--surface);border:1px solid var(--border);
   display:flex;align-items:center;justify-content:center;
-  color:var(--text3);transition:all .2s;
+  color:var(--text3);transition:all .15s;
 }
 .footer-social:hover{color:var(--text);border-color:var(--border2)}
+.footer-trust{
+  display:flex;align-items:center;gap:24px;padding:20px 0;
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  margin:24px auto;max-width:var(--max-width);justify-content:center;flex-wrap:wrap;
+}
+.footer-trust-badge{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text3);font-weight:500}
 .footer-copy{
-  text-align:center;margin-top:28px;
-  padding-top:20px;border-top:1px solid var(--border);
-  color:var(--text3);font-size:12px;
-  max-width:1400px;margin-left:auto;margin-right:auto;
+  text-align:center;padding-top:16px;
+  color:var(--text3);font-size:11px;
+  max-width:var(--max-width);margin:0 auto;
 }
 
 /* ══ SCROLL TOP E FAB BUSCA ══ */
@@ -1012,10 +1150,10 @@ footer{
   padding:12px 20px;border-radius:100px;
   background:var(--accent);color:#fff;
   font-size:13px;font-weight:700;
-  box-shadow:0 4px 25px var(--accent-glow);
-  transition:all .3s;opacity:0;pointer-events:none;
+  box-shadow:0 4px 16px rgba(0,0,0,0.3);
+  transition:all .2s;opacity:0;pointer-events:none;
 }
-.fab-busca:hover{transform:scale(1.04);box-shadow:0 6px 35px var(--accent-glow)}
+.fab-busca:hover{transform:scale(1.03);box-shadow:0 6px 20px rgba(0,0,0,0.4)}
 
 /* ══ TOAST ══ */
 #toast-container{position:fixed;bottom:110px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none}
@@ -1039,71 +1177,69 @@ footer{
 
 /* ══ RESPONSIVE ══ */
 @media(max-width:1024px){
-  #hero{grid-template-columns:1fr;padding:60px 40px;min-height:auto;gap:40px}
-  .hero-visual{order:-1}
-  .phone-mockup{max-width:320px}
-  .section{padding:60px 40px}
-  footer{padding:32px 40px}
+  .hero-banner-inner{padding:44px 24px 40px}
+  .hero-right-col{display:none}
+  .section{padding:48px 24px}
+  footer{padding:32px 24px 16px}
+  .footer-inner{grid-template-columns:1fr 1fr}
   .stats-row{grid-template-columns:repeat(2,1fr)}
+  .trust-bar{flex-wrap:wrap;gap:16px}
+  .nav-search{display:none}
+  .category-nav-inner{justify-content:flex-start}
 }
 @media(max-width:768px){
   #hero{padding:32px 20px;gap:0;min-height:auto}
   .hero-mascot-side{display:none}
-  .section{padding:48px 20px}
-  footer{padding:28px 20px}
+  .hero-banner-inner{padding:36px 16px 32px}
+  .hero-main-title{font-size:clamp(36px,8vw,60px)}
+  .hero-banner-stats{gap:16px}
+  .category-nav{padding:14px 16px}
+  .cat-btn{min-width:60px;padding:10px 10px;font-size:10px}
+  .cat-btn-icon{font-size:20px}
+  .flash-sale-header{flex-direction:column;align-items:flex-start;gap:10px}
+  .flash-countdown{flex-wrap:wrap}
+  .section{padding:40px 16px}
+  footer{padding:28px 16px 16px}
+  .footer-inner{grid-template-columns:1fr;gap:24px}
   .nav-links{display:none}
   .nav-mobile-btn{display:flex}
-  .desktop-only {display:none}
+  .desktop-only{display:none}
   .fab-busca{bottom:96px;right:24px;padding:10px 16px}
   .chat-window{bottom:0;right:0;max-width:100%;border-radius:20px 20px 0 0;max-height:75vh}
   .chat-fab{bottom:16px;right:16px}
   .chat-fab.active{display:none !important}
-  .stats-row{grid-template-columns:repeat(2,1fr);gap:12px}
-  .hero-stats{gap:20px}
+  .stats-row{grid-template-columns:repeat(2,1fr);gap:10px}
+  .trust-bar{flex-direction:column;gap:12px}
 }
 @media(max-width:480px){
   .stats-row{grid-template-columns:1fr 1fr}
-  .ofertas-grid{grid-template-columns:repeat(2,1fr);gap:12px}
+  .ofertas-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .oferta-img{height:140px}
+  .oferta-body{padding:10px 12px 12px}
+  .oferta-preco-novo{font-size:18px}
+  .botoes-acao{gap:4px}
+  .btn-partilhar,.btn-comparar,.btn-alerta,.ai-btn{width:30px;height:30px;font-size:12px}
+  .hero-banner-btns{flex-direction:column}
+  .hero-btn-solid,.hero-btn-outline{width:100%;justify-content:center}
 }
 </style>
 </head>
 <body>
 
-<!-- NAVBAR COM A LOGO 100% EM CÓDIGO -->
+<!-- NAVBAR -->
 <nav id="navbar">
-  <div class="nav-logo">
-    <div class="custom-logo-container">
-      <svg class="custom-logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <g transform="translate(25, 55) rotate(-30)">
-          <rect x="-18" y="-14" width="36" height="28" rx="4" fill="var(--brand-blue)"></rect>
-          <circle cx="-6" cy="-4" r="2.5" fill="#fff"></circle>
-          <circle cx="6" cy="4" r="2.5" fill="#fff"></circle>
-          <line x1="-6" y1="6" x2="6" y2="-6" stroke="#fff" stroke-width="2" stroke-linecap="round"></line>
-        </g>
-        <g transform="translate(52, 38) rotate(-15)">
-          <rect x="-18" y="-18" width="36" height="36" rx="5" fill="var(--brand-blue)"></rect>
-          <circle cx="10" cy="-8" r="2.5" fill="#fff"></circle>
-          <polygon points="-4,-6 -2,0 4,0 -1,4 1,10 -4,6 -9,10 -7,4 -12,0 -6,0" fill="#fff"></polygon>
-        </g>
-        <circle cx="58" cy="38" r="20" stroke="var(--accent)" stroke-width="6.5" fill="none"></circle>
-        <g transform="translate(72, 52) rotate(45)">
-          <line x1="0" y1="0" x2="18" y2="0" stroke="var(--accent)" stroke-width="6.5" stroke-linecap="round"></line>
-          <polygon points="14,-7 26,0 14,7" fill="var(--accent)"></polygon>
-        </g>
-        <path d="M 30 18 Q 33 18 33 15 Q 33 18 36 18 Q 33 18 33 21 Q 33 18 30 18 Z" fill="var(--accent)"></path>
-        <circle cx="42" cy="16" r="1.5" fill="var(--accent)"></circle>
-      </svg>
-      <div class="custom-logo-text">
-        <span class="custom-logo-text-top">O CAÇADOR</span>
-        <span class="custom-logo-text-bottom">DE OFERTAS</span>
-      </div>
-    </div>
-  </div>
+  <a class="nav-logo" href="#" onclick="window.navegar('home');return false" aria-label="O Caçador de Ofertas - Página inicial">
+    <img src="logo-transparent.png" alt="O Caçador de Ofertas">
+  </a>
   <div class="nav-links">
     <button class="nav-btn active" data-page="home" onclick="window.navegar('home')" aria-label="Página Inicial">Início</button>
     <button class="nav-btn" data-page="ofertas" onclick="window.navegar('ofertas')" aria-label="Catálogo de Ofertas">Ofertas</button>
-    <button class="nav-btn" data-page="favoritos" onclick="window.navegar('favoritos')" aria-label="Meus Favoritos">❤️ Favoritos</button>
+    <button class="nav-btn" data-page="favoritos" onclick="window.navegar('favoritos')" aria-label="Meus Favoritos">Favoritos</button>
     <button class="nav-btn" data-page="pedir" onclick="window.navegar('pedir')" aria-label="Pedir uma Oferta">Pedir Oferta</button>
+  </div>
+  <div class="nav-search desktop-only">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+    <input type="text" placeholder="Buscar ofertas de iPhone, TV, Notebook..." oninput="if(document.getElementById('buscaInput')){document.getElementById('buscaInput').value=this.value;window.filtrarOfertas&&window.filtrarOfertas();}" onfocus="if(!document.getElementById('page-ofertas').classList.contains('active'))window.navegar('ofertas')">
   </div>
   <div class="nav-actions">
     <button class="nav-theme" onclick="window.toggleTema()" aria-label="Alternar tema claro e escuro">🌓</button>
@@ -1128,91 +1264,89 @@ footer{
 <!-- ═══ PÁGINA HOME ═══ -->
 <div class="page active" id="page-home">
   <section id="hero">
-    
-    <!-- PARTICULAS -->
-    <div class="teteco-particles">
-      <div class="particle p1">🏷️</div>
-      <div class="particle p2">💰</div>
-      <div class="particle p3">🛒</div>
-    </div>
-    
-    <div class="hero-text-side fade-up">
-      <div class="hero-badge">🔥 OFERTAS ATUALIZADAS 24/7</div>
-      <h1 class="hero-title">Não pague o preço cheio.<br>Nós caçamos as <span class="accent">Melhores Ofertas</span>.</h1>
-      <p class="hero-sub">Promoções imperdíveis da Amazon, Shopee, Mercado Livre e muito mais. O Teteco vasculha a internet para poupar o seu dinheiro.</p>
-      
-      <div class="hero-btns">
-        <a class="btn-primary" href="https://t.me/ocacadordeoferta" target="_blank" aria-label="Entrar no grupo VIP">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.94z"/></svg> 
-          Entrar no Grupo VIP
-        </a>
-        <button class="btn-ghost" onclick="window.navegar('ofertas')" aria-label="Ver catálogo de ofertas">Ver Catálogo</button>
+    <div class="hero-banner-inner">
+      <!-- ESQUERDA: Texto + CTAs -->
+      <div class="hero-left-col fade-up">
+        <div class="hero-tag">🔥 SUPER OFERTAS DO DIA</div>
+        <h1 class="hero-main-title">
+          Até 80% OFF
+          <span>nas melhores lojas do Brasil</span>
+        </h1>
+        <p class="hero-main-sub">Ofertas verificadas da Amazon, Shopee, Magalu, Mercado Livre e muito mais — atualizadas em tempo real, 24 horas por dia.</p>
+        <div class="hero-banner-btns">
+          <a class="hero-btn-solid" href="https://t.me/ocacadordeoferta" target="_blank" aria-label="Entrar no grupo VIP">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.94z"/></svg>
+            Entrar no Grupo VIP
+          </a>
+          <button class="hero-btn-outline" onclick="window.navegar('ofertas')" aria-label="Ver todas as ofertas">Ver Todas as Ofertas →</button>
+        </div>
+        <div class="hero-banner-stats">
+          <div class="hero-banner-stat">
+            <div class="hero-banner-stat-val" id="stat-total">—</div>
+            <div class="hero-banner-stat-lbl">Ofertas Ativas</div>
+          </div>
+          <div class="hero-banner-stat">
+            <div class="hero-banner-stat-val" id="stat-desconto-hero">—</div>
+            <div class="hero-banner-stat-lbl">Desconto Médio</div>
+          </div>
+          <div class="hero-banner-stat">
+            <div class="hero-banner-stat-val">10+</div>
+            <div class="hero-banner-stat-lbl">Lojas Parceiras</div>
+          </div>
+          <div class="hero-banner-stat">
+            <div class="hero-banner-stat-val">24/7</div>
+            <div class="hero-banner-stat-lbl">Monitoramento</div>
+          </div>
+        </div>
       </div>
 
-      <div class="hero-stats">
-        <div class="hero-stat">
-          <div class="hero-stat-val" id="stat-total">0</div>
-          <div class="hero-stat-label">Ofertas Ativas</div>
+      <!-- DIREITA: Cards flutuantes de ofertas -->
+      <div class="hero-right-col desktop-only fade-up fade-up-1" aria-hidden="true">
+        <div class="hero-offer-card">
+          <div class="hero-card-badge">🔥 Bug de Preço</div>
+          <div class="hero-card-name">Smartphone Samsung Galaxy A55 8GB/256GB</div>
+          <div class="hero-card-old">De: R$ 2.199</div>
+          <div class="hero-card-price">R$ 1.299</div>
         </div>
-        <div class="hero-stat">
-          <div class="hero-stat-val">24h</div>
-          <div class="hero-stat-label">Monitoramento</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- LADO DIREITO: Mockup de Celular Clean & Premium -->
-    <div class="hero-mascot-side fade-up fade-up-1">
-      <div class="teteco-glow-bg"></div>
-      <div class="phone-mockup">
-        <div class="phone-notch"></div>
-        <div class="phone-screen">
-           
-           <div class="mock-header">
-             <div class="mock-avatar">
-                <!-- LOGO SVG NO LUGAR DO ANTIGO EMOJI 🎯 -->
-                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px; margin-left: 2px;">
-                  <g transform="translate(25, 55) rotate(-30)">
-                    <rect x="-18" y="-14" width="36" height="28" rx="4" fill="var(--brand-blue)"></rect>
-                    <circle cx="-6" cy="-4" r="2.5" fill="#fff"></circle><circle cx="6" cy="4" r="2.5" fill="#fff"></circle><line x1="-6" y1="6" x2="6" y2="-6" stroke="#fff" stroke-width="2" stroke-linecap="round"></line>
-                  </g>
-                  <g transform="translate(52, 38) rotate(-15)">
-                    <rect x="-18" y="-18" width="36" height="36" rx="5" fill="var(--brand-blue)"></rect><circle cx="10" cy="-8" r="2.5" fill="#fff"></circle><polygon points="-4,-6 -2,0 4,0 -1,4 1,10 -4,6 -9,10 -7,4 -12,0 -6,0" fill="#fff"></polygon>
-                  </g>
-                  <circle cx="58" cy="38" r="20" stroke="var(--accent)" stroke-width="6.5" fill="none"></circle>
-                  <g transform="translate(72, 52) rotate(45)"><line x1="0" y1="0" x2="18" y2="0" stroke="var(--accent)" stroke-width="6.5" stroke-linecap="round"></line><polygon points="14,-7 26,0 14,7" fill="var(--accent)"></polygon></g>
-                  <path d="M 30 18 Q 33 18 33 15 Q 33 18 36 18 Q 33 18 33 21 Q 33 18 30 18 Z" fill="var(--accent)"></path><circle cx="42" cy="16" r="1.5" fill="var(--accent)"></circle>
-                </svg>
-             </div>
-             <div class="mock-header-text">
-               <strong>O Caçador de Ofertas</strong>
-               <span>Agora mesmo</span>
-             </div>
-           </div>
-
-           <!-- Simulação de Notificações de Ofertas -->
-           <div class="mock-msg msg-1">
-             <span class="mock-badge">🔥 OFERTA</span>
-             <strong>Smartphone S24 Ultra 256GB</strong>
-             <p>De: <s>R$ 7.999</s><br>Por: <span class="mock-price">R$ 5.499</span></p>
-           </div>
-
-           <div class="mock-msg msg-2">
-             <span class="mock-badge">⚡ BUG</span>
-             <strong>Smart TV 55" 4K UHD</strong>
-             <p>De: <s>R$ 3.299</s><br>Por: <span class="mock-price">R$ 1.899</span></p>
-           </div>
-
-           <div class="mock-msg msg-3">
-             <span class="mock-badge">📦 CUPOM</span>
-             <strong>Fralda Pampers Confort Sec</strong>
-             <p>Com cupom ativo da loja!<br><span class="mock-price">R$ 89,90</span></p>
-           </div>
-
+        <div class="hero-offer-card">
+          <div class="hero-card-badge">⚡ Oferta Relâmpago</div>
+          <div class="hero-card-name">Smart TV LG 55" 4K UHD WebOS</div>
+          <div class="hero-card-old">De: R$ 3.499</div>
+          <div class="hero-card-price">R$ 1.999</div>
         </div>
       </div>
     </div>
   </section>
+
+  <!-- CATEGORIAS -->
+  <nav class="category-nav" aria-label="Navegar por categoria">
+    <div class="category-nav-inner">
+      <button class="cat-btn" onclick="window.filtrarCategoria('celular')" aria-label="Ver celulares">
+        <span class="cat-btn-icon">📱</span>Celulares
+      </button>
+      <button class="cat-btn" onclick="window.filtrarCategoria('notebook')" aria-label="Ver notebooks">
+        <span class="cat-btn-icon">💻</span>Notebooks
+      </button>
+      <button class="cat-btn" onclick="window.filtrarCategoria('tv')" aria-label="Ver Smart TVs">
+        <span class="cat-btn-icon">📺</span>Smart TV
+      </button>
+      <button class="cat-btn" onclick="window.filtrarCategoria('game')" aria-label="Ver games">
+        <span class="cat-btn-icon">🎮</span>Games
+      </button>
+      <button class="cat-btn" onclick="window.filtrarCategoria('casa')" aria-label="Ver casa e cozinha">
+        <span class="cat-btn-icon">🏠</span>Casa
+      </button>
+      <button class="cat-btn" onclick="window.filtrarCategoria('eletro')" aria-label="Ver eletrodomésticos">
+        <span class="cat-btn-icon">⚡</span>Eletros
+      </button>
+      <button class="cat-btn" onclick="window.filtrarCategoria('moda')" aria-label="Ver moda">
+        <span class="cat-btn-icon">👗</span>Moda
+      </button>
+      <button class="cat-btn" onclick="window.navegar('ofertas')" aria-label="Ver todas as ofertas">
+        <span class="cat-btn-icon">🔥</span>Mais Vendidos
+      </button>
+    </div>
+  </nav>
 
   <!-- STATS -->
   <section class="section section-alt">
@@ -1223,13 +1357,24 @@ footer{
       <div class="stat-card fade-up fade-up-3"><div class="stat-icon">⚡</div><div class="stat-info"><div class="stat-val syne" style="color:var(--green)">24/7</div><div class="stat-lbl">Monitoramento</div></div></div>
     </div>
 
-    <div class="section-header">
-      <div>
-        <span class="section-label">Seleção VIP</span>
-        <h2 class="section-title">🔥 Destaques de Hoje</h2>
-        <p class="section-sub" style="margin-bottom:0">As promoções com as maiores quedas de preço registradas nas últimas horas.</p>
+    <!-- FLASH SALE HEADER com Countdown -->
+    <div class="flash-sale-header fade-up">
+      <div class="flash-title">
+        <span style="font-size:26px">🔥</span>
+        <h2>OFERTAS RELÂMPAGO</h2>
+        <div class="flash-live">AO VIVO</div>
       </div>
-      <button class="btn-ghost" onclick="window.navegar('ofertas')" aria-label="Ver todas as ofertas">Ver Todas →</button>
+      <div class="flash-countdown">
+        <span class="countdown-label">Termina em:</span>
+        <div class="countdown-timer">
+          <span class="countdown-seg" id="cdHoras">00</span>
+          <span class="countdown-sep">:</span>
+          <span class="countdown-seg" id="cdMinutos">00</span>
+          <span class="countdown-sep">:</span>
+          <span class="countdown-seg" id="cdSegundos">00</span>
+        </div>
+        <button class="btn-ghost" onclick="window.navegar('ofertas')" style="font-size:13px;padding:8px 14px" aria-label="Ver todas as ofertas">Ver Todas →</button>
+      </div>
     </div>
 
     <div class="destaque-grid" id="destaqueGrid"></div>
@@ -1251,7 +1396,7 @@ footer{
 <div class="page" id="page-ofertas">
   <section class="section">
     <span class="section-label">Catálogo Completo</span>
-    <h1 class="section-title fade-up">🏷️ Todas as Ofertas</h1>
+    <h1 class="section-title fade-up">Todas as Ofertas</h1>
     <p class="section-sub fade-up fade-up-1">Busque, filtre e ordene as melhores promoções da internet.</p>
     
     <div class="filtros-wrap fade-up fade-up-1">
@@ -1351,34 +1496,51 @@ footer{
 <!-- ═══ FOOTER COM A LOGO EM CÓDIGO ═══ -->
 <footer>
   <div class="footer-inner">
-    <div>
+    <!-- Coluna 1: Marca -->
+    <div class="footer-col">
       <div class="footer-brand">
-        <!-- Replicando a logo no Footer também, para manter a perfeição visual -->
-        <div class="custom-logo-container" style="opacity: 0.9;">
-          <svg class="custom-logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <g transform="translate(25, 55) rotate(-30)">
-              <rect x="-18" y="-14" width="36" height="28" rx="4" fill="var(--brand-blue)"></rect>
-              <circle cx="-6" cy="-4" r="2.5" fill="#fff"></circle><circle cx="6" cy="4" r="2.5" fill="#fff"></circle><line x1="-6" y1="6" x2="6" y2="-6" stroke="#fff" stroke-width="2" stroke-linecap="round"></line>
-            </g>
-            <g transform="translate(52, 38) rotate(-15)">
-              <rect x="-18" y="-18" width="36" height="36" rx="5" fill="var(--brand-blue)"></rect><circle cx="10" cy="-8" r="2.5" fill="#fff"></circle><polygon points="-4,-6 -2,0 4,0 -1,4 1,10 -4,6 -9,10 -7,4 -12,0 -6,0" fill="#fff"></polygon>
-            </g>
-            <circle cx="58" cy="38" r="20" stroke="var(--accent)" stroke-width="6.5" fill="none"></circle>
-            <g transform="translate(72, 52) rotate(45)"><line x1="0" y1="0" x2="18" y2="0" stroke="var(--accent)" stroke-width="6.5" stroke-linecap="round"></line><polygon points="14,-7 26,0 14,7" fill="var(--accent)"></polygon></g>
-            <path d="M 30 18 Q 33 18 33 15 Q 33 18 36 18 Q 33 18 33 21 Q 33 18 30 18 Z" fill="var(--accent)"></path><circle cx="42" cy="16" r="1.5" fill="var(--accent)"></circle>
-          </svg>
-          <div class="custom-logo-text">
-            <span class="custom-logo-text-top">O CAÇADOR</span>
-            <span class="custom-logo-text-bottom">DE OFERTAS</span>
-          </div>
-        </div>
+        <img src="logo-transparent.png" alt="O Caçador de Ofertas" style="height:56px;width:auto;display:block;filter:drop-shadow(0 1px 4px rgba(0,0,0,0.25))">
       </div>
-      <p class="footer-brand-tag" style="margin-top: 12px;">A sua plataforma de inteligência em descontos.</p>
+      <p class="footer-brand-tag" style="margin-top:12px;">A sua plataforma de inteligência em descontos.</p>
+      <div class="footer-socials" id="footerSocials"></div>
     </div>
-    <div class="footer-socials" id="footerSocials"></div>
+    <!-- Coluna 2: Navegação -->
+    <div class="footer-col">
+      <h4>Navegação</h4>
+      <a href="#" onclick="window.navegar('home');return false">Início</a>
+      <a href="#" onclick="window.navegar('ofertas');return false">Ofertas</a>
+      <a href="#" onclick="window.navegar('favoritos');return false">Favoritos</a>
+      <a href="#" onclick="window.navegar('pedir');return false">Pedir Oferta</a>
+    </div>
+    <!-- Coluna 3: Lojas Parceiras -->
+    <div class="footer-col">
+      <h4>Lojas Parceiras</h4>
+      <a>Amazon</a>
+      <a>Shopee</a>
+      <a>Magalu</a>
+      <a>Mercado Livre</a>
+      <a>AliExpress</a>
+    </div>
+    <!-- Coluna 4: Suporte -->
+    <div class="footer-col">
+      <h4>Suporte</h4>
+      <a href="https://t.me/ocacadordeoferta" target="_blank">Telegram</a>
+      <a href="https://www.instagram.com/ocacadorde_ofertas" target="_blank">Instagram</a>
+      <a>Termos de Uso</a>
+      <a>Política de Privacidade</a>
+    </div>
   </div>
+
+  <!-- Barra de confiança -->
+  <div class="footer-trust">
+    <div class="footer-trust-badge">🔒 Compra Segura</div>
+    <div class="footer-trust-badge">✅ Ofertas Verificadas</div>
+    <div class="footer-trust-badge">🤖 IA Anti-Fraude</div>
+    <div class="footer-trust-badge">💳 Todas as Formas de Pagamento</div>
+  </div>
+
   <div class="footer-copy">
-    © 2026 O Caçador de Ofertas. Powered by Teteco Bot AI 🤖.<br>
+    © 2026 O Caçador de Ofertas. Powered by Teteco AI.<br>
     Nós recebemos uma comissão por compras feitas através dos nossos links, sem custo adicional para si.
   </div>
 </footer>
@@ -1400,7 +1562,7 @@ footer{
     <button class="chat-close" onclick="window.fecharAiModal()" style="position:absolute; top:16px; right:16px; color:var(--text); background:none; border:none; font-size:20px; cursor:pointer;" aria-label="Fechar Análise IA">✕</button>
     <div class="ai-modal-header">
       <div class="mock-avatar" style="font-size:20px; width:40px; height:40px;">✨</div>
-      <h3 style="font-family:'Syne',sans-serif; margin:0; font-size:18px;">Análise Inteligente</h3>
+      <h3 style="font-family:'Plus Jakarta Sans','DM Sans',sans-serif; margin:0; font-size:18px;">Análise Inteligente</h3>
     </div>
     <div class="ai-modal-body" id="aiModalBody">
       <!-- O conteúdo será injetado dinamicamente pela API do Gemini -->
@@ -1420,7 +1582,7 @@ footer{
 <div id="comparadorModal" onclick="if(event.target===this)window.fecharComparador()">
   <div class="comparador-modal-content">
     <button onclick="window.fecharComparador()" style="position:absolute;top:16px;right:16px;background:none;border:none;color:var(--text);font-size:20px;cursor:pointer;">✕</button>
-    <h3 style="font-family:'Syne',sans-serif;margin-bottom:20px;">⚖️ Comparador de Preços</h3>
+    <h3 style="font-family:'Plus Jakarta Sans','DM Sans',sans-serif;margin-bottom:20px;">⚖️ Comparador de Preços</h3>
     <div id="comparadorCorpo"></div>
   </div>
 </div>
@@ -2087,6 +2249,9 @@ function atualizarStats() {
     
     const elDesc2 = document.getElementById("stat-desconto-2");
     if (elDesc2) elDesc2.textContent = media + "%";
+
+    const elDescHero = document.getElementById("stat-desconto-hero");
+    if (elDescHero) elDescHero.textContent = media + "%";
 }
 
 function inicializarFiltros() {
@@ -2171,70 +2336,106 @@ async function enviarPedido() {
 
     const btn = document.getElementById("formSubmit");
     btn.disabled = true;
-    btn.innerHTML = '<span style="display:inline-flex;align-items:center;gap:8px"><span class="loader-spinner" style="width:16px;height:16px;border-width:2px"></span> A IA está buscando...</span>';
+    btn.innerHTML = '<span style="display:inline-flex;align-items:center;gap:8px"><span class="loader-spinner" style="width:16px;height:16px;border-width:2px"></span> A IA está buscando a melhor oferta...</span>';
 
     try {
-        // Links de afiliado por loja
-        const q = encodeURIComponent(produto);
-        const linksAfiliado = {
-            amazon:       `https://www.amazon.com.br/s?k=${q}&tag=ocacadordeo02`,
-            magalu:       `https://www.magazinevoce.com.br/magazinein_2463196/busca/${q}/`,
-            mercadolivre: `https://www.mercadolivre.com.br/busca?q=${q}&tracking_id=FF182A-079E`,
-            shopee:       `https://shopee.com.br/search?keyword=${q}`
-        };
+        // 1. Busca Shopee: retorna {filtrados, melhorLink}
+        // melhorLink = offerLink do produto mais caro (maior preço = produto principal, não acessório)
+        // O offerLink da API já tem rastreio de afiliado embutido (gerado pelo SHOPEE_APP_ID)
+        async function buscarShopeeForm(termo) {
+            try {
+                const res = await fetch('/api/shopee?q=' + encodeURIComponent(termo));
+                if (!res.ok) return { filtrados: [], melhorLink: null };
+                const raw = await res.json();
+                if (!Array.isArray(raw) || !raw.length) return { filtrados: [], melhorLink: null };
+                // Melhor link = produto mais caro dos resultados brutos (afiliado garantido)
+                const ordenado = [...raw].sort((a, b) => (b.discountPrice || b.price || 0) - (a.discountPrice || a.price || 0));
+                const melhorLink = ordenado[0].offerLink || null;
+                return { filtrados: filtrarAntiAcessorios(raw, termo), melhorLink };
+            } catch(_) { return { filtrados: [], melhorLink: null }; }
+        }
 
-        // 1. Gemini escolhe a melhor loja e retorna preços
-        const promptIA = `Você é um especialista em compras no Brasil. Um cliente quer encontrar a melhor oferta de um produto.
+        // Cascata: termo completo → primeiras 2 palavras
+        let busca = await buscarShopeeForm(produto);
+        if (!busca.filtrados.length) {
+            const termoCurto = produto.split(' ').slice(0, 2).join(' ');
+            if (termoCurto !== produto) {
+                const busca2 = await buscarShopeeForm(termoCurto);
+                if (busca2.filtrados.length || busca2.melhorLink) busca = busca2;
+            }
+        }
 
-Produto: ${produto}${orcamento ? `\nOrçamento máximo: ${orcamento}` : ''}${detalhes ? `\nDetalhes: ${detalhes}` : ''}
+        let dadosEmail;
+        if (busca.filtrados.length) {
+            // Produto real encontrado na Shopee com filtro
+            const melhor = busca.filtrados[0];
+            dadosEmail = {
+                produto_nome: melhor.offerName || produto,
+                preco_antigo: melhor.price ? formatarMoeda(melhor.price) : "—",
+                preco_novo:   melhor.discountPrice ? formatarMoeda(melhor.discountPrice) : (melhor.price ? formatarMoeda(melhor.price) : "—"),
+                link_produto: melhor.offerLink
+            };
+        } else {
+            // Sem produto no filtro: Gemini formata nome+preço, link usa offerLink afiliado (se houver)
+            try {
+                const promptFallback = `Você é especialista em compras no Brasil. Formate o nome do produto e estime o preço atual no mercado brasileiro.
 
-Responda APENAS com um JSON válido, sem texto antes ou depois, neste formato exato:
-{
-  "produto_nome": "nome completo do produto com modelo e especificações",
-  "preco_antigo": "R$ X.XXX,XX",
-  "preco_novo": "R$ X.XXX,XX",
-  "loja": "amazon"
-}
+Produto digitado pelo cliente: "${produto}"${orcamento ? `\nOrçamento: ${orcamento}` : ''}
+
+Responda APENAS com JSON válido, sem texto extra:
+{"produto_nome":"nome oficial completo com modelo","preco_antigo":"R$ X.XXX,XX","preco_novo":"R$ X.XXX,XX"}
 
 Regras:
-- produto_nome: nome completo e específico do produto
-- preco_antigo: preço típico de tabela/lançamento no Brasil
-- preco_novo: melhor preço médio atual no mercado brasileiro
-- loja: escolha UMA entre: amazon, magalu, mercadolivre, shopee (a que normalmente tem o melhor preço para este tipo de produto)`;
-
-        const respostaRaw = await chamarGemini(promptIA, "Você é um assistente de compras brasileiro. Responda APENAS com JSON válido, sem texto adicional.");
-        const jsonMatch = respostaRaw.match(/\{[\s\S]*?\}/);
-        const dados = jsonMatch ? JSON.parse(jsonMatch[0]) : {};
-        const lojaEscolhida = dados.loja && linksAfiliado[dados.loja] ? dados.loja : "amazon";
-        const linkAfiliado = linksAfiliado[lojaEscolhida];
+- produto_nome: nome oficial com marca, modelo e especificação principal (ex: "Samsung Galaxy S23 128GB")
+- preco_antigo: preço de lançamento ou tabela no Brasil
+- preco_novo: melhor preço atual estimado no mercado brasileiro`;
+                const rawGemini = await chamarGemini(promptFallback, "Responda APENAS com JSON válido.");
+                const match = rawGemini.match(/\{[\s\S]*?\}/);
+                const dados = match ? JSON.parse(match[0]) : {};
+                dadosEmail = {
+                    produto_nome: dados.produto_nome || produto,
+                    preco_antigo: dados.preco_antigo || "—",
+                    preco_novo:   dados.preco_novo   || "—",
+                    // Prioridade: offerLink afiliado da API > search URL sem rastreio
+                    link_produto: busca.melhorLink || `https://shopee.com.br/search?keyword=${encodeURIComponent(dados.produto_nome || produto)}`
+                };
+            } catch(_) {
+                dadosEmail = {
+                    produto_nome: produto,
+                    preco_antigo: "—",
+                    preco_novo:   "—",
+                    link_produto: busca.melhorLink || `https://shopee.com.br/search?keyword=${encodeURIComponent(produto)}`
+                };
+            }
+        }
 
         // 2. Notifica o admin
         await emailjs.send("service_v94cf8p", "template_6l0zsew", {
             produto,
             orcamento: orcamento || "Não informado",
-            loja: lojaEscolhida,
-            detalhes: `Email: ${email}${whatsapp ? ` | WhatsApp: ${whatsapp}` : ''}\n${detalhes || "Sem detalhes adicionais"}`
+            loja: whatsapp ? `WhatsApp: ${whatsapp}` : "Não informado",
+            detalhes: `Email: ${email}\n${detalhes || "Sem detalhes adicionais"}`
         });
 
-        // 3. Envia email bonito para o usuário com link de afiliado embutido
+        // 3. Envia email com oferta real da Shopee (link com comissão de afiliado)
         await emailjs.send("service_v94cf8p", CONFIG.EMAILJS_TEMPLATE_RESPOSTA, {
             to_email: email,
-            produto_nome: dados.produto_nome || produto,
-            preco_antigo: dados.preco_antigo || "—",
-            preco_novo: dados.preco_novo || "—",
-            link_produto: linkAfiliado
+            produto_nome: dadosEmail.produto_nome,
+            preco_antigo: dadosEmail.preco_antigo,
+            preco_novo:   dadosEmail.preco_novo,
+            link_produto: dadosEmail.link_produto
         });
 
         // 4. Tela de agradecimento
         document.getElementById("formBox").innerHTML = `
         <div class="form-success fade-up">
           <div class="form-success-icon">✓</div>
-          <h3 style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--text);margin-bottom:8px">Pronto, ${nome.split(' ')[0]}!</h3>
-          <p style="color:var(--text2);margin-bottom:8px">A nossa IA já buscou as melhores opções para <strong>${produto}</strong> e enviou tudo para <strong>${email}</strong>. Verifique a sua caixa de entrada (e a pasta spam).</p>
-          <p style="color:var(--text2);margin-bottom:24px">Enquanto isso, entre no nosso grupo e fique por dentro de todas as promoções em tempo real — todos os dias!</p>
+          <h3 style="font-family:'Plus Jakarta Sans','DM Sans',sans-serif;font-size:24px;font-weight:800;color:var(--text);margin-bottom:8px">Pronto, ${nome.split(' ')[0]}!</h3>
+          <p style="color:var(--text2);margin-bottom:8px">Buscamos na Shopee e enviamos a melhor oferta de <strong>${produto}</strong> para <strong>${email}</strong>. Verifique a sua caixa de entrada (e a pasta spam).</p>
+          <p style="color:var(--text2);margin-bottom:24px">Entre no nosso grupo e fique por dentro de todas as promoções em tempo real — todos os dias!</p>
           <a href="${CONFIG.TELEGRAM}" target="_blank" class="btn-primary" style="text-decoration:none;display:inline-block;margin-bottom:12px">🔥 Entrar no Grupo de Ofertas</a>
           <br>
-          <button onclick="document.getElementById('formBox').innerHTML=''" style="background:none;border:none;color:var(--text3);font-size:13px;cursor:pointer;margin-top:8px">Fazer outro pedido</button>
+          <button onclick="window.resetarFormulario()" style="background:none;border:none;color:var(--text3);font-size:13px;cursor:pointer;margin-top:8px">Fazer outro pedido</button>
         </div>`;
     } catch(e) {
         btn.disabled = false;
@@ -2587,6 +2788,38 @@ window.compartilharOferta = compartilharOferta;
 window.mostrarToast = mostrarToast;
 window.toggleFormLoja = toggleFormLoja;
 window.enviarPedido = enviarPedido;
+window.resetarFormulario = function() {
+    document.getElementById("formBox").innerHTML = `
+      <h2 class="form-title">🎯 Pedir Promoção</h2>
+      <p class="form-sub">Diga-nos o que você procura e a nossa IA vai buscar as melhores opções e enviar direto para o seu e-mail.</p>
+      <div class="form-group">
+        <label class="form-label" for="pedidoNome">Seu Nome *</label>
+        <input class="form-input" id="pedidoNome" placeholder='Ex: "João Silva"' aria-label="Seu nome">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="pedidoEmail">Seu E-mail *</label>
+        <input class="form-input" type="email" id="pedidoEmail" placeholder='Ex: "joao@email.com"' aria-label="Seu e-mail">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="pedidoWhatsapp">WhatsApp (Opcional)</label>
+        <input class="form-input" type="tel" id="pedidoWhatsapp" placeholder='Ex: "(11) 99999-9999"' aria-label="Seu WhatsApp">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="pedidoProduto">O que você procura? *</label>
+        <input class="form-input" id="pedidoProduto" placeholder='Ex: "PlayStation 5 256GB"' aria-label="Nome do produto procurado">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="pedidoOrcamento">Orçamento Máximo (Opcional)</label>
+        <input class="form-input" id="pedidoOrcamento" placeholder='Ex: "Até R$ 3.500"' aria-label="Orçamento máximo">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="pedidoDetalhes">Detalhes Adicionais (Opcional)</label>
+        <textarea class="form-textarea" id="pedidoDetalhes" placeholder='Ex: "Pode ser recondicionado, cor branca..."' aria-label="Detalhes adicionais"></textarea>
+      </div>
+      <button class="form-submit" id="formSubmit" onclick="window.enviarPedido()" aria-label="Enviar pedido de oferta">
+        🔍 Buscar e Enviar por E-mail
+      </button>`;
+};
 window.toggleChat = toggleChat;
 window.enviarMsg = enviarMsg;
 window.analisarOferta = analisarOferta;
@@ -2627,6 +2860,40 @@ document.addEventListener('click', (e) => {
         if (box) box.style.display = 'none';
     }
 });
+
+// ==========================================
+// COUNTDOWN RELÂMPAGO (até meia-noite)
+// ==========================================
+function atualizarContagem() {
+    const agora = new Date();
+    const meiaNoite = new Date(agora);
+    meiaNoite.setHours(24, 0, 0, 0);
+    let diff = Math.floor((meiaNoite - agora) / 1000);
+    if (diff < 0) diff = 0;
+    const h = Math.floor(diff / 3600);
+    const m = Math.floor((diff % 3600) / 60);
+    const s = diff % 60;
+    const pad = n => String(n).padStart(2, '0');
+    const elH = document.getElementById('cdHoras');
+    const elM = document.getElementById('cdMinutos');
+    const elS = document.getElementById('cdSegundos');
+    if (elH) elH.textContent = pad(h);
+    if (elM) elM.textContent = pad(m);
+    if (elS) elS.textContent = pad(s);
+}
+atualizarContagem();
+setInterval(atualizarContagem, 1000);
+
+// ==========================================
+// FILTRO POR CATEGORIA (botões da category-nav)
+// ==========================================
+window.filtrarCategoria = function(termo) {
+    window.navegar('ofertas');
+    setTimeout(() => {
+        const inp = document.getElementById('buscaInput');
+        if (inp) { inp.value = termo; window.filtrarOfertas && window.filtrarOfertas(); }
+    }, 100);
+};
 
 // ==========================================
 // INICIALIZAÇÃO
