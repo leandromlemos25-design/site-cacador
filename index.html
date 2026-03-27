@@ -1352,9 +1352,25 @@ footer{
   .page{padding-top:56px}
   #hero{padding-top:56px;padding-left:0;padding-right:0;gap:0;min-height:auto}
   .hero-mascot-side{display:none}
-  .hero-banner-inner{padding:28px 16px 28px}
-  .hero-main-title{font-size:clamp(36px,8vw,60px)}
-  .hero-banner-stats{gap:16px}
+  .hero-banner-inner{
+    padding:28px 16px 28px;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:0;
+  }
+  .hero-left-col{width:100%}
+  .hero-tag{
+    letter-spacing:1px;
+    white-space:nowrap;
+    font-size:9px;
+  }
+  .hero-main-title{font-size:clamp(42px,11vw,64px);letter-spacing:-2px}
+  .hero-main-sub{font-size:14px;max-width:100%}
+  .hero-banner-btns{flex-direction:column;gap:10px}
+  .hero-btn-solid,.hero-btn-outline{width:100%;justify-content:center}
+  .hero-banner-stats{gap:0;margin-top:4px}
+  .hero-banner-stat{padding:0 16px 0 0;margin-right:16px}
+  .hero-mobile-card{width:100%;margin-top:16px}
   .category-nav{padding:14px 16px}
   .cat-btn{min-width:60px;padding:10px 10px;font-size:10px}
   .cat-btn-icon{font-size:20px}
