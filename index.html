@@ -1353,20 +1353,21 @@ footer{
   display:grid;grid-template-columns:2fr 1fr 1fr 1fr;
   gap:40px;max-width:var(--max-width);margin:0 auto;
 }
-.footer-brand{display:flex;align-items:center;gap:12px}
+.footer-brand{display:flex;flex-direction:column;align-items:center;gap:0}
 .footer-brand-name{font-family:'Plus Jakarta Sans','DM Sans',sans-serif;font-weight:800;font-size:15px;color:var(--text);}
-.footer-brand-tag{font-size:12px;color:var(--text3);margin-top:2px}
-.footer-col h4{font-size:13px;font-weight:700;color:var(--text);margin-bottom:14px;text-transform:uppercase;letter-spacing:0.5px}
+.footer-brand-tag{font-size:12px;color:var(--text3);margin-top:2px;text-align:center}
+.footer-col h4{font-size:13px;font-weight:700;color:var(--brand-blue);margin-bottom:14px;text-transform:uppercase;letter-spacing:0.5px}
 .footer-col a{display:block;font-size:13px;color:var(--text3);padding:3px 0;transition:color .15s}
 .footer-col a:hover{color:var(--accent)}
-.footer-socials{display:flex;gap:8px;margin-top:12px}
+.footer-socials{display:flex;gap:8px;margin-top:14px;justify-content:center}
 .footer-social{
-  width:36px;height:36px;border-radius:var(--radius-sm);
+  width:40px;height:40px;border-radius:var(--radius-sm);
   background:var(--surface);border:1px solid var(--border);
-  display:flex;align-items:center;justify-content:center;
+  display:flex;align-items:center;justify-content:flex-start;
+  padding-left:10px;
   color:var(--text3);transition:all .15s;
 }
-.footer-social:hover{color:var(--text);border-color:var(--border2)}
+.footer-social:hover{color:var(--accent);border-color:var(--accent);background:var(--accent-soft)}
 .footer-trust{
   display:flex;align-items:center;gap:24px;padding:20px 0;
   border-top:1px solid var(--border);border-bottom:1px solid var(--border);
@@ -1826,9 +1827,9 @@ footer{
     <!-- Coluna 1: Marca -->
     <div class="footer-col">
       <div class="footer-brand">
-        <img src="logo-transparent.png" alt="O Caçador de Ofertas" style="height:56px;width:auto;display:block;filter:drop-shadow(0 1px 4px rgba(0,0,0,0.25))">
+        <img src="logo-transparent.png" alt="O Caçador de Ofertas" style="height:72px;width:auto;display:block;filter:drop-shadow(0 2px 8px rgba(0,0,0,0.3))">
       </div>
-      <p class="footer-brand-tag" style="margin-top:12px;">A sua plataforma de inteligência em descontos.</p>
+      <p class="footer-brand-tag" style="margin-top:10px;">A sua plataforma de inteligência em descontos.</p>
       <div class="footer-socials" id="footerSocials"></div>
     </div>
     <!-- Coluna 2: Navegação -->
