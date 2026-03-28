@@ -470,9 +470,15 @@ nav#navbar{
 .carousel-prev{left:12px}
 .carousel-next{right:12px}
 @media(max-width:768px){
-  .carousel-slide{height:160px;padding:0 16px}
-  .carousel-slide-right{width:120px;height:120px}
-  .carousel-slide-right img{max-height:110px}
+  #bannerCarousel{border-radius:0}
+  .carousel-slide{height:auto;min-height:130px;padding:16px;overflow:hidden;align-items:center}
+  .carousel-slide-left{flex:1;min-width:0;padding-right:12px}
+  .carousel-slide-title{font-size:13px;-webkit-line-clamp:2}
+  .carousel-slide-new{font-size:20px}
+  .carousel-slide-old{font-size:12px}
+  .carousel-slide-btn{font-size:11px;padding:6px 12px}
+  .carousel-slide-right{width:90px;height:90px;flex-shrink:0}
+  .carousel-slide-right img{max-width:90px;max-height:85px}
   .carousel-arrow{display:none}
 }
 
@@ -2691,10 +2697,13 @@ function renderBannerCarousel() {
     const dotsEl = document.getElementById('carouselDots');
     if (!track || !dotsEl) return;
 
-    const slides = todasOfertas
+    // Uma oferta por loja (variedade) — evita repetir o mesmo produto dos destaques
+    const byStore = {};
+    todasOfertas
         .filter(o => o.desconto >= 15 && o.precoNovo > 0 && o.img && o.img.startsWith('http'))
         .sort((a, b) => b.desconto - a.desconto)
-        .slice(0, 6);
+        .forEach(o => { if (!byStore[o.loja]) byStore[o.loja] = o; });
+    const slides = Object.values(byStore).slice(0, 6);
 
     if (!slides.length) { document.getElementById('bannerCarousel').style.display = 'none'; return; }
     document.getElementById('bannerCarousel').style.display = 'block';
