@@ -1365,16 +1365,15 @@ footer{
 .footer-social{
   width:52px;height:52px;border-radius:14px;
   border:2px solid transparent;
-  display:flex;align-items:center;justify-content:center;
+  display:grid;place-items:center;
   transition:transform .2s,box-shadow .2s,opacity .15s;
   opacity:.92;
 }
 .footer-social i{
-  font-size:22px;
-  line-height:52px;
-  color:#fff;
-  margin:0;padding:0;
-  pointer-events:none;
+  font-size:22px !important;
+  line-height:1 !important;
+  color:#fff !important;
+  display:block;
 }
 .footer-social svg{width:26px!important;height:26px!important;display:block}
 .footer-social:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.25);opacity:1}
@@ -2645,7 +2644,7 @@ function renderFavoritos() {
 
 function renderSocial() {
     document.getElementById("socialGrid").innerHTML = REDES.map(r => `<a class="social-card" href="${r.url}" target="_blank" aria-label="Siga-nos no ${r.nome}"><div class="social-icon" style="color:${r.cor};"><i class="${r.fa}" style="font-size:28px"></i></div><span>${r.nome}</span></a>`).join("");
-    document.getElementById("footerSocials").innerHTML = REDES.map(r => `<a class="footer-social" href="${r.url}" target="_blank" aria-label="Siga-nos no ${r.nome}" style="background:${r.cor};border-color:${r.cor};font-size:22px;color:#fff;text-align:center"><i class="${r.fa}"></i></a>`).join("");
+    document.getElementById("footerSocials").innerHTML = REDES.map(r => `<a class="footer-social" href="${r.url}" target="_blank" aria-label="Siga-nos no ${r.nome}" style="background:${r.cor};border-color:${r.cor}"><i class="${r.fa}"></i></a>`).join("");
 }
 
 function renderFormLojas() {
