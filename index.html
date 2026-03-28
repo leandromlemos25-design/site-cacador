@@ -1359,15 +1359,15 @@ footer{
 .footer-col h4{font-size:13px;font-weight:700;color:var(--brand-blue);margin-bottom:14px;text-transform:uppercase;letter-spacing:0.5px}
 .footer-col a{display:block;font-size:13px;color:var(--text3);padding:3px 0;transition:color .15s}
 .footer-col a:hover{color:var(--accent)}
-.footer-socials{display:flex;gap:8px;margin-top:14px;justify-content:center}
+.footer-socials{display:flex;gap:10px;margin-top:14px;justify-content:center}
 .footer-social{
-  width:40px;height:40px;border-radius:var(--radius-sm);
-  background:var(--surface);border:1px solid var(--border);
-  display:flex;align-items:center;justify-content:flex-start;
-  padding-left:10px;
-  color:var(--text3);transition:all .15s;
+  width:44px;height:44px;border-radius:12px;
+  border:2px solid transparent;
+  display:flex;align-items:center;justify-content:center;
+  transition:transform .2s,box-shadow .2s,opacity .15s;
+  opacity:.9;
 }
-.footer-social:hover{color:var(--accent);border-color:var(--accent);background:var(--accent-soft)}
+.footer-social:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.25);opacity:1}
 .footer-trust{
   display:flex;align-items:center;gap:24px;padding:20px 0;
   border-top:1px solid var(--border);border-bottom:1px solid var(--border);
@@ -2080,10 +2080,14 @@ const LOJAS = {
 };
 
 const REDES = [
-    { nome: "Telegram",  url: CONFIG.TELEGRAM,  svg: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.94z"/></svg>', cor: "#0088CC" },
-    { nome: "Instagram", url: CONFIG.INSTAGRAM, svg: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>', cor: "#E4405F" },
-    { nome: "TikTok",    url: CONFIG.TIKTOK,    svg: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.16-3.44-3.37-3.46-5.7-.02-1.43.34-2.84 1.05-4.04 1.63-2.64 4.88-3.9 7.82-2.92v4.06c-1.12-.4-2.42-.31-3.43.3-1.05.62-1.68 1.78-1.62 3.02.04 1.15.68 2.21 1.7 2.76 1.06.56 2.4.61 3.49.12 1.15-.52 1.88-1.68 1.91-2.96.06-4.57.01-9.15.03-13.73l-.02-.02z"/></svg>', cor: "#fff" },
-    { nome: "Facebook",  url: CONFIG.FACEBOOK,  svg: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm3 8h-1.35c-.538 0-.65.221-.65.778v1.222h2l-.209 2h-1.791v7h-3v-7h-2v-2h2v-2.308c0-1.769.931-2.692 3.029-2.692h1.971v3z"/></svg>', cor: "#1877F2" }
+    { nome: "Telegram",  url: CONFIG.TELEGRAM,  cor: "#0088CC",
+      svg: '<svg viewBox="0 0 24 24" width="20" height="20" fill="#fff"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/></svg>' },
+    { nome: "Instagram", url: CONFIG.INSTAGRAM, cor: "#E4405F",
+      svg: '<svg viewBox="0 0 24 24" width="20" height="20" fill="#fff"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5M12 7a5 5 0 1 1 0 10A5 5 0 0 1 12 7m0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>' },
+    { nome: "TikTok",    url: CONFIG.TIKTOK,    cor: "#010101",
+      svg: '<svg viewBox="0 0 24 24" width="20" height="20" fill="#fff"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.16-3.44-3.37-3.46-5.7-.02-1.43.34-2.84 1.05-4.04 1.63-2.64 4.88-3.9 7.82-2.92v4.06c-1.12-.4-2.42-.31-3.43.3-1.05.62-1.68 1.78-1.62 3.02.04 1.15.68 2.21 1.7 2.76 1.06.56 2.4.61 3.49.12 1.15-.52 1.88-1.68 1.91-2.96.06-4.57.01-9.15.03-13.73l-.02-.02z"/></svg>' },
+    { nome: "Facebook",  url: CONFIG.FACEBOOK,  cor: "#1877F2",
+      svg: '<svg viewBox="0 0 24 24" width="20" height="20" fill="#fff"><path d="M13 9.5h2.5l-.5 3H13v9h-3v-9H8v-3h2V8c0-2.5 1.5-4 3.9-4 1.1 0 2.1.1 3.1.3V7h-1.5c-1.1 0-1.5.5-1.5 1.5V9.5z"/></svg>' }
 ];
 
 let todasOfertas = [];
@@ -2631,7 +2635,7 @@ function renderFavoritos() {
 
 function renderSocial() {
     document.getElementById("socialGrid").innerHTML = REDES.map(r => `<a class="social-card" href="${r.url}" target="_blank" aria-label="Siga-nos no ${r.nome}"><div class="social-icon" style="color:${r.cor};">${r.svg}</div><span>${r.nome}</span></a>`).join("");
-    document.getElementById("footerSocials").innerHTML = REDES.map(r => `<a class="footer-social" href="${r.url}" target="_blank" aria-label="Siga-nos no ${r.nome}">${r.svg}</a>`).join("");
+    document.getElementById("footerSocials").innerHTML = REDES.map(r => `<a class="footer-social" href="${r.url}" target="_blank" aria-label="Siga-nos no ${r.nome}" style="background:${r.cor};border-color:${r.cor}">${r.svg}</a>`).join("");
 }
 
 function renderFormLojas() {
