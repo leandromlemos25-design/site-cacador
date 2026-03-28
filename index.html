@@ -379,6 +379,103 @@ nav#navbar{
 .hero-card-price{font-size:20px;font-weight:800;color:#fff;font-family:'Plus Jakarta Sans','DM Sans',sans-serif}
 .hero-card-old{font-size:12px;color:rgba(255,255,255,0.65);text-decoration:line-through}
 
+/* ══ BANNER CAROUSEL ══ */
+#bannerCarousel{
+  width:100%;overflow:hidden;position:relative;
+  background:var(--bg2);
+  border-bottom:1px solid var(--border);
+  user-select:none;
+}
+.carousel-track{
+  display:flex;
+  transition:transform .55s cubic-bezier(.25,.46,.45,.94);
+  will-change:transform;
+}
+.carousel-slide{
+  min-width:100%;height:200px;
+  display:flex;align-items:center;
+  justify-content:space-between;
+  padding:0 40px;
+  position:relative;overflow:hidden;
+  cursor:pointer;
+  text-decoration:none;
+}
+.carousel-slide::before{
+  content:'';position:absolute;inset:0;
+  background:inherit;opacity:.92;
+}
+.carousel-slide-left{position:relative;z-index:1;flex:1;padding-right:16px}
+.carousel-slide-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;
+  color:#fff;background:rgba(0,0,0,0.3);
+  border-radius:4px;padding:4px 10px;margin-bottom:10px;
+  backdrop-filter:blur(8px);
+}
+.carousel-slide-title{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(16px,2.5vw,22px);font-weight:800;
+  color:#fff;line-height:1.2;margin-bottom:10px;
+  text-shadow:0 2px 8px rgba(0,0,0,0.3);
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+.carousel-slide-prices{display:flex;align-items:baseline;gap:10px;margin-bottom:12px}
+.carousel-slide-old{font-size:13px;color:rgba(255,255,255,0.65);text-decoration:line-through}
+.carousel-slide-new{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(22px,4vw,32px);font-weight:800;color:#fff;
+  text-shadow:0 2px 12px rgba(0,0,0,0.3);
+}
+.carousel-slide-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  background:#fff;color:#111;
+  font-size:12px;font-weight:800;
+  padding:8px 18px;border-radius:100px;
+  transition:transform .15s;
+}
+.carousel-slide-btn:hover{transform:scale(1.04)}
+.carousel-slide-right{
+  position:relative;z-index:1;
+  flex-shrink:0;width:160px;height:160px;
+  display:flex;align-items:center;justify-content:center;
+}
+.carousel-slide-right img{
+  max-width:100%;max-height:150px;
+  object-fit:contain;
+  filter:drop-shadow(0 8px 24px rgba(0,0,0,0.4));
+  transition:transform .3s;
+}
+.carousel-slide:hover .carousel-slide-right img{transform:scale(1.06) translateY(-4px)}
+.carousel-dots{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  padding:10px 0;background:var(--bg2);
+}
+.carousel-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--border2);cursor:pointer;
+  transition:all .25s;border:none;
+}
+.carousel-dot.ativo{width:20px;border-radius:4px;background:var(--accent)}
+.carousel-arrow{
+  position:absolute;top:50%;transform:translateY(-60%);
+  width:36px;height:36px;border-radius:50%;
+  background:rgba(0,0,0,0.35);color:#fff;
+  font-size:22px;font-weight:300;line-height:1;
+  display:flex;align-items:center;justify-content:center;
+  border:1px solid rgba(255,255,255,0.2);
+  transition:background .15s;z-index:10;
+  backdrop-filter:blur(4px);
+}
+.carousel-arrow:hover{background:rgba(0,0,0,0.6)}
+.carousel-prev{left:12px}
+.carousel-next{right:12px}
+@media(max-width:768px){
+  .carousel-slide{height:160px;padding:0 16px}
+  .carousel-slide-right{width:120px;height:120px}
+  .carousel-slide-right img{max-height:110px}
+  .carousel-arrow{display:none}
+}
+
 /* ══ CATEGORY NAV ══ */
 .category-nav{
   background:var(--surface);
@@ -1534,6 +1631,14 @@ footer{
     </div>
   </section>
 
+  <!-- ═══ CAROUSEL DE BANNERS ═══ -->
+  <div id="bannerCarousel" aria-label="Ofertas em destaque">
+    <div class="carousel-track" id="carouselTrack"></div>
+    <div class="carousel-dots" id="carouselDots"></div>
+    <button class="carousel-arrow carousel-prev" onclick="window.carouselMove(-1)" aria-label="Anterior">‹</button>
+    <button class="carousel-arrow carousel-next" onclick="window.carouselMove(1)" aria-label="Próxima">›</button>
+  </div>
+
   <!-- CATEGORIAS -->
   <nav class="category-nav" aria-label="Navegar por categoria">
     <div class="category-nav-inner">
@@ -2575,6 +2680,99 @@ function renderizarTudo() {
     atualizarStats();
     atualizarSchemaItemList();
     atualizarHeroMobileCard();
+    renderBannerCarousel();
+}
+
+// ══ BANNER CAROUSEL ══
+let _carIdx = 0, _carTimer = null, _carTotal = 0, _carStartX = 0;
+
+function renderBannerCarousel() {
+    const track = document.getElementById('carouselTrack');
+    const dotsEl = document.getElementById('carouselDots');
+    if (!track || !dotsEl) return;
+
+    const slides = todasOfertas
+        .filter(o => o.desconto >= 15 && o.precoNovo > 0 && o.img && o.img.startsWith('http'))
+        .sort((a, b) => b.desconto - a.desconto)
+        .slice(0, 6);
+
+    if (!slides.length) { document.getElementById('bannerCarousel').style.display = 'none'; return; }
+    document.getElementById('bannerCarousel').style.display = 'block';
+    _carTotal = slides.length;
+    _carIdx = 0;
+
+    const formatR = v => 'R$ ' + v.toFixed(2).replace('.', ',');
+
+    track.innerHTML = slides.map(o => {
+        const loja = LOJAS[o.loja] || LOJAS.outras;
+        const bg = `linear-gradient(120deg, ${loja.cor}dd 0%, ${loja.cor}88 60%, ${loja.cor}44 100%)`;
+        return `
+        <a class="carousel-slide" href="${esc(o.link)}" target="_blank" rel="noopener"
+           style="background:${bg}"
+           onclick="window.trackClick(${o.id},'${esc(o.titulo)}','${o.loja}',${o.precoNovo})">
+          <div class="carousel-slide-left">
+            <div class="carousel-slide-badge">${loja.emoji} ${loja.nome} &nbsp;•&nbsp; -${o.desconto}% OFF</div>
+            <div class="carousel-slide-title">${esc(o.titulo)}</div>
+            <div class="carousel-slide-prices">
+              ${o.precoAntigo > 0 ? `<span class="carousel-slide-old">${formatR(o.precoAntigo)}</span>` : ''}
+              <span class="carousel-slide-new">${formatR(o.precoNovo)}</span>
+            </div>
+            <span class="carousel-slide-btn">Ver Oferta →</span>
+          </div>
+          <div class="carousel-slide-right">
+            <img src="${esc(o.img)}" alt="${esc(o.titulo)}" loading="lazy"
+                 onerror="this.parentElement.style.display='none'">
+          </div>
+        </a>`;
+    }).join('');
+
+    dotsEl.innerHTML = slides.map((_, i) =>
+        `<button class="carousel-dot ${i===0?'ativo':''}" onclick="window.carouselGo(${i})" aria-label="Slide ${i+1}"></button>`
+    ).join('');
+
+    _iniciarCarouselAuto();
+    _carouselSwipe();
+}
+
+function _moverCarousel() {
+    const track = document.getElementById('carouselTrack');
+    if (track) track.style.transform = `translateX(-${_carIdx * 100}%)`;
+    document.querySelectorAll('.carousel-dot').forEach((d, i) => d.classList.toggle('ativo', i === _carIdx));
+}
+
+window.carouselGo = function(idx) {
+    _carIdx = idx;
+    _moverCarousel();
+    _reiniciarCarouselTimer();
+};
+
+window.carouselMove = function(dir) {
+    _carIdx = (_carIdx + dir + _carTotal) % _carTotal;
+    _moverCarousel();
+    _reiniciarCarouselTimer();
+};
+
+function _iniciarCarouselAuto() {
+    if (_carTimer) clearInterval(_carTimer);
+    _carTimer = setInterval(() => {
+        _carIdx = (_carIdx + 1) % _carTotal;
+        _moverCarousel();
+    }, 4500);
+}
+
+function _reiniciarCarouselTimer() {
+    if (_carTimer) clearInterval(_carTimer);
+    _iniciarCarouselAuto();
+}
+
+function _carouselSwipe() {
+    const el = document.getElementById('bannerCarousel');
+    if (!el) return;
+    el.addEventListener('touchstart', e => { _carStartX = e.touches[0].clientX; }, { passive: true });
+    el.addEventListener('touchend', e => {
+        const diff = _carStartX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 40) window.carouselMove(diff > 0 ? 1 : -1);
+    }, { passive: true });
 }
 
 function atualizarHeroMobileCard() {
