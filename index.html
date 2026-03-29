@@ -1439,6 +1439,30 @@ footer{
 @keyframes toast-out{to{opacity:0;transform:translateY(10px)}}
 .toast-icon{font-size:16px}
 
+/* ══ GAMIFICAÇÃO ══ */
+.gami-hud{display:flex;align-items:center;gap:6px;cursor:pointer;padding:4px 8px;border-radius:20px;background:var(--bg2);transition:background .2s}
+.gami-hud:hover{background:var(--border)}
+.gami-nivel-emoji{font-size:18px;line-height:1}
+.gami-bar-wrap{width:48px;height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+.gami-bar{height:100%;background:linear-gradient(90deg,var(--primary),#ff8c00);border-radius:3px;transition:width .4s ease}
+.gami-perfil{background:var(--bg2);border-radius:16px;padding:20px;margin-bottom:24px;border:1px solid var(--border)}
+.gami-perfil-topo{display:flex;align-items:center;gap:16px;margin-bottom:16px}
+.gami-nivel-grande{font-size:48px;line-height:1}
+.gami-nivel-nome{font-size:18px;font-weight:700;color:var(--text)}
+.gami-pts{font-size:13px;color:var(--text2);margin-top:2px}
+.gami-streak{font-size:13px;color:var(--primary);font-weight:600;margin-top:4px}
+.gami-stats-row{display:flex;gap:16px;margin-bottom:16px}
+.gami-stat{display:flex;flex-direction:column;align-items:center;background:var(--bg);border-radius:10px;padding:10px 16px;flex:1}
+.gami-stat strong{font-size:20px;font-weight:800;color:var(--text)}
+.gami-stat span{font-size:11px;color:var(--text2);margin-top:2px}
+.gami-section-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text2);margin:12px 0 8px}
+.gami-badges{display:flex;flex-wrap:wrap;gap:8px}
+.gami-badge{display:flex;flex-direction:column;align-items:center;gap:4px;background:var(--bg);border-radius:10px;padding:10px 12px;min-width:72px;border:1px solid var(--border)}
+.gami-badge.desbloqueado{border-color:var(--primary);background:color-mix(in srgb,var(--primary) 8%,var(--bg))}
+.gami-badge.bloqueado{opacity:.45}
+.gami-badge span{font-size:22px;line-height:1}
+.gami-badge small{font-size:10px;color:var(--text2);text-align:center;line-height:1.2}
+
 /* ══ ANIMAÇÕES ══ */
 .fade-up{animation:fade-up .5s ease both}
 @keyframes fade-up{from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)}}
@@ -1551,6 +1575,7 @@ footer{
     <button class="nav-mobile-search" onclick="window.toggleBuscaMobile()" aria-label="Buscar ofertas">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
     </button>
+    <div id="gamiHUD" class="gami-hud" onclick="window.navegar('favoritos')" title="Seu nível de caçador"></div>
     <button class="nav-theme" onclick="window.toggleTema()" aria-label="Alternar tema claro e escuro">🌓</button>
     <a class="nav-cta" href="https://t.me/ocacadordeoferta" target="_blank" aria-label="Entrar no Grupo do Telegram">
       <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.94z"/></svg> 
@@ -1787,6 +1812,7 @@ footer{
     <span class="section-label">Sua Lista</span>
     <h1 class="section-title fade-up">❤️ Favoritos</h1>
     <p class="section-sub fade-up fade-up-1">As ofertas que você salvou para não perder de vista.</p>
+    <div id="gamiPerfil" class="gami-perfil fade-up"></div>
     <div class="ofertas-grid" id="favoritosGrid"></div>
   </section>
 </div>
@@ -2073,5 +2099,6 @@ footer{
 <script src="js/carousel.js"></script>
 <script src="js/chatbot.js"></script>
 <script src="js/features.js"></script>
+<script src="js/gamification.js"></script>
 </body>
 </html>

@@ -179,6 +179,8 @@ window.trackClick = function(id, titulo, loja, preco) {
         if (clicks.length > 1000) clicks.splice(0, clicks.length - 1000);
         localStorage.setItem('cdf_analytics', JSON.stringify(clicks));
     } catch(e) {}
+    const oferta = todasOfertas.find(o => o.id === id);
+    if (window.gamiAddClick) window.gamiAddClick(oferta?.desconto || 0);
 };
 
 // ==========================================
