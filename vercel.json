@@ -25,7 +25,7 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://browser.sentry-cdn.com https://www.googletagmanager.com https://www.google-analytics.com https://cdn.emailjs.com https://generativelanguage.googleapis.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://sheets.googleapis.com https://generativelanguage.googleapis.com https://api.emailjs.com https://sentry.io https://www.google-analytics.com https://script.google.com https://script.googleusercontent.com https://o4511125614690304.ingest.de.sentry.io; frame-ancestors 'none';"
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://browser.sentry-cdn.com https://www.googletagmanager.com https://www.google-analytics.com https://cdn.emailjs.com https://generativelanguage.googleapis.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://sheets.googleapis.com https://generativelanguage.googleapis.com https://api.emailjs.com https://sentry.io https://www.google-analytics.com https://script.google.com https://script.googleusercontent.com https://o4511125614690304.ingest.de.sentry.io https://cdn.jsdelivr.net; frame-ancestors 'none';"
         }
       ]
     }
