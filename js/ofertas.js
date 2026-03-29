@@ -103,6 +103,7 @@ async function carregarOfertas(silencioso = false) {
             selo:         { nomes: ["selo", "badge", "tag"],   idx: 8 },
             ativo:        { nomes: ["ativo", "active"],        idx: 9 },
             imagem:       { nomes: ["imagem", "image", "img"], idx: 10 },
+            banner:       { nomes: ["banner"],                 idx: 11 },
         };
 
         const colIdx = {};
@@ -150,6 +151,7 @@ async function carregarOfertas(silencioso = false) {
                 img: imgRaw || emojiF,
                 categoria: getCel(row, "categoria") || "Geral",
                 selo: getCel(row, "selo") || "",
+                banner: String(getCel(row, "banner") || "").toUpperCase() === "TRUE",
                 ativo, timestamp: ts
             };
         }).filter(o => {

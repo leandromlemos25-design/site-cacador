@@ -261,6 +261,12 @@ body {
               <label for="f_destaque" style="font-weight: 700; color: var(--text); cursor: pointer;">🔥 Enviar para a vitrine de Destaques do site</label>
             </div>
 
+            <!-- CAIXA DE BANNER -->
+            <div class="form-group full" style="flex-direction: row; align-items: center; gap: 10px; background: var(--bg2); padding: 15px; border-radius: 12px; border: 1px solid #7c3aed;">
+              <input type="checkbox" id="f_banner" style="width: 20px; height: 20px; accent-color: #7c3aed;" onchange="updatePreview()">
+              <label for="f_banner" style="font-weight: 700; color: var(--text); cursor: pointer;">🎯 Destacar no Banner Principal (carrossel do topo)</label>
+            </div>
+
           </div>
 
           <button type="button" id="btnSubmit" class="btn-submit" onclick="enviarParaSite()">
@@ -554,9 +560,10 @@ function enviarParaSite() {
     formData.append('link', link); 
     formData.append('data', dataFormatada); 
     formData.append('emoji', isEmoji); 
-    formData.append('categoria', categoria); 
-    formData.append('selo', selo); 
+    formData.append('categoria', categoria);
+    formData.append('selo', selo);
     formData.append('imagem', isImgUrl);
+    formData.append('banner', document.getElementById('f_banner').checked ? 'TRUE' : '');
 
     fetch(APPS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: formData }).then(() => {
         document.getElementById('successModal').classList.add('active');

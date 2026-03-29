@@ -6,13 +6,22 @@ function renderBannerCarousel() {
     const dotsEl = document.getElementById('carouselDots');
     if (!track || !dotsEl) return;
 
-    // Uma oferta por loja (variedade) — evita repetir o mesmo produto dos destaques
+    // 1. Ofertas marcadas manualmente como banner (prioridade máxima)
+    const bannerManuais = todasOfertas
+        .filter(o => o.banner && o.precoNovo > 0 && o.img && o.img.startsWith('http'))
+        .slice(0, 6);
+
+    // 2. Completar com melhor oferta por loja se não houver 6 manuais
     const byStore = {};
     todasOfertas
-        .filter(o => o.desconto >= 15 && o.precoNovo > 0 && o.img && o.img.startsWith('http'))
+        .filter(o => !o.banner && o.desconto >= 15 && o.precoNovo > 0 && o.img && o.img.startsWith('http'))
         .sort((a, b) => b.desconto - a.desconto)
         .forEach(o => { if (!byStore[o.loja]) byStore[o.loja] = o; });
-    const slides = Object.values(byStore).slice(0, 6);
+
+    const slides = [
+        ...bannerManuais,
+        ...Object.values(byStore)
+    ].slice(0, 6);
 
     if (!slides.length) { document.getElementById('bannerCarousel').style.display = 'none'; return; }
     document.getElementById('bannerCarousel').style.display = 'block';
