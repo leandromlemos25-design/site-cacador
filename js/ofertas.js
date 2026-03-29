@@ -282,11 +282,48 @@ function renderDestaques() {
     initLazyLoading();
 }
 
+const SINONIMOS = {
+    "mae": ["presente", "perfume", "kit", "cozinha", "flor", "mimo"],
+    "pai": ["ferramenta", "eletronico", "churrasco", "futebol", "carro"],
+    "bebe": ["infantil", "crianca", "berco", "fralda", "brinquedo"],
+    "celular": ["smartphone", "iphone", "android", "telefone", "mobile"],
+    "fone": ["headphone", "earphone", "auricular", "bluetooth", "headset", "audio"],
+    "tv": ["televisao", "televisor", "smart tv", "monitor"],
+    "notebook": ["laptop", "computador", "pc", "ultrabook"],
+    "roupa": ["camiseta", "calca", "vestido", "camisa", "blusa", "moletom"],
+    "tenis": ["sapato", "calcado", "sandalia", "sapatilha", "sneaker"],
+    "presente": ["kit", "conjunto", "gift", "mimo"],
+    "cozinha": ["panela", "frigideira", "utensilio", "eletrodomestico", "airfryer"],
+    "geladeira": ["refrigerador", "freezer"],
+    "perfume": ["fragrancia", "colonia", "desodorante"],
+    "jogo": ["game", "console", "playstation", "xbox", "nintendo"],
+    "relogio": ["smartwatch", "watch", "pulso"],
+    "bolsa": ["mochila", "carteira", "necessaire", "bag"],
+    "brinquedo": ["boneca", "carrinho", "lego", "jogo", "infantil"],
+    "academia": ["fitness", "treino", "musculacao", "haltere", "esteira"],
+    "casa": ["decoracao", "organizador", "limpeza", "cama", "banho"],
+};
+
+function _normStr(s) {
+    return (s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+}
+
+function _matchBusca(titulo, categoria, query) {
+    if (!query) return true;
+    const texto = _normStr(titulo + " " + categoria);
+    const palavras = _normStr(query).split(/\s+/).filter(Boolean);
+    return palavras.every(p => {
+        if (texto.includes(p)) return true;
+        const sins = SINONIMOS[p];
+        return sins ? sins.some(s => texto.includes(s)) : false;
+    });
+}
+
 function getFilteredOfertas() {
-    const busca = (document.getElementById("buscaInput")?.value || "").toLowerCase();
+    const busca = (document.getElementById("buscaInput")?.value || "").trim();
     return aplicarOrdem(todasOfertas.filter(o => {
-        return (lojaAtual === "todas" || o.loja === lojaAtual) && 
-               (!busca || o.titulo.toLowerCase().includes(busca) || o.categoria.toLowerCase().includes(busca));
+        return (lojaAtual === "todas" || o.loja === lojaAtual) &&
+               _matchBusca(o.titulo, o.categoria, busca);
     }));
 }
 
