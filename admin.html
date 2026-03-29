@@ -427,9 +427,9 @@ async function buscarDadosProduto() {
         if (!res.ok || data.erro) throw new Error(data.erro || 'Falha ao extrair dados');
 
         if (data.titulo) document.getElementById('f_titulo').value = data.titulo;
-        if (data.precoNovo) document.getElementById('f_preco_novo').value = data.precoNovo.toFixed(2).replace('.', ',');
+        if (data.precoNovo) document.getElementById('f_preco_novo').value = data.precoNovo.toFixed(2);
         if (data.precoAntigo && data.precoAntigo > data.precoNovo) {
-            document.getElementById('f_preco_antigo').value = data.precoAntigo.toFixed(2).replace('.', ',');
+            document.getElementById('f_preco_antigo').value = data.precoAntigo.toFixed(2);
         }
         if (data.imagem) document.getElementById('f_imagem').value = data.imagem;
         if (!document.getElementById('f_link').value) document.getElementById('f_link').value = url;
