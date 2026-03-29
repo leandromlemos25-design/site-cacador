@@ -58,14 +58,11 @@ window.updatePriceFilterDisplay = function() {
     disp.textContent = el.value >= 15000 ? "R$ 15.000+" : `R$ ${el.value}`;
 };
 window.mostrarAutocomplete = function() {
-    const busca = (document.getElementById('buscaInput')?.value || '').toLowerCase().trim();
+    const busca = (document.getElementById('buscaInput')?.value || '').trim();
     const box = document.getElementById('autocompleteResults');
     if (!box) return;
     if (busca.length < 2) { box.style.display = 'none'; return; }
-    const sugestoes = todasOfertas.filter(o => {
-        const t = o.titulo.toLowerCase();
-        return t.includes(busca) || t.replace(/pro max/gi,"promax").includes(busca);
-    }).slice(0, 6);
+    const sugestoes = todasOfertas.filter(o => _matchBusca(o.titulo, o.categoria, busca)).slice(0, 6);
     if (sugestoes.length === 0) { box.style.display = 'none'; return; }
     box.innerHTML = sugestoes.map(o => `<div class="autocomplete-item" onclick="window.selecionarAutocomplete('${esc(o.titulo)}')">🔍 ${esc(o.titulo)}</div>`).join('');
     box.style.display = 'block';
