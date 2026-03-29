@@ -128,19 +128,36 @@ function parsearAmazon(body) {
 
     const titulo = regexTag('productTitle') || regexTag('title', 'h1');
 
-    // Preço: whole + fraction
+    // Preço: múltiplas estratégias
+    let precoNovo = 0;
     const whole = body.match(/<span[^>]+class=["'][^"']*a-price-whole[^"']*["'][^>]*>([\d.]+)/i);
     const frac  = body.match(/<span[^>]+class=["'][^"']*a-price-fraction[^"']*["'][^>]*>(\d+)/i);
-    const precoNovo = whole ? parseFloat(`${whole[1].replace(/\./g,'')}.${frac ? frac[1] : '00'}`) : 0;
+    if (whole) precoNovo = parseFloat(`${whole[1].replace(/\./g,'')}.${frac ? frac[1] : '00'}`);
+    if (!precoNovo) {
+        const jsonM = body.match(/"priceAmount"\s*:\s*([\d.]+)/);
+        if (jsonM) precoNovo = parseFloat(jsonM[1]);
+    }
+    if (!precoNovo) {
+        const dataM = body.match(/data-a-color=["']price["'][^>]*>[\s\S]{0,200}?R\$\s*([\d.,]+)/i);
+        if (dataM) precoNovo = extrairPreco(dataM[1]);
+    }
 
-    // Preço antigo (taxado)
-    const antigoM = body.match(/<span[^>]+class=["'][^"']*a-price\s+a-text-price[^"']*["'][^>]*>[\s\S]*?<span[^>]*>([\d.,R$\s]+)<\/span>/i);
+    // Preço antigo
+    const antigoM = body.match(/"wasPrice"\s*:\s*"R\$\s*([\d.,]+)"/)
+                 || body.match(/a-text-price[^>]*>[\s\S]{0,100}?R\$\s*([\d.,]+)<\/span>/i);
     const precoAntigo = antigoM ? extrairPreco(antigoM[1]) : 0;
 
-    // Imagem principal
-    const imgM = body.match(/id=["']landingImage["'][^>]+src=["']([^"']+)["']/i)
-               || body.match(/id=["']imgBlkFront["'][^>]+src=["']([^"']+)["']/i);
-    const imagem = imgM ? imgM[1] : '';
+    // Imagem: src direto, depois JSON embutido
+    let imagem = '';
+    const imgSrc = body.match(/id=["']landingImage["'][^>]+src=["'](https:[^"']+)["']/i)
+                || body.match(/id=["']imgBlkFront["'][^>]+src=["'](https:[^"']+)["']/i);
+    if (imgSrc) {
+        imagem = imgSrc[1];
+    } else {
+        const hiRes = body.match(/"hiRes"\s*:\s*"(https:[^"]+)"/)
+                   || body.match(/"large"\s*:\s*"(https:[^"]+\.jpg[^"]*)"/);
+        if (hiRes) imagem = hiRes[1];
+    }
 
     return { titulo: titulo || '', precoNovo, precoAntigo, imagem };
 }
