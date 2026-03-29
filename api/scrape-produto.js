@@ -93,16 +93,33 @@ function extrairNextData($, body) {
         const el = $('#__NEXT_DATA__').html() || body.match(/<script id="__NEXT_DATA__"[^>]*>([\s\S]*?)<\/script>/)?.[1];
         if (el) {
             const json = JSON.parse(el);
-            // Navega recursivamente em busca de campos de produto
             const str = JSON.stringify(json);
-            const nome = str.match(/"(?:title|name|productName|nomeProduto)"\s*:\s*"([^"]{10,200})"/)?.[1];
-            const preco = str.match(/"(?:price|bestPrice|salePrice|preco|valor)"\s*:\s*([\d.]+)/)?.[1];
-            const precoAntigo = str.match(/"(?:listPrice|originalPrice|precoAntigo|fullPrice)"\s*:\s*([\d.]+)/)?.[1];
-            const img = str.match(/"(?:imageUrl|image|foto|thumbnail)"\s*:\s*"(https:[^"]+)"/)?.[1];
-            if (nome) return {
-                titulo: nome,
-                precoNovo: preco ? parseFloat(preco) : 0,
-                precoAntigo: precoAntigo ? parseFloat(precoAntigo) : 0,
+
+            // Magalu: campos específicos da estrutura deles
+            const magaluProd = str.match(/"title"\s*:\s*"([^"]{10,300})"/)?.[1]
+                            || str.match(/"description"\s*:\s*"([^"]{10,300})"/)?.[1];
+            // Preços: Magalu usa bestPrice / price em centavos ou reais
+            let preco = 0, precoAntigo = 0;
+            const bestPrice = str.match(/"bestPrice"\s*:\s*([\d.]+)/)?.[1];
+            const listPrice = str.match(/"listPrice"\s*:\s*([\d.]+)/)?.[1];
+            const salePrice = str.match(/"salePrice"\s*:\s*([\d.]+)/)?.[1];
+            const origPrice = str.match(/"originalPrice"\s*:\s*([\d.]+)/)?.[1];
+            const priceVal  = str.match(/"price"\s*:\s*([\d.]+)/)?.[1];
+
+            preco = parseFloat(bestPrice || salePrice || priceVal || 0);
+            precoAntigo = parseFloat(listPrice || origPrice || 0);
+
+            // Valores em centavos (> 10000 para produto de R$100) → dividir por 100
+            if (preco > 10000) preco = preco / 100;
+            if (precoAntigo > 10000) precoAntigo = precoAntigo / 100;
+
+            // Imagem
+            const img = str.match(/"(?:imageUrl|image|foto|url)"\s*:\s*"(https:\/\/[^"]+\.(?:jpg|jpeg|png|webp)[^"]*)"/i)?.[1];
+
+            if (magaluProd) return {
+                titulo: magaluProd,
+                precoNovo: preco,
+                precoAntigo,
                 imagem: img || '',
             };
         }
