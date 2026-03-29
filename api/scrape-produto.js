@@ -61,6 +61,14 @@ function fetchUrl(urlStr, redirects = 0) {
                 res.resume();
                 return resolve(fetchUrl(next, redirects + 1));
             }
+            if (res.statusCode === 403 || res.statusCode === 401) {
+                res.resume();
+                return reject(new Error(`O site bloqueou o acesso automático (${res.statusCode}). Use o link direto do produto, não o link de afiliado curto.`));
+            }
+            if (res.statusCode >= 400) {
+                res.resume();
+                return reject(new Error(`Erro ${res.statusCode} ao acessar o link.`));
+            }
             const encoding = (res.headers['content-encoding'] || '').toLowerCase();
             let stream = res;
             if (encoding === 'gzip') stream = res.pipe(zlib.createGunzip());
