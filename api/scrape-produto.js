@@ -156,7 +156,10 @@ export default async function handler(req, res) {
         const { body, finalUrl } = await fetchUrl(url);
         const produto = parsearProduto(body, finalUrl);
 
-        if (!produto.titulo) return res.status(422).json({ erro: 'Não foi possível extrair dados do produto' });
+        // Retorna mesmo com dados parciais — admin pode completar manualmente
+        if (!produto.titulo && !produto.imagem && !produto.precoNovo) {
+            return res.status(422).json({ erro: 'Site bloqueou o acesso automático. Preencha manualmente.' });
+        }
 
         return res.status(200).json(produto);
     } catch (err) {
