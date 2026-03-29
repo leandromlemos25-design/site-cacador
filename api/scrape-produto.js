@@ -2,6 +2,7 @@ const https = require('https');
 const http = require('http');
 const zlib = require('zlib');
 const { URL } = require('url');
+const { load } = require('cheerio');
 
 const LOJAS_MAP = {
     'magalu.com': 'Magalu', 'magazineluiza.com': 'Magalu',
@@ -67,7 +68,7 @@ function fetchUrl(urlStr, redirects = 0) {
             else if (encoding === 'br') stream = res.pipe(zlib.createBrotliDecompress());
 
             const chunks = [];
-            stream.on('data', chunk => { if (chunks.reduce((a, c) => a + c.length, 0) < 500000) chunks.push(chunk); });
+            stream.on('data', chunk => { if (chunks.reduce((a, c) => a + c.length, 0) < 600000) chunks.push(chunk); });
             stream.on('end', () => resolve({ body: Buffer.concat(chunks).toString('utf8'), finalUrl: urlStr }));
             stream.on('error', reject);
         });
@@ -77,136 +78,132 @@ function fetchUrl(urlStr, redirects = 0) {
     });
 }
 
-function extrairMeta(html, prop) {
-    const patterns = [
-        new RegExp(`<meta[^>]+property=["']${prop}["'][^>]+content=["']([^"']+)["']`, 'i'),
-        new RegExp(`<meta[^>]+content=["']([^"']+)["'][^>]+property=["']${prop}["']`, 'i'),
-        new RegExp(`<meta[^>]+name=["']${prop}["'][^>]+content=["']([^"']+)["']`, 'i'),
-        new RegExp(`<meta[^>]+content=["']([^"']+)["'][^>]+name=["']${prop}["']`, 'i'),
-    ];
-    for (const re of patterns) {
-        const m = html.match(re);
-        if (m) return m[1].replace(/&amp;/g, '&').replace(/&#39;/g, "'").trim();
-    }
-    return null;
-}
-
-function extrairJsonLd(html) {
-    const matches = [...html.matchAll(/<script[^>]+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)];
-    for (const m of matches) {
-        try {
-            const data = JSON.parse(m[1]);
-            const items = Array.isArray(data) ? data : [data];
-            for (const item of items) {
-                const type = (item['@type'] || '').toLowerCase();
-                if (type === 'product' || type.includes('product')) return item;
-                if (item['@graph']) {
-                    const prod = item['@graph'].find(i => (i['@type'] || '').toLowerCase().includes('product'));
-                    if (prod) return prod;
-                }
-            }
-        } catch {}
-    }
-    return null;
-}
-
 function extrairPreco(str) {
     if (!str) return 0;
     const s = String(str).replace(/[^\d.,]/g, '');
-    if (s.includes(',') && s.includes('.')) {
-        return parseFloat(s.replace('.', '').replace(',', '.')) || 0;
-    }
+    if (s.includes(',') && s.includes('.')) return parseFloat(s.replace('.', '').replace(',', '.')) || 0;
     if (s.includes(',')) return parseFloat(s.replace(',', '.')) || 0;
     return parseFloat(s) || 0;
 }
 
-function parsearAmazon(body) {
-    const regexTag = (id, tag = 'span') => {
-        const m = body.match(new RegExp(`<${tag}[^>]+id=["']${id}["'][^>]*>([\\s\\S]*?)<\\/${tag}>`, 'i'));
-        return m ? m[1].replace(/<[^>]+>/g, '').trim() : null;
-    };
+function extrairJsonLd($) {
+    let produto = null;
+    $('script[type="application/ld+json"]').each((_, el) => {
+        if (produto) return;
+        try {
+            const data = JSON.parse($(el).html());
+            const items = Array.isArray(data) ? data : [data];
+            for (const item of items) {
+                const type = (item['@type'] || '').toLowerCase();
+                if (type === 'product' || type.includes('product')) { produto = item; return; }
+                if (item['@graph']) {
+                    const p = item['@graph'].find(i => (i['@type'] || '').toLowerCase().includes('product'));
+                    if (p) { produto = p; return; }
+                }
+            }
+        } catch {}
+    });
+    return produto;
+}
 
-    const titulo = regexTag('productTitle') || regexTag('title', 'h1');
+function parsearAmazon($, body) {
+    const titulo = $('#productTitle').text().trim()
+               || $('h1.a-size-large').first().text().trim();
 
-    // Preço: múltiplas estratégias
+    // Preço: tentar vários seletores
     let precoNovo = 0;
-    const whole = body.match(/<span[^>]+class=["'][^"']*a-price-whole[^"']*["'][^>]*>([\d.]+)/i);
-    const frac  = body.match(/<span[^>]+class=["'][^"']*a-price-fraction[^"']*["'][^>]*>(\d+)/i);
-    if (whole) precoNovo = parseFloat(`${whole[1].replace(/\./g,'')}.${frac ? frac[1] : '00'}`);
+    const whole = $('.a-price-whole').first().text().replace(/\./g, '').trim();
+    const frac   = $('.a-price-fraction').first().text().trim();
+    if (whole) precoNovo = parseFloat(`${whole}.${frac || '00'}`);
+
     if (!precoNovo) {
         const jsonM = body.match(/"priceAmount"\s*:\s*([\d.]+)/);
         if (jsonM) precoNovo = parseFloat(jsonM[1]);
     }
-    if (!precoNovo) {
-        const dataM = body.match(/data-a-color=["']price["'][^>]*>[\s\S]{0,200}?R\$\s*([\d.,]+)/i);
-        if (dataM) precoNovo = extrairPreco(dataM[1]);
-    }
 
     // Preço antigo
-    const antigoM = body.match(/"wasPrice"\s*:\s*"R\$\s*([\d.,]+)"/)
-                 || body.match(/a-text-price[^>]*>[\s\S]{0,100}?R\$\s*([\d.,]+)<\/span>/i);
-    const precoAntigo = antigoM ? extrairPreco(antigoM[1]) : 0;
+    const antigoTxt = $('.a-text-price .a-offscreen').first().text()
+                   || $('[data-a-strike="true"]').first().text();
+    const precoAntigo = extrairPreco(antigoTxt);
 
-    // Imagem: src direto, depois JSON embutido
-    let imagem = '';
-    const imgSrc = body.match(/id=["']landingImage["'][^>]+src=["'](https:[^"']+)["']/i)
-                || body.match(/id=["']imgBlkFront["'][^>]+src=["'](https:[^"']+)["']/i);
-    if (imgSrc) {
-        imagem = imgSrc[1];
-    } else {
+    // Imagem
+    let imagem = $('#landingImage').attr('src')
+              || $('#imgBlkFront').attr('src')
+              || '';
+    if (!imagem) {
         const hiRes = body.match(/"hiRes"\s*:\s*"(https:[^"]+)"/)
                    || body.match(/"large"\s*:\s*"(https:[^"]+\.jpg[^"]*)"/);
         if (hiRes) imagem = hiRes[1];
     }
 
-    return { titulo: titulo || '', precoNovo, precoAntigo, imagem };
+    return { titulo, precoNovo, precoAntigo, imagem };
+}
+
+function parsearMagalu($) {
+    const titulo = $('h1[class*="product-title"], h1[class*="Title"], h1.sc-dcJsrY').first().text().trim();
+    const precoNovo = extrairPreco($('[class*="price-value"], [class*="Price"] [class*="value"], [data-testid="price-value"]').first().text());
+    const precoAntigo = extrairPreco($('[class*="original-price"], [class*="OldPrice"], [data-testid="original-price"]').first().text());
+    const imagem = $('img[class*="product-image"], img[class*="ProductImage"]').first().attr('src') || '';
+    return { titulo, precoNovo, precoAntigo, imagem };
+}
+
+function parsearMercadoLivre($) {
+    const titulo = $('h1.ui-pdp-title').first().text().trim();
+    const precoNovo = extrairPreco($('.andes-money-amount__fraction').first().text());
+    const precoAntigo = extrairPreco($('.ui-pdp-price__original-value .andes-money-amount__fraction').first().text());
+    const imagem = $('img.ui-pdp-image').first().attr('data-zoom')
+               || $('img.ui-pdp-image').first().attr('src') || '';
+    return { titulo, precoNovo, precoAntigo, imagem };
 }
 
 function parsearProduto(body, finalUrl) {
-    const isAmazon = finalUrl.includes('amazon.com');
-    const jsonLd = extrairJsonLd(body);
+    const $ = load(body);
+    const loja = detectarLoja(finalUrl);
     let titulo = '', precoNovo = 0, precoAntigo = 0, imagem = '';
 
-    // Amazon: usar parser específico primeiro
-    if (isAmazon) {
-        const az = parsearAmazon(body);
-        titulo = az.titulo;
-        precoNovo = az.precoNovo;
-        precoAntigo = az.precoAntigo;
-        imagem = az.imagem;
+    // Parsers específicos por loja
+    if (loja === 'Amazon') {
+        const az = parsearAmazon($, body);
+        titulo = az.titulo; precoNovo = az.precoNovo;
+        precoAntigo = az.precoAntigo; imagem = az.imagem;
+    } else if (loja === 'Magalu') {
+        const mg = parsearMagalu($);
+        titulo = mg.titulo; precoNovo = mg.precoNovo;
+        precoAntigo = mg.precoAntigo; imagem = mg.imagem;
+    } else if (loja === 'Mercado Livre') {
+        const ml = parsearMercadoLivre($);
+        titulo = ml.titulo; precoNovo = ml.precoNovo;
+        precoAntigo = ml.precoAntigo; imagem = ml.imagem;
     }
 
-    if (jsonLd) {
-        titulo = jsonLd.name || '';
-        imagem = Array.isArray(jsonLd.image) ? jsonLd.image[0] : (jsonLd.image?.url || jsonLd.image || '');
-        const offer = Array.isArray(jsonLd.offers) ? jsonLd.offers[0] : jsonLd.offers;
-        if (offer) {
-            precoNovo = extrairPreco(offer.price);
-            precoAntigo = extrairPreco(offer.highPrice || offer.priceValidUntil || 0);
+    // Fallback universal: JSON-LD
+    if (!titulo || !precoNovo) {
+        const jsonLd = extrairJsonLd($);
+        if (jsonLd) {
+            if (!titulo) titulo = jsonLd.name || '';
+            const img = jsonLd.image;
+            if (!imagem) imagem = Array.isArray(img) ? img[0] : (img?.url || img || '');
+            const offer = Array.isArray(jsonLd.offers) ? jsonLd.offers[0] : jsonLd.offers;
+            if (offer && !precoNovo) {
+                precoNovo = extrairPreco(offer.price);
+                precoAntigo = extrairPreco(offer.highPrice || 0);
+            }
         }
     }
 
-    // Fallback OG tags
-    if (!titulo) titulo = extrairMeta(body, 'og:title') || extrairMeta(body, 'twitter:title') || '';
-    if (!imagem) imagem = extrairMeta(body, 'og:image') || extrairMeta(body, 'twitter:image') || '';
+    // Fallback final: OG tags via Cheerio
+    if (!titulo) titulo = $('meta[property="og:title"]').attr('content')
+                       || $('meta[name="twitter:title"]').attr('content') || '';
+    if (!imagem) imagem = $('meta[property="og:image"]').attr('content')
+                       || $('meta[name="twitter:image"]').attr('content') || '';
 
-    // Título: limpar sufixos de loja
+    // Limpar sufixo de loja do título
     titulo = titulo.replace(/\s*[|\-–—]\s*(Magalu|Magazine Luiza|Shopee|Amazon|Mercado Livre|Americanas|KaBuM|Casas Bahia).*$/i, '').trim();
 
-    // Calcular desconto
-    let desconto = 0;
-    if (precoAntigo > precoNovo && precoNovo > 0) {
-        desconto = Math.round(((precoAntigo - precoNovo) / precoAntigo) * 100);
-    }
+    const desconto = precoAntigo > precoNovo && precoNovo > 0
+        ? Math.round(((precoAntigo - precoNovo) / precoAntigo) * 100) : 0;
 
-    return {
-        titulo,
-        precoNovo,
-        precoAntigo,
-        desconto,
-        imagem,
-        loja: detectarLoja(finalUrl),
-    };
+    return { titulo, precoNovo, precoAntigo, desconto, imagem, loja };
 }
 
 export default async function handler(req, res) {
@@ -222,7 +219,6 @@ export default async function handler(req, res) {
         const { body, finalUrl } = await fetchUrl(url);
         const produto = parsearProduto(body, finalUrl);
 
-        // Retorna mesmo com dados parciais — admin pode completar manualmente
         if (!produto.titulo && !produto.imagem && !produto.precoNovo) {
             return res.status(422).json({ erro: 'Site bloqueou o acesso automático. Preencha manualmente.' });
         }
