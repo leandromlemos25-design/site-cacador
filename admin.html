@@ -178,8 +178,20 @@ body {
       <!-- FORMULÁRIO -->
       <div class="form-panel">
         <form id="offerForm">
+
+          <!-- AUTO-PREENCHER -->
+          <div class="form-group full" style="margin-bottom:20px">
+            <label class="form-label">⚡ Preencher automaticamente pelo link</label>
+            <div style="display:flex;gap:8px">
+              <input type="url" id="autoLinkInput" class="form-input" placeholder="Cole o link de afiliado aqui e clique em Buscar..." style="flex:1">
+              <button type="button" onclick="buscarDadosProduto()" id="btnAuto" style="background:var(--primary);color:#fff;border:none;border-radius:10px;padding:0 20px;font-weight:700;cursor:pointer;white-space:nowrap;transition:opacity .2s">🔍 Buscar</button>
+            </div>
+            <div id="autoStatus" style="font-size:12px;margin-top:6px;color:var(--text3)"></div>
+          </div>
+          <hr style="border:none;border-top:1px solid var(--border);margin-bottom:20px">
+
           <div class="form-row">
-            
+
             <div class="form-group full">
               <label class="form-label">Título do Produto</label>
               <input type="text" id="f_titulo" class="form-input" placeholder="Ex: Smart TV 55 4K Samsung..." required oninput="updatePreview()">
@@ -383,6 +395,52 @@ const LOJAS = {
 
 function formatMoney(num) { 
     return Number(num).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); 
+}
+
+const LOJAS_SLUG = {
+    'Magalu': 'magalu', 'Shopee': 'shopee', 'Amazon': 'amazon',
+    'Mercado Livre': 'mercadolivre', 'Americanas': 'americanas',
+    'KaBuM': 'kabum', 'Casas Bahia': 'casasbahia', 'AliExpress': 'aliexpress'
+};
+
+async function buscarDadosProduto() {
+    const url = document.getElementById('autoLinkInput').value.trim();
+    const status = document.getElementById('autoStatus');
+    const btn = document.getElementById('btnAuto');
+    if (!url) { status.textContent = '⚠️ Cole um link primeiro.'; return; }
+
+    btn.disabled = true;
+    btn.textContent = '⏳ Buscando...';
+    status.style.color = 'var(--text3)';
+    status.textContent = 'Acessando a página do produto...';
+
+    try {
+        const res = await fetch(`/api/scrape-produto?url=${encodeURIComponent(url)}`);
+        const data = await res.json();
+
+        if (!res.ok || data.erro) throw new Error(data.erro || 'Falha ao extrair dados');
+
+        if (data.titulo) document.getElementById('f_titulo').value = data.titulo;
+        if (data.precoNovo) document.getElementById('f_preco_novo').value = data.precoNovo.toFixed(2).replace('.', ',');
+        if (data.precoAntigo && data.precoAntigo > data.precoNovo) {
+            document.getElementById('f_preco_antigo').value = data.precoAntigo.toFixed(2).replace('.', ',');
+        }
+        if (data.imagem) document.getElementById('f_imagem').value = data.imagem;
+        if (!document.getElementById('f_link').value) document.getElementById('f_link').value = url;
+
+        const lojaSlug = LOJAS_SLUG[data.loja];
+        if (lojaSlug) document.getElementById('f_loja').value = lojaSlug;
+
+        updatePreview();
+        status.style.color = '#22c55e';
+        status.textContent = `✅ Dados preenchidos! Loja: ${data.loja}${data.desconto ? ` · ${data.desconto}% de desconto detectado` : ''}. Revise antes de publicar.`;
+    } catch (err) {
+        status.style.color = '#ef4444';
+        status.textContent = `❌ ${err.message}. Preencha manualmente.`;
+    } finally {
+        btn.disabled = false;
+        btn.textContent = '🔍 Buscar';
+    }
 }
 
 function updatePreview() {
