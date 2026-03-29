@@ -24,6 +24,7 @@ async function carregarOfertasMercadoLivre() {
         }
     } catch (err) {
         console.warn("Aviso ML API Frontend:", err.message);
+        if (typeof Sentry !== 'undefined') Sentry.captureException(err, { tags: { api: 'mercadolivre' } });
     }
 }
 
@@ -57,6 +58,7 @@ async function carregarOfertasShopee() {
         }
     } catch (err) {
         console.warn("Aviso Shopee API Frontend:", err.message);
+        if (typeof Sentry !== 'undefined') Sentry.captureException(err, { tags: { api: 'shopee' } });
     }
 }
 
@@ -168,6 +170,7 @@ async function carregarOfertas(silencioso = false) {
 
     } catch (err) {
         console.warn("API Sheets erro:", err.message);
+        if (typeof Sentry !== 'undefined') Sentry.captureException(err, { tags: { api: 'sheets' } });
         // Fallback: usar cache mesmo expirado se Sheets falhar
         const cached = lerCache();
         if (cached && todasOfertas.length === 0) {
