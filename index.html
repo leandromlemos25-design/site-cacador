@@ -3,6 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-R37SG7RK2H"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-R37SG7RK2H');
+</script>
+<script src="https://browser.sentry-cdn.com/7.99.0/bundle.tracing.min.js" crossorigin="anonymous"></script>
+<script>
+  if(typeof Sentry !== 'undefined') Sentry.init({
+    dsn: "SENTRY_DSN_PLACEHOLDER",
+    tracesSampleRate: 0.2,
+    environment: location.hostname.includes('localhost') ? 'development' : 'production'
+  });
+</script>
 <title>O Caçador de Ofertas — Melhores Promoções da Internet</title>
 <meta name="description" content="Promoções imperdíveis de Amazon, Shopee, Magalu, Mercado Livre e mais. Ofertas verificadas e atualizadas diariamente.">
 <meta property="og:title" content="O Caçador de Ofertas">
@@ -2237,9 +2252,10 @@ function isFavorito(id) { return getFavoritos().includes(id); }
 function toggleFavorito(id) {
     const favs = getFavoritos();
     const idx = favs.indexOf(id);
-    if (idx === -1) { favs.push(id); mostrarToast("❤️", `Salvo nos favoritos!`); } 
+    if (idx === -1) { favs.push(id); mostrarToast("❤️", `Salvo nos favoritos!`); }
     else { favs.splice(idx, 1); mostrarToast("💔", `Removido!`); }
     salvarFavoritos(favs);
+    if (navigator.vibrate) navigator.vibrate(idx === -1 ? [30, 20, 60] : [40]);
     document.querySelectorAll(`.btn-favorito[data-id="${id}"]`).forEach(btn => {
         btn.innerHTML = isFavorito(id) ? "❤️" : "🤍";
         btn.classList.toggle("ativo", isFavorito(id));
@@ -2253,7 +2269,7 @@ function compartilharOferta(titulo, link) {
         navigator.share({ title: 'O Caçador de Ofertas', text: `🔥 Olha essa promoção: ${titulo}`, url: link }).catch(console.error);
     } else if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(`${titulo}\n${link}`)
-            .then(() => mostrarToast("🔗", "Link copiado!"))
+            .then(() => { mostrarToast("🔗", "Link copiado!"); if (navigator.vibrate) navigator.vibrate(30); })
             .catch(() => mostrarToast("⚠️", "Não foi possível copiar o link."));
     } else {
         const el = document.createElement('textarea');
