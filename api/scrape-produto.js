@@ -211,8 +211,19 @@ function parsearMagalu($) {
 
 function parsearMercadoLivre($) {
     const titulo = $('h1.ui-pdp-title').first().text().trim();
-    const precoNovo = extrairPreco($('.andes-money-amount__fraction').first().text());
-    const precoAntigo = extrairPreco($('.ui-pdp-price__original-value .andes-money-amount__fraction').first().text());
+
+    // Preço novo: inteiro + centavos
+    const novoInt  = $('.ui-pdp-price__second-line .andes-money-amount:not(.andes-money-amount--previous) .andes-money-amount__integer').first().text().replace(/\./g, '').trim();
+    const novoFrac = $('.ui-pdp-price__second-line .andes-money-amount:not(.andes-money-amount--previous) .andes-money-amount__fraction').first().text().trim();
+    const precoNovo = novoInt ? parseFloat(`${novoInt}.${novoFrac || '00'}`) : extrairPreco($('.andes-money-amount__fraction').first().text());
+
+    // Preço antigo: estrutura andes-money-amount--previous
+    const antigoInt  = $('.andes-money-amount--previous .andes-money-amount__integer').first().text().replace(/\./g, '').trim();
+    const antigoFrac = $('.andes-money-amount--previous .andes-money-amount__fraction').first().text().trim();
+    const precoAntigo = antigoInt
+        ? parseFloat(`${antigoInt}.${antigoFrac || '00'}`)
+        : extrairPreco($('.ui-pdp-price__original-value').first().text());
+
     const imagem = $('img.ui-pdp-image').first().attr('data-zoom')
                || $('img.ui-pdp-image').first().attr('src') || '';
     return { titulo, precoNovo, precoAntigo, imagem };
@@ -293,7 +304,13 @@ export default async function handler(req, res) {
         const produto = parsearProduto(body, finalUrl);
 
         if (!produto.titulo && !produto.imagem && !produto.precoNovo) {
-            return res.status(422).json({ erro: 'Site bloqueou o acesso automático. Preencha manualmente.' });
+            const lojasBloqueadas = ['magalu', 'magazineluiza', 'shopee', 'amazon'];
+            const urlLower = finalUrl.toLowerCase();
+            const bloqueada = lojasBloqueadas.some(l => urlLower.includes(l));
+            const msg = bloqueada
+                ? `${produto.loja} bloqueia acesso automático de servidores. Preencha título, preço e imagem manualmente.`
+                : 'Não foi possível extrair dados. Preencha manualmente.';
+            return res.status(422).json({ erro: msg });
         }
 
         return res.status(200).json(produto);
