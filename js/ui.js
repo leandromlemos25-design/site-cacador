@@ -72,8 +72,16 @@ function isFavorito(id) { return getFavoritos().includes(id); }
 function toggleFavorito(id) {
     const favs = getFavoritos();
     const idx = favs.indexOf(id);
-    if (idx === -1) { favs.push(id); mostrarToast("❤️", `Salvo nos favoritos!`); }
-    else { favs.splice(idx, 1); mostrarToast("💔", `Removido!`); }
+    if (idx === -1) {
+        favs.push(id);
+        mostrarToast("❤️", `Salvo nos favoritos!`);
+        const oferta = todasOfertas.find(o => o.id === id);
+        if (window.gamiAddFav) window.gamiAddFav(oferta?.desconto || 0);
+    } else {
+        favs.splice(idx, 1);
+        mostrarToast("💔", `Removido!`);
+        if (window.gamiRemoveFav) window.gamiRemoveFav();
+    }
     salvarFavoritos(favs);
     if (navigator.vibrate) navigator.vibrate(idx === -1 ? [30, 20, 60] : [40]);
     document.querySelectorAll(`.btn-favorito[data-id="${id}"]`).forEach(btn => {
@@ -89,7 +97,7 @@ function compartilharOferta(titulo, link) {
         navigator.share({ title: 'O Caçador de Ofertas', text: `🔥 Olha essa promoção: ${titulo}`, url: link }).catch(console.error);
     } else if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(`${titulo}\n${link}`)
-            .then(() => { mostrarToast("🔗", "Link copiado!"); if (navigator.vibrate) navigator.vibrate(30); })
+            .then(() => { mostrarToast("🔗", "Link copiado!"); if (navigator.vibrate) navigator.vibrate(30); if (window.gamiAddShare) window.gamiAddShare(); })
             .catch(() => mostrarToast("⚠️", "Não foi possível copiar o link."));
     } else {
         const el = document.createElement('textarea');

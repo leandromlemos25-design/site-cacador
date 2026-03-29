@@ -150,7 +150,7 @@ function navegar(pagina) {
     window.scrollTo(0, 0);
     history.pushState({ pagina }, "", `#${pagina}`);
     if (pagina === "ofertas") { if(!document.getElementById("lojasFilter").innerHTML) inicializarFiltros(); renderOfertas(); }
-    else if (pagina === "favoritos") renderFavoritos();
+    else if (pagina === "favoritos") { renderFavoritos(); if (window.gamiRenderPerfil) window.gamiRenderPerfil(); }
 }
 
 window.addEventListener("popstate", (e) => {
