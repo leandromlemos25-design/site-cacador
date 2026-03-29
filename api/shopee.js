@@ -32,12 +32,14 @@ async function fetchShopee(appId, appSecret, page, limit, keyword) {
 }
 
 function formatarProdutos(nodes) {
-    return (nodes || []).map(n => {
-        const precoAtual = parseFloat(n.price) || 0;
-        const desconto = parseFloat(n.priceDiscountRate) || 0;
-        const precoAntigo = desconto > 0 && desconto < 100 ? precoAtual / (1 - desconto / 100) : precoAtual;
-        return { offerName: n.productName || "Oferta Shopee", price: precoAntigo, discountPrice: precoAtual, discountRate: desconto, offerLink: n.offerLink, imageUrl: n.imageUrl };
-    });
+    return (nodes || [])
+        .filter(n => n.imageUrl && n.imageUrl.startsWith('http'))
+        .map(n => {
+            const precoAtual = parseFloat(n.price) || 0;
+            const desconto = parseFloat(n.priceDiscountRate) || 0;
+            const precoAntigo = desconto > 0 && desconto < 100 ? precoAtual / (1 - desconto / 100) : precoAtual;
+            return { offerName: n.productName || "Oferta Shopee", price: precoAntigo, discountPrice: precoAtual, discountRate: desconto, offerLink: n.offerLink, imageUrl: n.imageUrl };
+        });
 }
 
 export default async function handler(req, res) {
