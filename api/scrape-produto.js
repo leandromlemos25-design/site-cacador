@@ -86,6 +86,43 @@ function extrairPreco(str) {
     return parseFloat(s) || 0;
 }
 
+// Extrai dados de frameworks JS (Next.js, Nuxt) que embutem dados na página
+function extrairNextData($, body) {
+    // __NEXT_DATA__ (Next.js — Magalu, Shopee BR, etc.)
+    try {
+        const el = $('#__NEXT_DATA__').html() || body.match(/<script id="__NEXT_DATA__"[^>]*>([\s\S]*?)<\/script>/)?.[1];
+        if (el) {
+            const json = JSON.parse(el);
+            // Navega recursivamente em busca de campos de produto
+            const str = JSON.stringify(json);
+            const nome = str.match(/"(?:title|name|productName|nomeProduto)"\s*:\s*"([^"]{10,200})"/)?.[1];
+            const preco = str.match(/"(?:price|bestPrice|salePrice|preco|valor)"\s*:\s*([\d.]+)/)?.[1];
+            const precoAntigo = str.match(/"(?:listPrice|originalPrice|precoAntigo|fullPrice)"\s*:\s*([\d.]+)/)?.[1];
+            const img = str.match(/"(?:imageUrl|image|foto|thumbnail)"\s*:\s*"(https:[^"]+)"/)?.[1];
+            if (nome) return {
+                titulo: nome,
+                precoNovo: preco ? parseFloat(preco) : 0,
+                precoAntigo: precoAntigo ? parseFloat(precoAntigo) : 0,
+                imagem: img || '',
+            };
+        }
+    } catch {}
+
+    // __NUXT__ / window.__STATE__ (Nuxt.js)
+    try {
+        const nuxtM = body.match(/window\.__(?:NUXT|STATE)__\s*=\s*(\{[\s\S]*?\})\s*;?\s*<\/script>/);
+        if (nuxtM) {
+            const str = nuxtM[1];
+            const nome = str.match(/"(?:title|name|productName)"\s*:\s*"([^"]{10,200})"/)?.[1];
+            const preco = str.match(/"(?:price|salePrice)"\s*:\s*([\d.]+)/)?.[1];
+            const img = str.match(/"(?:imageUrl|image)"\s*:\s*"(https:[^"]+)"/)?.[1];
+            if (nome) return { titulo: nome, precoNovo: preco ? parseFloat(preco) : 0, precoAntigo: 0, imagem: img || '' };
+        }
+    } catch {}
+
+    return null;
+}
+
 function extrairJsonLd($) {
     let produto = null;
     $('script[type="application/ld+json"]').each((_, el) => {
@@ -176,7 +213,18 @@ function parsearProduto(body, finalUrl) {
         precoAntigo = ml.precoAntigo; imagem = ml.imagem;
     }
 
-    // Fallback universal: JSON-LD
+    // Fallback 1: Next.js / Nuxt __NEXT_DATA__
+    if (!titulo || !precoNovo) {
+        const nd = extrairNextData($, body);
+        if (nd) {
+            if (!titulo) titulo = nd.titulo;
+            if (!precoNovo) precoNovo = nd.precoNovo;
+            if (!precoAntigo) precoAntigo = nd.precoAntigo;
+            if (!imagem) imagem = nd.imagem;
+        }
+    }
+
+    // Fallback 2: JSON-LD
     if (!titulo || !precoNovo) {
         const jsonLd = extrairJsonLd($);
         if (jsonLd) {
